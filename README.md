@@ -6,6 +6,7 @@ FaultNet is a Windows-first local network-resilience lab. The approved documenta
 
 - [AGENTS.md](AGENTS.md): rules every coding agent must follow.
 - [HANDOFF.md](HANDOFF.md): current progress, approvals, blockers, validation, and next action.
+- [roadmap.md](roadmap.md): full-project task board, dependencies, proposed laptop ownership, quality gates, and task handoff template.
 - [Architecture pack](FaultNet-Architecture-Pack/AGENTS.md): project guide and seven companion specifications. Approved decisions, proposals, and unresolved details retain their labels.
 
 All application and test coding is performed by AI agents. The user provides requirements, decisions, and account access. Agents handle routine Git work.
@@ -28,7 +29,7 @@ Open the resulting `FaultNet` folder as the Codex project root. A different loca
 
 Give the new agent this prompt:
 
-> Continue FaultNet from this repository. Read AGENTS.md, HANDOFF.md, and the architecture pack. Inspect the current branch, local changes, recent commits, and origin. Fetch and pull with --ff-only if safe. Confirm the previous writer's pushed branch/commit and that this laptop now owns writing before editing. Summarize approved decisions, blockers, and the next action. All code is written by agents. Follow existing approval boundaries; update the handoff and commit/push at meaningful milestones and before laptop switches.
+> Continue FaultNet from this repository. Read AGENTS.md, HANDOFF.md, roadmap.md, and the architecture pack. Inspect the current branch, local changes, recent commits, and origin. Fetch and pull with --ff-only if safe. Confirm the previous writer's pushed branch/commit and that this laptop now owns writing before editing. Summarize approved decisions, blockers, and the next task. All code is written by agents. Respect the current implementation pause/resume state and task ownership; update the handoff and commit/push at meaningful milestones and before laptop switches.
 
 ## Agent synchronization procedure
 

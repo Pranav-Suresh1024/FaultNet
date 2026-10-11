@@ -2,6 +2,7 @@
 
 ## Start every session
 1. Read [HANDOFF.md](HANDOFF.md) for the latest state, approvals, blockers, and next action.
+   Read [roadmap.md](roadmap.md) for task dependencies, ownership, and acceptance checks; check the current implementation pause/resume state before coding.
 2. Read [the project guide](FaultNet-Architecture-Pack/AGENTS.md) and its seven companion documents before application changes. Its project rules also apply to application files created at this repository root.
 3. Inspect the actual checkout, current branch, local changes, and recent commits. Resolve differences between the handoff and the files before acting.
 4. Follow [README.md](README.md) for laptop synchronization. Fetch and, on a clean branch with an upstream, pull with `--ff-only` before editing. Preserve existing local work and stop synchronization if histories diverge.
@@ -9,7 +10,7 @@
 ## Shared working agreement
 - All application code and test code is written by AI agents; the user supplies requirements, decisions, and access, not manual code edits.
 - This repository is the shared source of project context across three laptops and different Codex accounts. Do not rely on another account's chat history, memory, plugins, or local paths.
-- Current authorization covers documentation, Git setup, commits, and pushes to `Pranav-Suresh1024/FaultNet`. Application implementation still requires its own user request and resolution of the affected blocking decisions.
+- Current authorization covers documentation, Git setup, commits, and pushes to `Pranav-Suresh1024/FaultNet`. Application work follows the latest pause/resume instruction in HANDOFF.md and requires resolution of the affected blocking decisions.
 - Preserve approved decisions and visibly label proposals, unresolved details, and untested claims. A handoff does not create new authorization.
 - Keep shared file references relative to this repository. Record machine-specific observations as observations, not universal setup requirements.
 - Use one active writing laptop at a time for the default sequential workflow. Do not begin writes until the user identifies this laptop as the active writer if another laptop may still be working.
