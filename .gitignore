@@ -26,3 +26,11 @@ coverage/
 *.log
 .DS_Store
 Thumbs.db
+
+# Machine/account-specific AI state
+.codex/
+
+# Generated lab evidence; share reviewed sanitized evidence deliberately
+results/
+*.pcap
+*.pcapng
