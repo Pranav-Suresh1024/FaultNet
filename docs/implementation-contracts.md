@@ -1,8 +1,8 @@
 # FaultNet implementation contracts
 
-**Status: Proposed for review, not approved or implemented.** Prepared 12 October 2026 under the user's request to propose and record technical choices. Implementation remains paused. Approval of this document resolves the application contract part of roadmap R01; course/lab availability questions remain separate gates for their affected tasks.
+**Status: Application contracts approved; implementation resumed 12 October 2026.** The user asked to start implementation after the technical proposal was presented. That request approves proceeding with these application choices and supersedes the roadmap preparation pause. Lab scenarios below remain proposals; rubric/tool questions gate their affected tasks. Current implementation and validation are in [HANDOFF.md](../HANDOFF.md).
 
-Read with [roadmap.md](../roadmap.md) and the [architecture pack](../FaultNet-Architecture-Pack/AGENTS.md). This document makes the existing proposals concrete; it does not broaden the approved MVP. Once approved, all agents use the same contracts and update affected documents before changing them.
+Read with [roadmap.md](../roadmap.md) and the [architecture pack](../FaultNet-Architecture-Pack/AGENTS.md). All agents use these application contracts and update affected documents before changing them. This does not broaden the approved MVP.
 
 ## Recommended approach
 
@@ -14,7 +14,7 @@ Separate operating-system processes would isolate failures more strongly but add
 
 - Reference runtime: Node.js **22.23.1**, observed on the current Windows laptop; record it in a committed `.node-version`. Other laptops install/use the same reference runtime. Node 24 compatibility may be checked later; it is not assumed.
 - JavaScript ES modules (`type: module`), semantic HTML, plain CSS, browser JavaScript. No third-party runtime or test packages initially.
-- Planned package scripts: `npm start` -> `node src/main.js`; `npm test` -> `node --test`. These commands do not exist yet and are not verified application commands. Commit a package lockfile when the manifest is created; do not require package downloads for zero external dependencies.
+- Configured scripts: `npm start` -> `node src/main.js`; `npm test` -> `node --test`. Both have been executed locally. package-lock.json is committed with zero external dependencies; package downloads are unnecessary.
 - Control/dashboard: `http://127.0.0.1:3000`; demo: `127.0.0.1:3001`; proxy: `127.0.0.1:3002`. All listeners bind explicitly to `127.0.0.1`. The dashboard uses the canonical numeric host; `localhost` is not an alternative Host value.
 - Start demo and proxy before exposing ready control services. If any port is occupied or initialization fails, report the error and close already-started listeners. Do not terminate other programs or silently choose another public port.
 - Automated tests use ephemeral local ports and temporary storage via internal test parameters, not user-selectable target URLs or paths.
@@ -127,7 +127,7 @@ Error shape: `{error: {code, message}}`. Use stable categories: 400 `invalid_inp
 
 ## Module ownership and interfaces
 
-Use the roadmap's proposed paths. Keep integration/configuration/specification edits with lane A. These JavaScript interfaces are proposals for inter-agent coordination, not existing exports:
+Use the committed module paths. Logical lanes remain proposed future assignments; the current checkout implements sequentially. Factory-created runner, proxy, and store instances expose these interfaces:
 
 | Owner | Module interface | Contract |
 | --- | --- | --- |
@@ -148,14 +148,14 @@ Startup wires shared dependencies once; test fixtures can inject local test reso
 - One page: settings and start/stop controls; readiness/current phase; comparison table; saved-run list; JSON/CSV export. Poll active status/results every 1000 ms; pause polling when idle and refresh after user actions.
 - Controls show valid ranges and units. Baseline mode disables fault inputs with an explanation. Stop stays available during running/stopping, and confirmed fault clearance appears only after cleanup.
 - Empty, loading, running, stopping, stopped, failed, interrupted, denied, unsaved, incomplete, and populated states have explicit text. Prevent duplicate starts and ignore stale responses when selection changes.
-- Light theme: background `#f8fafc`, surface `#ffffff`, text `#0f172a`, primary `#1d4ed8`, error `#b91c1c`; system UI font, 16 px body, 8 px spacing unit, 8 px control radius. Maximum content width 1200 px; stack panels below 768 px. These are proposed values, not a verified accessibility claim.
+- Light theme: background `#f8fafc`, surface `#ffffff`, text `#0f172a`, primary `#1d4ed8`, error `#b91c1c`; system UI font, 16 px body, 8 px spacing unit, 8 px control radius. Maximum content width 1200 px; stack panels below 768 px. These are approved implementation values, not an accessibility certification.
 - Semantic controls/labels/tables, visible keyboard focus, text with color indicators, restrained polite status announcements, no automatic motion. Contrast, zoom/reflow, keyboard paths, and browser behavior must be checked on the rendered UI.
 - Reference browsers: installed Chromium-based Edge/Chrome on Windows; record actual versions during verification. Mobile support is not a release promise.
 
 ## Test and evidence protocol
 
 - Use Node's test runner and strict assertions for formula/validation/storage/security tests and real local HTTP integration tests. Use temporary results roots and ephemeral test ports; always close resources.
-- Write a meaningful failing test for each nontrivial behavior before implementation. CI runs the committed reference runtime and actual test script after configuration exists. No package/browser download is required for this documentation task.
+- Write a meaningful failing test for nontrivial behavior before implementation. Use the committed reference runtime and actual test script. No package/browser download is required. Remote CI execution must be verified separately rather than inferred from a workflow file.
 - Delay check: five successful baseline and five 500 ms delayed requests, with identical settings and 3000 ms timeout; median elapsed-time difference should be 400-800 ms on an otherwise idle machine. Record measured values/environment; a failure is investigated, not silently removed or given a wider tolerance.
 - Bandwidth check: three successful 65,536-byte probes at 32 KiB/s, whole-request goodput each 24-36 KiB/s, timeout 5000 ms. Verify actual received byte counts; report inability to meet this bound on a busy environment rather than claiming a pass.
 - Interruption check: every faulty probe records an incomplete/failed transport outcome; after clear, three full demo responses succeed. Cancellation tests include pending delay, active throttle, interruption, and recovery-window exhaustion.
@@ -173,5 +173,5 @@ Startup wires shared dependencies once; test fixtures can inject local test reso
 ## Laptop coordination status
 
 - The user confirms the teammate is not working currently and plans to grant the other laptop's access in the morning. No collaborator invitation or remote-laptop verification has been performed by this agent.
-- This checkout is the active writer for the currently requested contract documentation. Continue sequential work by default; proposed A/B/C lanes become actual assignments only when the user requests concurrent work.
-- Before handing over, commit/push context and verify the remote SHA; the receiving agent reads this proposal's approval status, roadmap task ownership, and HANDOFF.md before making changes.
+- This checkout is the active sequential application writer; teammate is idle. Proposed A/B/C lanes become actual assignments only when the user requests concurrent work.
+- Before handing over, commit/push context and verify the remote SHA; the receiving agent reads current approval status, roadmap ownership, and HANDOFF.md before making changes.

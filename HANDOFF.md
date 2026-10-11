@@ -2,57 +2,43 @@
 
 Updated: 12 October 2026 (Asia/Kolkata).
 
-## Current state
-- Documentation baseline only. No application code, package manifest, dependency lockfile, startup command, or application tests exist.
-- Implementation remains paused. The roadmap defines R00-R20 and no application task has started. R01 now has a concrete [implementation contract proposal](docs/implementation-contracts.md), marked In review, not approved.
-- The original eight Markdown files have been read. The seven companion specification documents now link to the concrete recommendations while retaining the distinction between approved scope and pending choices.
-- Repository: https://github.com/Pranav-Suresh1024/FaultNet
-- Working branch for this setup: `main`.
-- The existing remote initialization commit is preserved. Root agent instructions, synchronization guidance, and this handoff accompany the architecture pack.
-- This laptop's working folder has been connected to the remote. For transfer completion, verify the latest GitHub branch SHA; the final chat report records the pushed commit.
-- Three laptops are involved. Two use the owner's GitHub account; the third uses the friend's GitHub account. Codex accounts may differ.
-- Sequential writing is the default. The user confirms the teammate is not working currently and access will be granted in the morning. This checkout owns the requested contract documentation; laptop identities and the friend's GitHub login/access remain unverified.
+## Current state and authorization
+- The user asked to start implementation after the concrete technical proposal was presented. Application contracts are approved and implementation is resumed; the earlier roadmap preparation pause is superseded.
+- First local application checkpoint implemented on task/faultnet-mvp, based on e60dacd. Main retains the preceding documentation baseline; no merge/public deployment has been performed.
+- Repository: https://github.com/Pranav-Suresh1024/FaultNet. Documentation, Git setup, application/test coding within approved contracts, commits, and branch pushes are authorized. All coding is performed by AI agents.
+- This checkout is the sequential writer. Teammate is idle; user plans to grant access in the morning. Two laptops use the owner's GitHub account, the third the friend's account; Codex accounts can differ. Actual remote-laptop access/environments remain unverified.
+- Writing ownership may transfer after the push is confirmed and the next laptop is explicitly identified as writer. Verify the branch SHA rather than relying on chat history. The final report contains the checkpoint commit; do not put this commit's own SHA in this file.
 
-## User authorization and stable decisions
-- Read the local Markdown pack and prepare shared code/context synchronization with appropriate GitHub pushes.
-- The user subsequently requested implementation, then said to wait before starting and create a full-project roadmap. Current work is roadmap/context documentation only; wait for an implementation-resume instruction before coding.
-- The latest user request authorizes proposing technical choices and recording them for all agents. It does not approve the proposed values or revoke the earlier implementation pause.
-- AI agents perform all application and test coding. The user need not write code or run routine Git commands; agents handle those commands where tools/access permit.
-- Approved project scope: Windows-first local network-resilience lab; Node.js backend, plain HTML/CSS/JavaScript frontend, local JSON storage.
-- MVP: local dashboard and demo server; baseline, delay, bandwidth restriction, connection interruption, recovery comparison, and JSON/CSV export.
-- Controls stay on loopback and faults affect the fixed demo target only. Dashboard/control traffic must remain usable.
-- Packet Tracer simulation, Wireshark observations, and real application measurements are separate evidence sources.
-- No public deployment, arbitrary targets, production traffic, or real IP packet-loss injection in the MVP. Failed HTTP requests are not evidence of IP packet loss.
-- Existing document approval does not authorize application implementation or silently approve proposed contracts.
+## Implemented application
+- Node.js 22.23.1 ES modules, zero external packages, plain browser UI, local schema-v1 JSON. package.json/package-lock.json/.node-version are configured.
+- One process with loopback control 3000/demo 3001/proxy 3002. GET /payload returns 65,536 synthetic F bytes. Proxy accepts only the fixed demo path/target.
+- Baseline or baseline/fault/clear/recovery runs, bounded delay/throttling/interruption, one active run, cancellation, three-success/15-second recovery, and a 120-second probing deadline.
+- Validated records, atomic phase/terminal saves, restart interruption labels, explicit unsaved evidence, safe JSON/CSV exports, protected result APIs.
+- Dashboard controls, status, phase summaries, saved compatible/incompatible comparisons, and capability-protected downloads.
+- See docs/implementation-contracts.md for exact approved values; docs/implementation-progress.md for verification/review rulings. Roadmap R02-R14 are In review on the task branch, not integrated Done. R01's lab portion remains open.
 
-## Blockers and open decisions
-- Implementation is paused; R01's concrete proposals need review/approval and the user must resume implementation before coding.
-- Proposed reference runtime Node.js 22.23.1; no third-party packages; ES modules; ports 3000/3001/3002; 10 probes per phase, 250 ms waits, 3000 ms timeout, 65,536-byte synthetic body; three-success/15-second recovery; bounded settings and 120-second experiment budget. These are recommendations, not approved requirements or measured results.
-- The same proposal specifies API responses, schema v1, atomic persistence, safe exports, browser protections, UI details, module boundaries, and validation tolerances. Review docs/implementation-contracts.md instead of inventing different defaults on another laptop.
-- Required Packet Tracer scenarios, Wireshark availability/permissions, grading rubric, and exact deadline confirmation.
-- PRD's working deadline is 13 October 2026, 11:59 p.m. IST; this remains an unconfirmed interpretation.
-- Teammate access will be granted by the user in the morning; no teammate work is in progress. Actual access remains unverified and will be needed for that laptop's push/handoff. Do not share the owner's credentials.
-- Other laptop environments and repository access have not been verified.
+## Checks and results
+- npm test: PASS, 26 tests, 0 failures, about 18 seconds. Real local HTTP/filesystem tests and controlled DOM/fetch regression; no external test packages.
+- Latest full-run calibration: five baseline/five 500 ms delay samples gave median difference 514.9 ms (400–800ms bound). Three 32 KiB/s probes each received65,536 bytes with 31.89/31.81/31.74 KiB/s (24–36 bound).
+- Recovery-window exhaustion: PASS, full 15-second observation without inventing a confirmation/duration.
+- API regressions: hostile Host/Origin, missing/Unicode capability, missing mutation Origin, canonicalized/absolute-form paths, invalid/oversized input, rate limits, and asset/path restrictions.
+- Persistence/lifecycle: reopen, corrupt/unsupported records, interrupted restart, summary/chronology checks, failed writes, failed-save shutdown, port collision cleanup, five-second incomplete-header closure.
+- Independent review found authorization-path, record chronology, header timeout scanning, shutdown-save, stale selection/export, and refresh/start race issues. Fixes and regressions are complete; final targeted review found no remaining critical/important issue in reviewed scope.
+- npm start: PASS; app currently running locally at http://127.0.0.1:3000. No extra dependency install required.
+- Browser observation in Codex in-app Chromium: interruption and delay runs completed/recovered; saved records reopened after restart; compatible/incompatible comparison displayed correctly; keyboard Enter started a baseline; throttled run stopped with cancelled evidence and fault none.
+- Browser JSON download matched the saved record; CSV contained all 7 observations plus header. No browser error-level console entries observed. Narrow viewport observed375px with equal page width and one settings column; override reset.
+- Color-pair arithmetic: text/background17.06:1, white/primary6.70:1, error/errorbackground5.91:1, secondarytext/white7.58:1. These bounded checks are not a full accessibility certification; browser version/full keyboard paths/zoom remain unverified.
+- git diff --check: PASS. Local-link/heading-anchor audit: PASS across all 14 repository Markdown files.
+- Pinned official GitHub Actions workflow added for Windows npm test on pushes/PRs using .node-version. Remote execution is not yet verified; check its result after the branch push.
 
-## Environment and validation evidence
-- This Windows laptop: Git 2.54.0.windows.1; Node.js v22.23.1 observed. This is not an approved project runtime requirement.
-- Git fetch succeeded against the existing `main` branch. GitHub reports this repository is public.
-- Original README described a cloud checkout `/workspace/FaultNet` with Python 3.12 and Node.js 24. Those are historical remote notes, not verified on this laptop or the other two.
-- Application checks: Not run; no application or test configuration exists.
-- Original synchronization checks passed: a PowerShell local-link audit of the original 11 Markdown files; `git check-ignore -q` checks for six sensitive/generated paths and eight eligible source/context paths; `git diff --check` for whitespace errors.
-- Roadmap checks passed: PowerShell assertions for 21 unique ordered task IDs, completion details for R01-R20, and F-01 through F-07 coverage; local-link validation across all 12 Markdown files; `git diff --check`. Application tasks remain unstarted and untested.
-- Contract-documentation checks passed: local links and heading anchors across 13 Markdown files; proposal status/section checks; arithmetic checks confirming the default comparison fits its proposed budget and the default throttled payload fits its request timeout before scheduling overhead; current pause/access instructions retained. These checks validate the proposal, not application behavior.
-- Push confirmation belongs in the setup commit's final report; future agents must verify the current remote SHA rather than assume it from this file.
+## Open gates and next action
+1. Verify GitHub Actions for the pushed task branch, then review/integrate the checkpoint; no main merge has been requested/performed. Keep application work on this branch until integration.
+2. Confirm actual laptops/access and user-selected active writer. New clones must fetch/switch to task/faultnet-mvp because main lacks this implementation. Follow README.md; pull --ff-only only on a clean matching branch and preserve diverged/local work.
+3. Resolve course rubric, exact deadline (working interpretation 13 Oct 2026, 23:59 IST), Packet Tracer version/scenarios/RIP-OSPF need, Wireshark installation/capture privileges. These gate R15-R18 and report/release; no lab observation has been invented.
+4. Verify a fresh checkout on all three laptops (R19), then complete reviewed lab/report/demo/release work (R20). Friend needs accepted collaborator write access to push to a private repo; owner grants access, credentials are not shared.
 
-## Next action
-1. Review docs/implementation-contracts.md with the user; confirm the application proposal and resolve any changes before coding. Keep implementation paused until the user resumes it. Lab/rubric/tool questions gate their affected tasks.
-2. Assign actual laptops to proposed lanes A/B/C if parallel work is explicitly requested, or continue sequentially. Establish task/file ownership and the integration owner before any parallel writes.
-3. On another laptop, clone/open the Git root, read the shared context including roadmap.md, and verify the previous writer's pushed branch/commit before taking ownership.
-4. Authenticate using that laptop's own GitHub identity. The owner must grant the friend's account access if it lacks permission; no collaborator invitation has been sent. Making the repository private still permits accepted collaborators to push, subject to branch rules.
-
-## Local-only evidence
-- None generated in this session.
-- Future generated results/captures are excluded from Git by default. If evidence must travel, explicitly review and approve a sanitized version or a separate transfer; record its location and provenance here. GitHub code sync does not back up ignored evidence.
-
-## Future handoff updates
-Replace stale state instead of appending a chat transcript. Record what changed, why, relevant files, exact check commands/outcomes, user decisions and their basis, unfinished work, and the next concrete action. Keep failed, skipped, and not-run checks distinct. Never store tokens, private conversations, or credentials here.
+## Local-only evidence and limitations
+- Four synthetic browser-check records under ignored results/: interruption 9ceac5be…, delay 70c97d4a…, stopped throttle 22891a83…, baseline fe054af4…. These are local measurements, not network-lab evidence and not a source-sync backup.
+- Delay JSON/CSV test downloads are in this laptop's Downloads folder. Dashboard preview is ignored .codex/faultnet-dashboard.jpg. None is staged or pushed.
+- Phase-boundary saving can lose latest in-phase observations after a hard crash. Failed-save evidence exists only in memory until exit; download before closing. Power-loss durability, exhaustive browser/security audit, Node 24, remote CI, and other laptops remain unverified.
+- Raw captures, credentials, Codex account/session data, and generated records remain outside Git. Deliberately review/sanitize/transfer evidence separately when authorized.

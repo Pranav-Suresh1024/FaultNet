@@ -1,12 +1,12 @@
 # Product Requirements Document
 
-## Concrete proposals for review
-[Implementation contracts](../../docs/implementation-contracts.md#measurement-protocol) now proposes measurement settings, definitions, safety bounds, and separate lab scenarios for roadmap R01. These choices remain pending approval; the approved scope and open course/tool questions below are preserved.
+## Approved application contracts
+The user resumed implementation on 12 October 2026 after reviewing the [implementation contracts](../../docs/implementation-contracts.md#measurement-protocol). Application settings, definitions, safety bounds, API/schema, and UI choices are approved. Separate lab scenarios remain proposals; course/tool questions remain open. Current evidence is in [HANDOFF.md](../../HANDOFF.md).
 
 ## Project context
 - Product: FaultNet.
 - Owner: Project owner/user.
-- Status: Approved documentation baseline. Approved choices, proposals, and unresolved details remain distinguished; documentation approval does not authorize application implementation.
+- Status: Application implemented on task/faultnet-mvp under the user's resume request; validation/review and separate lab/release gates are recorded in the handoff and roadmap.
 - Problem: The project investigates how unreliable networks affect web application availability, performance, and recovery.
 - Target users: A student lab operator. Instructors review exported results and supporting evidence.
 - Desired outcome: Reproducible comparisons between normal, faulty, and recovery conditions, with network observations distinguished from application measurements.
@@ -63,7 +63,7 @@
    - Failure/recovery: Unsupported tools or unavailable permissions are recorded as limitations.
 
 ## Feature specifications
-The following acceptance criteria are recorded in the approved document pack. Numeric protocols and implementation details remain unresolved where identified.
+The following acceptance criteria use the approved concrete application contracts. F-06 still requires separate verified lab evidence.
 
 | ID | User need | Behavior | Acceptance criteria | Priority |
 | --- | --- | --- | --- | --- |
@@ -79,19 +79,17 @@ The following acceptance criteria are recorded in the approved document pack. Nu
 - Measure application request outcomes, elapsed time, delivered throughput, and observed recovery.
 - Measure RTT and retransmissions only through an appropriate network observation method.
 - Do not infer IP packet loss from failed HTTP requests.
-- Proposed availability definition: Successful non-cancelled attempts divided by all non-cancelled attempts; no attempts yields an unavailable value, not zero.
-- Proposed successful attempt: Expected HTTP response with a complete body. Exact demo response contract remains unresolved.
-- Proposed recovery definition: The first configured number of consecutive successful probes after fault removal, within a configured observation window.
-- Probe counts, intervals, timeouts, payload sizes, recovery count/window, timing tolerances, and percentile calculation are unresolved.
-- No performance improvement, accuracy target, or test result is claimed.
-- Accessibility criteria are proposed in [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md).
+- Availability: Successful non-cancelled attempts divided by all non-cancelled attempts; no eligible attempts yields null.
+- Success: Status 200 and complete 65,536-byte synthetic F body.
+- Recovery: Three consecutive complete successes after clearance within 15 seconds; no confirmation yields null duration.
+- Counts, intervals, timeouts, limits, median/p95 formulas, and calibration tolerances follow the approved [measurement protocol](../../docs/implementation-contracts.md#measurement-protocol).
+- Local test/calibration observations are recorded in HANDOFF.md; no performance improvement or general accuracy claim is made.
+- Accessibility requirements follow [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md); compliance requires rendered verification.
 
 ## Open decisions
-- Measurement protocol and numeric safety limits — owner: Project owner; needed before experiment implementation.
 - Exact Packet Tracer scenarios and RIP/OSPF coverage — owner: Project owner; needed before lab procedures are finalized.
 - Wireshark availability and capture privileges — owner: Project owner; needed before capture exercises.
 - Deadline interpretation and course rubric — owner: Project owner; needed before release planning.
-- API/schema proposals and visual details — owner: Project owner; needed before affected implementation.
 
 ## Definition of ready
-Approved scope and document acceptance criteria are recorded. Blocking unknowns are resolved before the affected implementation. Documentation approval does not authorize application implementation.
+The application scope/contracts are approved and implementation is resumed. Resolve outstanding lab/rubric/tool questions before their affected tasks. Approval does not authorize public deployment or fabricated lab evidence.

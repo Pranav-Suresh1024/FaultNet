@@ -1,13 +1,32 @@
 # FaultNet
 
-FaultNet is a Windows-first local network-resilience lab. The approved documentation baseline uses Node.js, plain HTML/CSS/JavaScript, and local JSON records. Application implementation has not started.
+FaultNet is a Windows-first local network-resilience lab using Node.js, plain HTML/CSS/JavaScript, and local JSON records. The first application checkpoint is on `task/faultnet-mvp`; `main` still contains the preceding documentation baseline until reviewed integration.
+
+## Run the application
+
+Use the reference Node.js **22.23.1** recorded in `.node-version`. No external packages or build step are required. From the Git root on the application branch:
+
+```powershell
+npm start
+```
+
+Open [FaultNet](http://127.0.0.1:3000). Keep the numeric host: `localhost` is rejected by the control boundary. Ports 3000/3001/3002 must be free; the app reports conflicts rather than terminating other programs. Stop with Ctrl+C.
+
+Choose a baseline or baseline/fault/recovery run. Delay, bandwidth restriction, and connection interruption affect only the synthetic 64 KiB demo. View phase summaries, saved compatible runs, and JSON/CSV downloads. Low bandwidth can intentionally exceed the timeout. Measurements are HTTP outcomes/elapsed time, not IP packet loss or RTT.
+
+```powershell
+npm test
+```
+
+Tests use temporary storage and ephemeral ports. Runtime results go to ignored `results/`; code pushes do not transfer those records or captures. Phase-boundary saving can lose latest observations on a hard crash; failed saves are shown explicitly. Lab evidence and other-laptop validation remain pending.
 
 ## Shared context
 
 - [AGENTS.md](AGENTS.md): rules every coding agent must follow.
 - [HANDOFF.md](HANDOFF.md): current progress, approvals, blockers, validation, and next action.
 - [roadmap.md](roadmap.md): full-project task board, dependencies, proposed laptop ownership, quality gates, and task handoff template.
-- [Implementation contracts](docs/implementation-contracts.md): concrete proposed runtime, measurement, API/schema, security, UI, and test choices for R01; pending review.
+- [Implementation contracts](docs/implementation-contracts.md): approved application choices; separate lab proposals remain open.
+- [Implementation ledger](docs/implementation-progress.md): verification and independent review evidence for the current task branch.
 - [Architecture pack](FaultNet-Architecture-Pack/AGENTS.md): project guide and seven companion specifications. Approved decisions, proposals, and unresolved details retain their labels.
 
 All application and test coding is performed by AI agents. The user provides requirements, decisions, and account access. Agents handle routine Git work.
@@ -24,6 +43,9 @@ For the first checkout on another laptop, ask its agent to run this in a chosen 
 
 ```powershell
 git clone https://github.com/Pranav-Suresh1024/FaultNet.git
+cd FaultNet
+git fetch origin
+git switch --track origin/task/faultnet-mvp
 ```
 
 Open the resulting `FaultNet` folder as the Codex project root. A different local path is fine. Prefer a folder outside OneDrive or other live file-sync services for new clones. This existing checkout remains in place; no personal files were moved. Do not share or file-sync `.git` or Codex credential/session folders.
@@ -75,9 +97,7 @@ The original initialization notes described `/workspace/FaultNet` with Git, Pyth
 Work in the existing checkout; each cloud task already has an isolated
 environment, so an additional Git worktree is unnecessary.
 
-There are currently no application dependencies, services, builds, or tests.
-Add the appropriate manifests, lockfiles, setup commands, and tests when the
-implementation is authorized and unresolved runtime/package choices are finalized. Keep dependency lockfiles under version control. Do not invent start/test commands before configuration exists.
+The application branch has package manifests, built-in Node tests, and three local services. There are zero external packages and no build step. Keep the lockfile under version control. Cloud/Node 24 compatibility remains unverified; use the reference runtime and run the actual tests.
 
 ## Saving work
 

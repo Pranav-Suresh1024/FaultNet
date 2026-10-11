@@ -1,80 +1,34 @@
 # Security
 
-## Concrete proposals for review
-[Local control security](../../docs/implementation-contracts.md#local-control-security) proposes exact Host/Origin checks, an in-memory session capability, asset allowlisting, request/resource limits, and security regression cases. These are proposed enforcement choices, not implemented or tested protections.
+## Approved control boundary
+The application [security contract](../../docs/implementation-contracts.md#local-control-security) was approved with the 12 October implementation-resume request. The local application is implemented; protections are tested within the scenarios documented in [TESTING.md](TESTING.md).
 
-## Assets and trust boundaries
-- Assets: Experiment controls, fixed demo target, local result files, and separate packet captures.
-- Untrusted inputs: Browser requests, settings, identifiers, stored file contents, and external reference material.
-- Relevant threats: Cross-origin control requests, arbitrary-target proxying, path traversal, excessive resource use, accidental sensitive capture, and misleading/incomplete evidence.
-- Loopback binding reduces exposure but does not make every local process or website trustworthy.
+## Assets and threats
+Protect experiment controls, fixed demo target, saved evidence, and separate captures. Treat HTTP inputs, identifiers, stored records, and external content as untrusted. Relevant threats include cross-origin control, DNS rebinding, arbitrary-target proxying, path traversal, excessive resource use, and misleading evidence. A privileged or compromised local process is outside this protection model.
 
-## Authentication and authorization
-- Approved identity model: One local operator; no accounts or identity provider.
-- Approved boundary: Loopback-only controls and fault injection restricted to the project demo server.
+## Authorization
+- All listeners bind to 127.0.0.1. Exact control Host must match its numeric address/port.
+- Reject foreign Origin and cross-site/same-site Fetch Metadata on every route.
+- GET /api/session issues a cryptographically random 32-byte hex capability for this process. Keep it only in browser/process memory.
+- All other APIs require X-FaultNet-Token; mutations also require exact canonical Origin and JSON content type for non-empty bodies.
+- Authorization and routing use the same normalized pathname, including absolute-form and dot-segment inputs.
+- No permissive CORS, accounts, persistent browser tokens, public listener, or credential-sharing workflow.
+- The intended operator can start/stop/read/export. Prohibited requests cannot read records or mutate experiments. Deletion is a separate filesystem action.
 
-| Caller | Read results | Start/stop/configure | Export | Delete |
-| --- | --- | --- | --- | --- |
-| Intended local operator | Allowed | Allowed within approved limits | Allowed | Explicit manual file deletion |
-| Untrusted web origin/prohibited request | Denied | Denied | Denied | Denied |
-| Remote network client | No control listener exposed | Denied | No control listener exposed | Denied |
+## Resource/input/output controls
+- One active experiment, 120-second probing deadline, validated protocol/fault bounds.
+- 8192-byte JSON body limit; 20 API requests per second; 32 connections per listener.
+- 5-second header/body bounds with a 250 ms timeout-check scan. Scheduling may add a small delay to timeout enforcement.
+- Fixed target, fixed asset allowlist, UUID identifiers, fixed storage root, bounded record reads.
+- Content Security Policy uses same-origin scripts and prohibits framing; nosniff and no-store headers.
+- Browser renders text through textContent; no arbitrary HTML or shell execution.
+- CSV escapes quotes and protects spreadsheet formula prefixes. JSON/export excludes bodies, credentials, cookies, capability, and captures.
 
-Proposed enforcement:
-- Bind control services to loopback interfaces.
-- Validate Host and browser Origin; prohibit permissive cross-origin control access.
-- Use side-effect-free read requests and validated mutation requests.
-- Reject arbitrary targets and paths.
-- Determine whether an additional per-session anti-CSRF capability is needed; mechanism unresolved.
-- Do not claim protection from a compromised machine or privileged local process.
-- Accounts, tenant checks, account recovery, and session revocation: Not applicable.
-- Operational recovery: Stop the experiment and clear faults; detailed cleanup behavior proposed.
+## Persistence/privacy
+Stop/shutdown clears faults, cancels probes, and reports save failure. Corrupt/unsupported evidence is identified explicitly. Generated results/captures remain outside Git. Scope capture to synthetic demo traffic, review before sharing, and label simulation/capture/application evidence separately. Capture permissions remain unverified; no compliance claim is made.
 
-## Secrets and configuration
-- No application credentials or secret variables have been identified as required.
-- Future secret requirements need explicit review.
-- Never put secrets in documents, source, browser assets, JSON records, or logs.
-- Ports, limits, and storage locations are non-secret configuration; names/values unresolved.
+## Dependencies and review
+No third-party packages. Commit manifests/lockfile; review necessity before adding packages or changing boundaries. No public deployment or security weakening is authorized. Independent review found and prompted fixes for URL authorization, record chronology, header-deadline enforcement, shutdown persistence, and stale UI selection handling. Regression checks accompany the fixes.
 
-## Input and output handling
-Proposed controls:
-- Validate settings, record identifiers, permitted methods, and expected JSON.
-- Enforce duration, concurrency, payload, request-size, and rate bounds; numeric values unresolved.
-- Render untrusted text safely rather than interpreting it as HTML.
-- Do not pass user input into shell commands.
-- Prevent file-path traversal and target substitution.
-- Export only approved fields.
-- Handle CSV spreadsheet-formula interpretation safely.
-- Application uploads: Outside the MVP.
-- No broad CORS policy or public proxy service.
-
-## Privacy
-- Collect approved experiment metadata only.
-- Retain records until manually deleted.
-- Do not store request bodies, credentials, or cookies.
-- Keep captures separate; captures may contain sensitive traffic.
-- Proposed capture practice: Use synthetic demo traffic, minimize capture scope, and review captures before sharing.
-- Proposed logging: Stable error categories and identifiers, with sensitive values redacted.
-- No regulatory compliance claim is made.
-
-## Dependencies and deployment
-- No application dependencies are configured.
-- Proposed policy: Review package necessity and maintenance, commit lockfiles, and preserve TLS/integrity verification.
-- Only the local lab environment is approved.
-- Public deployment is outside scope.
-- Security-sensitive changes require project-owner review of changed boundaries.
-- No package installation or deployment occurs during document preparation.
-
-## Verification
-Proposed tests in [TESTING.md](TESTING.md) cover:
-- Prohibited origins and targets.
-- Invalid settings and path traversal.
-- Resource limits and stop/restore behavior.
-- Safe rendering, exports, and sensitive-data exclusion.
-- Tenant-isolation tests are not applicable.
-
-Residual risks:
-- Compromised/privileged local processes are outside the protection model.
-- Packet-capture permissions and privacy remain unresolved.
-- Resource ceilings and browser-origin protection must be finalized.
-- Owner: Project owner/user.
-- Security tests: Not run.
+## Residual limitations
+Local machine compromise is out of scope. These checks are not an exhaustive security audit. Lab capture privileges and other-laptop environments/access remain unverified. A hard crash can lose latest unsaved phase observations.

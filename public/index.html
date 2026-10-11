@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FaultNet · Local resilience lab</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <main>
+    <header><p class="eyebrow">LOCAL NETWORK LAB</p><h1>FaultNet</h1>
+      <p>Measure a fixed demo response before, during, and after a controlled fault.</p></header>
+    <p id="status" role="status">Connecting to the local services…</p>
+    <p id="message" role="alert" hidden></p>
+    <section aria-labelledby="settings-title">
+      <h2 id="settings-title">Run an experiment</h2>
+      <p>All probes use a synthetic 64 KiB payload on this laptop. Only demo traffic is impaired.</p>
+      <form id="settings">
+        <fieldset id="fields"><legend>Experiment settings</legend>
+          <div class="fields">
+            <label>Mode<select id="mode"><option value="comparison">Baseline → fault → recovery</option><option value="baseline">Baseline only</option></select></label>
+            <label>Probes per phase<input id="count" type="number" min="1" max="20" step="1" value="10" required></label>
+            <label>Wait after each probe (ms)<input id="interval" type="number" min="100" max="2000" step="1" value="250" required></label>
+            <label>Request timeout (ms)<input id="timeout" type="number" min="500" max="5000" step="1" value="3000" required></label>
+            <label>Fault<select id="fault"><option value="delay">Response delay</option><option value="bandwidth">Bandwidth restriction</option><option value="interruption">Connection interruption</option></select></label>
+            <label id="delay-label">Delay (ms)<input id="delay" type="number" min="0" max="2000" step="1" value="500" required></label>
+            <label id="rate-label" hidden>Rate (KiB/s)<input id="rate" type="number" min="8" max="1024" step="1" value="32" required disabled></label>
+          </div>
+        </fieldset>
+        <p class="note">One experiment at a time, with a 120-second probing limit. Recovery requires three consecutive successful responses within 15 seconds.</p>
+        <p id="fault-hint" class="note"></p>
+        <div class="actions"><button id="start" type="submit" disabled>Start experiment</button><button id="stop" type="button" class="secondary" disabled>Stop experiment</button></div>
+      </form>
+    </section>
+    <section aria-labelledby="results-title">
+      <h2 id="results-title">Results</h2><p id="run-info">No experiment selected.</p><p id="recovery"></p>
+      <div class="table-scroll"><table><caption>Selected experiment by phase</caption><thead><tr><th scope="col">Phase</th><th scope="col">Attempts / cancelled</th><th scope="col">Success / eligible</th><th scope="col">Availability</th><th scope="col">Median (ms)</th><th scope="col">p95 (ms)</th><th scope="col">Mean KiB/s</th></tr></thead><tbody id="phases"></tbody></table></div>
+      <p class="note">Elapsed time covers the complete HTTP response, not network RTT. Availability excludes cancelled probes. Failed requests do not measure IP packet loss. — means no applicable measurement.</p>
+      <div class="actions"><button id="json" class="secondary" disabled>Download JSON</button><button id="csv" class="secondary" disabled>Download CSV</button></div>
+    </section>
+    <section aria-labelledby="history-title">
+      <div class="section-heading"><h2 id="history-title">Saved experiments</h2><button id="refresh" class="secondary">Refresh</button></div>
+      <label>Open an experiment<select id="history"><option value="">Choose a saved experiment</option></select></label>
+      <p id="record-errors" role="status"></p>
+      <label>Compare with another experiment<select id="compare"><option value="">Choose another experiment</option></select></label>
+      <p id="comparison-note" role="status"></p>
+      <div class="table-scroll" id="comparison-wrap" hidden><table><caption>Compatible runs: selected / compared</caption><thead><tr><th scope="col">Phase</th><th scope="col">Availability</th><th scope="col">Median (ms)</th><th scope="col">Mean KiB/s</th></tr></thead><tbody id="comparison"></tbody></table></div>
+    </section>
+    <footer>Application measurements are separate from Packet Tracer simulations and Wireshark observations. Those evidence tasks are pending.</footer>
+  </main>
+</body>
+</html>

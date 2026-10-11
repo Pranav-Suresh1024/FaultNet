@@ -2,15 +2,15 @@
 
 **Goal:** Deliver a reproducible local network-resilience lab with baseline/fault/recovery measurements, saved results, exports, and separate network-lab evidence.
 
-**Status:** Planning only. The user requested implementation, then explicitly paused it to prepare this roadmap. No application task has started. Resume coding only after the user resumes implementation and the affected decisions in R01 are approved.
+**Status:** Implementation resumed on 12 October 2026 after the concrete application contracts were presented. The local application checkpoint is implemented on `task/faultnet-mvp` with tests/review; it is not yet integrated into main. Lab/report/release and other-laptop validation remain pending.
 
 **Architecture:** Plain browser dashboard, Node.js control service, fixed demo server, fault proxy, and local JSON records. The dashboard/control path stays usable while demo traffic is impaired. Packet Tracer and Wireshark provide separate evidence.
 
 **Source specifications:** [PRD](FaultNet-Architecture-Pack/docs/PRD.md), [Architecture](FaultNet-Architecture-Pack/docs/ARCHITECTURE.md), [Database](FaultNet-Architecture-Pack/docs/DATABASE.md), [Security](FaultNet-Architecture-Pack/docs/SECURITY.md), [Design System](FaultNet-Architecture-Pack/docs/DESIGN_SYSTEM.md), [Code Style](FaultNet-Architecture-Pack/docs/CODE_STYLE.md), and [Testing](FaultNet-Architecture-Pack/docs/TESTING.md).
 
-This is a task roadmap, not a finalized API or numeric protocol. File paths and laptop lanes below are proposals. R01 freezes the contracts before dependent agents implement them; do not turn an unresolved choice into an assumed requirement.
+The [application contracts](docs/implementation-contracts.md) define the concrete API/protocol. Actual module/test paths are in the task branch; laptop lanes remain proposals until assigned. Resolve lab-specific choices before affected lab work.
 
-Concrete recommendations are now recorded in [implementation contracts](docs/implementation-contracts.md), pending owner review. Teammate access is planned for the morning and the teammate is not working currently; this checkout owns the requested documentation work. Application implementation remains paused.
+This checkout owns sequential application work; teammate is idle with access planned for the morning. The user's latest start request approves proceeding with the presented application choices and supersedes the roadmap pause. [Implementation evidence](docs/implementation-progress.md) records checks and remaining limits.
 
 ## Global constraints
 
@@ -20,7 +20,7 @@ Concrete recommendations are now recorded in [implementation contracts](docs/imp
 - No public deployment, production traffic, arbitrary external targets, genuine IP packet-loss injection, or automatic Packet Tracer/Wireshark integration.
 - Measurements distinguish HTTP outcomes from RTT, retransmissions, and packet loss. Missing observations are not zero or fabricated success.
 - Records/logs/exports exclude request bodies, credentials, and cookies. Review captures before any sharing; generated evidence is not automatically backed up by Git.
-- Runtime version, ports, packages, limits, API/schema details, visual tokens, and lab scenarios remain decisions for R01. Prefer Node's built-in capabilities where they fully solve the task.
+- Application runtime, ports, packages, limits, API/schema, and visual tokens follow the approved contracts. Lab scenarios remain R01 decisions. Use Node's built-in capabilities.
 
 ## Coordination across three laptops
 
@@ -51,20 +51,20 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 | ID | Small deliverable | Depends on | Lane | Status | Assigned laptop / branch / evidence |
 | --- | --- | --- | --- | --- | --- |
 | R00 | Repository and portable context | None | A | Done | Setup verified in commit `1e75729`; other laptops' access unverified |
-| R01 | Approve runtime, measurement, API/schema, security, UI, and lab contracts | User resumes implementation | A + user | In review | Concrete contract proposal prepared; no approval or coding yet; lab/rubric questions remain |
-| R02 | Fixed demo response and startup/shutdown | R01 | A | Planned | Unassigned |
-| R03 | Local control security and input validation | R01 | A | Planned | Unassigned |
-| R04 | JSON record persistence and safe reads | R01 | B | Planned | Unassigned |
-| R05 | Probe outcomes and measurement calculations | R01, R02 | B | Planned | Unassigned |
-| R06 | Pass-through proxy and delay fault | R01, R02 | B | Planned | Unassigned |
-| R07 | Bounded bandwidth restriction | R06 | B | Planned | Unassigned |
-| R08 | Connection interruption and fault reset | R06 | B | Planned | Unassigned |
-| R09 | Baseline/fault/recovery lifecycle and cancellation | R03-R08 | A | Planned | Unassigned |
-| R10 | Control/result API integration | R09 | A | Planned | Unassigned |
-| R11 | Accessible dashboard controls and states | R01, R10 | C | Planned | Unassigned |
-| R12 | Phase comparison and saved-run browser | R04, R05, R11 | C | Planned | Unassigned |
-| R13 | JSON/CSV export and dashboard download | R04, R05, R10, R12 | B then C | Planned | Sequential backend/UI ownership |
-| R14 | End-to-end, failure-path, and security regression checks | R07-R13 | A | Planned | Unassigned |
+| R01 | Approve runtime, measurement, API/schema, security, UI, and lab contracts | User resumes implementation | A + user | In review | Application contracts approved/resumed; lab/rubric decisions remain open |
+| R02 | Fixed demo response and startup/shutdown | R01 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R03 | Local control security and input validation | R01 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R04 | JSON record persistence and safe reads | R01 | B | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R05 | Probe outcomes and measurement calculations | R01, R02 | B | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R06 | Pass-through proxy and delay fault | R01, R02 | B | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R07 | Bounded bandwidth restriction | R06 | B | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R08 | Connection interruption and fault reset | R06 | B | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R09 | Baseline/fault/recovery lifecycle and cancellation | R03-R08 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R10 | Control/result API integration | R09 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R11 | Accessible dashboard controls and states | R01, R10 | C | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R12 | Phase comparison and saved-run browser | R04, R05, R11 | C | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R13 | JSON/CSV export and dashboard download | R04, R05, R10, R12 | B then C | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R14 | End-to-end, failure-path, and security regression checks | R07-R13 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
 | R15 | Packet Tracer procedure and topology | R01 lab decisions | C | Planned | Unassigned |
 | R16 | Recorded Packet Tracer evidence | R15 | C | Planned | Tool/environment access unverified |
 | R17 | Wireshark capture procedure | R01 lab decisions, R06 | C | Planned | Capture availability/permissions unverified |
@@ -78,7 +78,7 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 
 **Owns:** Updates to the seven specification documents and shared contracts. No application code.
 
-**Review artifact:** [docs/implementation-contracts.md](docs/implementation-contracts.md). The user authorized proposing/recording choices; this does not approve the choices or resume coding. Approve the application contract before its dependent tasks; resolve lab-specific questions before their affected tasks rather than treating teammate access as a blocker for local documentation.
+**Contract artifact:** [docs/implementation-contracts.md](docs/implementation-contracts.md). The user resumed application implementation after the proposal. Application decisions are approved; lab/rubric/tool questions remain open. Teammate access is not a blocker for this sequential local application work.
 
 - [ ] Record the user's implementation-resume instruction, course rubric, and confirmed deadline; record unavailable information explicitly.
 - [ ] Approve runtime/module format, required packages (if any), ports, storage directory, and proposed file ownership. Define reproducible start/test commands as planned commands until implemented and verified.

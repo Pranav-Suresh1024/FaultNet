@@ -2,10 +2,10 @@
 
 ## Shared repository context
 - Read the repository-root [agent instructions](../AGENTS.md), [handoff](../HANDOFF.md), and [synchronization guide](../README.md). Their cross-laptop workflow applies alongside this project guide.
-- The original document-preparation boundaries below describe that earlier task. The current user has separately authorized repository setup, context documentation, commits, and pushes to `Pranav-Suresh1024/FaultNet`; application implementation is still not authorized by this synchronization task.
+- The user authorized repository setup, documentation, commits/pushes, and subsequently resumed application implementation on 12 October 2026 after the concrete contracts were presented. Follow current HANDOFF.md rather than historical document-preparation boundaries.
 - Resolve paths relative to the checkout. The repository is shared across three laptops with different local paths and Codex accounts; do not depend on the original laptop's absolute destination.
 - Subsequent task status is recorded in [HANDOFF.md](../HANDOFF.md) and [roadmap.md](../roadmap.md). The user requested implementation, then explicitly paused it for roadmap preparation; honor the latest pause/resume instruction.
-- Read the [concrete implementation proposals](../docs/implementation-contracts.md); they are recorded for review, not silently approved. The teammate is currently idle and the user plans to grant access in the morning.
+- Read the [approved application contracts](../docs/implementation-contracts.md). Lab scenarios remain proposals. The teammate is idle and access is planned for the morning.
 
 ## Project context
 FaultNet is a Windows-first, local network-resilience lab project.
@@ -47,10 +47,10 @@ Summarize relevant approved decisions, proposals, unresolved items, and acceptan
 5. Run meaningful checks using actual configured commands.
 6. Review the diff and report changes, results, and remaining limitations.
 
-This document preparation task ends before application implementation.
+Application work is now authorized within the approved contracts. Independent lab evidence and final release gates remain separate.
 
 ## Boundaries
-- No application coding, dependency installation, production migrations, deployment, or pushing changes as part of this documentation task.
+- No public deployment, production migration, or unreviewed stack/boundary changes. Application coding and authorized branch pushes are permitted by the current user request.
 - No arbitrary external fault targets or production traffic.
 - No assumed Packet Tracer/Wireshark automation.
 - Deployment, destructive actions, production migrations, and external messaging require explicit task authorization.
@@ -60,11 +60,11 @@ This document preparation task ends before application implementation.
 ## Repository-specific details
 - Owner/decision maker: Project owner/user.
 - Destination: This repository's local checkout; the architecture pack remains under `FaultNet-Architecture-Pack/`.
-- Inspection: Uploaded project archive contains an empty project directory.
+- Inspection: The original archive was empty; the task branch now contains src/, public/, tests/, package manifests, and approved contracts.
 - Document pack: Approved by the project owner; proposals and unresolved items retain their labels.
 - Approved command sections: [Code Style](docs/CODE_STYLE.md#verified-commands) and [Testing](docs/TESTING.md#verified-commands).
-- Commands: Not configured.
+- Commands: npm start and npm test; see verified-command sections and HANDOFF.md for outcomes.
 - Sensitive systems: No external services or credentials approved.
 - Confirmed local tool: Cisco Packet Tracer; version unverified.
-- Blocking unknowns: Measurement protocol, numeric limits, implementation contracts, and required lab evidence.
-- Other unresolved details: Node.js version, ports, dependencies, visual tokens, Wireshark availability/permissions, grading rubric, and exact deadline interpretation.
+- Application contracts: Node.js 22.23.1, no external packages, ports 3000/3001/3002, schema v1, bounded measurements, and dashboard tokens.
+- Outstanding gates: Required lab evidence, Wireshark availability/permissions, Packet Tracer version/scenarios, grading rubric, deadline interpretation, other-laptop verification, and release acceptance.
