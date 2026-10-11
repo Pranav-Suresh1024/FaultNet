@@ -8,7 +8,7 @@ The user's 12 October implementation-start request approves proceeding with the 
 - Implemented inline from the reviewed roadmap with test-first batches. No extra worktree: project guide requests the intended existing folder; task branch keeps application work off main.
 - R02-R10/R13: fixed demo, validation/security, persistence, probe/metrics, all proxy faults, lifecycle/API/export implemented and locally tested.
 - R11-R12: dashboard, saved/phase/cross-run comparisons and downloads implemented; bounded rendered browser checks and controlled asynchronous regression passed.
-- R14: 26 local tests pass plus independent review; pinned Windows CI configured, remote outcome pending push. Task-board entries remain In review until integration.
+- R14: 26 local tests pass plus independent review; pinned Windows CI passed for application commit d23ef1a in [run 38171334106](https://github.com/Pranav-Suresh1024/FaultNet/actions/runs/38171334106). Task-board entries remain In review until integration.
 - R15-R20: separate labs, remote-laptop validation and release/report remain pending.
 
 ## Verification
@@ -29,4 +29,4 @@ Browser checks: start interruption/delay/baseline, stop throttling, phase/recove
 Final independent targeted review: no remaining critical/important defect found in reviewed scope. Hard-crash/power-loss durability, exhaustive security/accessibility, real-browser race timing, external labs and other laptops remain unverified.
 
 ## CI configuration provenance
-Pinned v7 action commits were resolved from the official [checkout](https://github.com/actions/checkout) and [setup-node](https://github.com/actions/setup-node) repositories. Workflow uses read-only repository permission, no persisted checkout credentials or dependency cache, the committed runtime and npm test. Its presence does not prove a remote pass.
+Pinned v7 action commits were resolved from the official [checkout](https://github.com/actions/checkout) and [setup-node](https://github.com/actions/setup-node) repositories. Workflow uses read-only repository permission, no persisted checkout credentials or dependency cache, the committed runtime and npm test. The application commit's remote checkout/runtime/test steps passed; verify future tips separately.

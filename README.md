@@ -20,6 +20,8 @@ npm test
 
 Tests use temporary storage and ephemeral ports. Runtime results go to ignored `results/`; code pushes do not transfer those records or captures. Phase-boundary saving can lose latest observations on a hard crash; failed saves are shown explicitly. Lab evidence and other-laptop validation remain pending.
 
+The [Windows CI workflow](.github/workflows/checks.yml) runs the same tests on branch pushes and pull requests. The application checkpoint passed from a fresh GitHub checkout; check the current branch's result before integration.
+
 ## Shared context
 
 - [AGENTS.md](AGENTS.md): rules every coding agent must follow.
