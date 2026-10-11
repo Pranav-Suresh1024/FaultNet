@@ -1,0 +1,28 @@
+# Local credentials and configuration
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node dependencies and common generated outputs
+node_modules/
+dist/
+build/
+coverage/
+.next/
+
+# Local logs and operating system files
+*.log
+.DS_Store
+Thumbs.db
