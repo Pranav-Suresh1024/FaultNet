@@ -5,6 +5,7 @@
 - The original document-preparation boundaries below describe that earlier task. The current user has separately authorized repository setup, context documentation, commits, and pushes to `Pranav-Suresh1024/FaultNet`; application implementation is still not authorized by this synchronization task.
 - Resolve paths relative to the checkout. The repository is shared across three laptops with different local paths and Codex accounts; do not depend on the original laptop's absolute destination.
 - Subsequent task status is recorded in [HANDOFF.md](../HANDOFF.md) and [roadmap.md](../roadmap.md). The user requested implementation, then explicitly paused it for roadmap preparation; honor the latest pause/resume instruction.
+- Read the [concrete implementation proposals](../docs/implementation-contracts.md); they are recorded for review, not silently approved. The teammate is currently idle and the user plans to grant access in the morning.
 
 ## Project context
 FaultNet is a Windows-first, local network-resilience lab project.

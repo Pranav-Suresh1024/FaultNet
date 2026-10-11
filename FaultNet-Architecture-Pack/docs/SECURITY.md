@@ -1,5 +1,8 @@
 # Security
 
+## Concrete proposals for review
+[Local control security](../../docs/implementation-contracts.md#local-control-security) proposes exact Host/Origin checks, an in-memory session capability, asset allowlisting, request/resource limits, and security regression cases. These are proposed enforcement choices, not implemented or tested protections.
+
 ## Assets and trust boundaries
 - Assets: Experiment controls, fixed demo target, local result files, and separate packet captures.
 - Untrusted inputs: Browser requests, settings, identifiers, stored file contents, and external reference material.

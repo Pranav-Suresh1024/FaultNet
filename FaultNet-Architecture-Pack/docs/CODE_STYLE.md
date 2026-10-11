@@ -1,5 +1,8 @@
 # Code Style
 
+## Concrete proposals for review
+[Implementation contracts](../../docs/implementation-contracts.md#runtime-and-startup) proposes a reference Node runtime, ES modules, no third-party packages, and future start/test scripts. Its [module interfaces](../../docs/implementation-contracts.md#module-ownership-and-interfaces) coordinate agent work. No manifest, scripts, exports, or installed dependencies exist yet; approval is pending.
+
 ## Languages and conventions
 - Approved: JavaScript on Node.js; plain HTML/CSS/JavaScript frontend.
 - Node.js version and browser support: Unresolved.

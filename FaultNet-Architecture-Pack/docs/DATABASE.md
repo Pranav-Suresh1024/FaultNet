@@ -1,5 +1,8 @@
 # Database
 
+## Concrete proposals for review
+[Record and persistence contract](../../docs/implementation-contracts.md#record-and-persistence-contract) proposes schema v1, UUID identifiers, record fields, safe writes, corruption handling, and explicit crash-durability limits; the [exports proposal](../../docs/implementation-contracts.md#exports) specifies JSON/CSV contents. These proposals remain unapproved and unimplemented.
+
 ## Storage model
 - Approved storage: Local JSON files; no database service selected.
 - Ownership: Single local lab operator; no tenants or account-owned records.

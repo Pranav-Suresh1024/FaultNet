@@ -1,5 +1,8 @@
 # Architecture
 
+## Concrete proposals for review
+[Implementation contracts](../../docs/implementation-contracts.md) proposes Node.js 22.23.1, built-in facilities without third-party packages, three loopback listeners, startup/cleanup behavior, exact API contracts, and module boundaries. These are pending review, not configured services or approved new decisions.
+
 ## System purpose
 Implement the local FaultNet workflow defined in [PRD.md](PRD.md): Run controlled application experiments, compare phases, retain results, and document separate network simulations and captures.
 

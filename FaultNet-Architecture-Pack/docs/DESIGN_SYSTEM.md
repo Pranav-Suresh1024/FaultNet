@@ -1,5 +1,8 @@
 # Design System
 
+## Concrete proposals for review
+[Dashboard proposal](../../docs/implementation-contracts.md#dashboard-proposal) supplies one-page layout, UI states, numeric visual tokens, polling behavior, and accessibility checks. They are pending approval; no rendered UI or compliance result exists yet.
+
 ## Design direction
 - Approved: Simple lab dashboard for FaultNet.
 - Proposed qualities: Clear, restrained, and evidence-focused.

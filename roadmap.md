@@ -10,6 +10,8 @@
 
 This is a task roadmap, not a finalized API or numeric protocol. File paths and laptop lanes below are proposals. R01 freezes the contracts before dependent agents implement them; do not turn an unresolved choice into an assumed requirement.
 
+Concrete recommendations are now recorded in [implementation contracts](docs/implementation-contracts.md), pending owner review. Teammate access is planned for the morning and the teammate is not working currently; this checkout owns the requested documentation work. Application implementation remains paused.
+
 ## Global constraints
 
 - Agents write all application and test code. The user supplies decisions and access; GUI observations may require the user's machine.
@@ -49,7 +51,7 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 | ID | Small deliverable | Depends on | Lane | Status | Assigned laptop / branch / evidence |
 | --- | --- | --- | --- | --- | --- |
 | R00 | Repository and portable context | None | A | Done | Setup verified in commit `1e75729`; other laptops' access unverified |
-| R01 | Approve runtime, measurement, API/schema, security, UI, and lab contracts | User resumes implementation | A + user | Blocked | Pending decisions; no application contracts approved |
+| R01 | Approve runtime, measurement, API/schema, security, UI, and lab contracts | User resumes implementation | A + user | In review | Concrete contract proposal prepared; no approval or coding yet; lab/rubric questions remain |
 | R02 | Fixed demo response and startup/shutdown | R01 | A | Planned | Unassigned |
 | R03 | Local control security and input validation | R01 | A | Planned | Unassigned |
 | R04 | JSON record persistence and safe reads | R01 | B | Planned | Unassigned |
@@ -75,6 +77,8 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 ### R01: Freeze decisions before parallel implementation
 
 **Owns:** Updates to the seven specification documents and shared contracts. No application code.
+
+**Review artifact:** [docs/implementation-contracts.md](docs/implementation-contracts.md). The user authorized proposing/recording choices; this does not approve the choices or resume coding. Approve the application contract before its dependent tasks; resolve lab-specific questions before their affected tasks rather than treating teammate access as a blocker for local documentation.
 
 - [ ] Record the user's implementation-resume instruction, course rubric, and confirmed deadline; record unavailable information explicitly.
 - [ ] Approve runtime/module format, required packages (if any), ports, storage directory, and proposed file ownership. Define reproducible start/test commands as planned commands until implemented and verified.

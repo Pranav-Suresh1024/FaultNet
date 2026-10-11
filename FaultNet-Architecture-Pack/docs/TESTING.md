@@ -1,5 +1,8 @@
 # Testing
 
+## Concrete proposals for review
+[Test and evidence protocol](../../docs/implementation-contracts.md#test-and-evidence-protocol) proposes Node's built-in test runner, exact fault-check workloads/tolerances, failure/security cases, and separate browser/lab checks. These are planned checks, not configured commands or passing test results.
+
 ## Goals and scope
 Verify [PRD F-01 through F-07](PRD.md#feature-specifications) and the boundaries in [SECURITY.md](SECURITY.md).
 Compare normal, faulty, and recovery conditions without conflating application failures with IP packet loss.

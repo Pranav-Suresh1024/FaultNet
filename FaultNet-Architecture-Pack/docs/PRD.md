@@ -1,5 +1,8 @@
 # Product Requirements Document
 
+## Concrete proposals for review
+[Implementation contracts](../../docs/implementation-contracts.md#measurement-protocol) now proposes measurement settings, definitions, safety bounds, and separate lab scenarios for roadmap R01. These choices remain pending approval; the approved scope and open course/tool questions below are preserved.
+
 ## Project context
 - Product: FaultNet.
 - Owner: Project owner/user.
