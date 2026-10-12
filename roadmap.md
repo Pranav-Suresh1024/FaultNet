@@ -65,9 +65,9 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 | R12 | Phase comparison and saved-run browser | R04, R05, R11 | C | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
 | R13 | JSON/CSV export and dashboard download | R04, R05, R10, R12 | B then C | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
 | R14 | End-to-end, failure-path, and security regression checks | R07-R13 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
-| R15 | Packet Tracer procedure and topology | R01 lab decisions | C | In progress | Teammate / task/packet-tracer-labs, user-reported; not independently reviewed |
-| R16 | Recorded Packet Tracer evidence | R15 | C | Planned | Teammate reports .pkt files; recorded scenario evidence not independently verified |
-| R17 | Wireshark capture procedure | R01 lab decisions, R06 | C | Planned | Capture availability/permissions unverified |
+| R15 | Packet Tracer procedure and topology | R01 lab decisions | C | In review | Teammate / task/packet-tracer-labs / 9f72386; three saved projects independently opened/config reviewed, not merged |
+| R16 | Recorded Packet Tracer evidence | R15 | C | In review | Static outage and RIP/OSPF alternate routes independently checked; see docs/packet-tracer-review.md for scope/transients |
+| R17 | Wireshark capture procedure | R01 lab decisions, R06 | C | In review | docs/wireshark-guide.md; Wireshark 4.6.9/loopback discovered, actual capture permissions pending |
 | R18 | Recorded Wireshark evidence | R14, R17 | C | Planned | No capture results yet |
 | R19 | Fresh-checkout verification across all three laptops | R14 | A + all laptops | Planned | Unassigned |
 | R20 | Final report, demo instructions, and release checkpoint | R14, R16, R18, R19 | A then C | Planned | Rubric/deadline confirmation pending |
