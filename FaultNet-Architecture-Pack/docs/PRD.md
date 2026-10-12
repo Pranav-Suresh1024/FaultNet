@@ -1,7 +1,7 @@
 # Product Requirements Document
 
 ## Approved application contracts
-The user resumed implementation on 12 October 2026 after reviewing the [implementation contracts](../../docs/implementation-contracts.md#measurement-protocol). Application settings, definitions, safety bounds, API/schema, and UI choices are approved. Separate lab scenarios remain proposals; course/tool questions remain open. Current evidence is in [HANDOFF.md](../../HANDOFF.md).
+The user resumed implementation on 12 October 2026 after reviewing the [implementation contracts](../../docs/implementation-contracts.md#measurement-protocol). Application settings, definitions, safety bounds, API/schema, and UI choices are approved. Static/RIPv2/OSPF Packet Tracer scenarios were explicitly requested and have reviewed local evidence under labs/packet-tracer; Wireshark/course questions remain open. Current evidence is in [HANDOFF.md](../../HANDOFF.md).
 
 ## Project context
 - Product: FaultNet.
@@ -87,7 +87,7 @@ The following acceptance criteria use the approved concrete application contract
 - Accessibility requirements follow [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md); compliance requires rendered verification.
 
 ## Open decisions
-- Exact Packet Tracer scenarios and RIP/OSPF coverage — owner: Project owner; needed before lab procedures are finalized.
+- Packet Tracer scope resolved: static/RIPv2/OSPF, three-router alternate path; review evidence under labs/packet-tracer before integration.
 - Wireshark availability and capture privileges — owner: Project owner; needed before capture exercises.
 - Deadline interpretation and course rubric — owner: Project owner; needed before release planning.
 

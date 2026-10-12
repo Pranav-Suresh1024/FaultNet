@@ -1,10 +1,10 @@
 # Architecture
 
 ## Approved application contracts
-The user resumed implementation on 12 October 2026 after reviewing the [implementation contracts](../../docs/implementation-contracts.md). Application contracts are approved; lab choices remain proposals. Current verification is in [HANDOFF.md](../../HANDOFF.md).
+The user resumed implementation on 12 October 2026 after reviewing the [implementation contracts](../../docs/implementation-contracts.md). Application contracts are approved; static/RIPv2/OSPF Packet Tracer scenarios were requested and executed separately. Wireshark choices remain open. Current verification is in [HANDOFF.md](../../HANDOFF.md).
 
 ## System purpose
-Implement [PRD F-01 through F-07](PRD.md#feature-specifications) as a local resilience lab. The application portion exists on task/faultnet-mvp; separate lab evidence and release remain pending.
+Implement [PRD F-01 through F-07](PRD.md#feature-specifications) as a local resilience lab. The application portion exists on task/faultnet-mvp; Packet Tracer evidence is in review on task/packet-tracer-labs; Wireshark and release remain pending.
 
 ## Stack and boundaries
 - Node.js 22.23.1, ES modules, built-in HTTP/filesystem/crypto/test facilities; no third-party packages.
@@ -37,7 +37,7 @@ Implemented routes, response/error shapes, settings, and module interfaces are d
 - tests/: Built-in Node tests with temporary storage and ephemeral ports.
 - docs/: Approved contracts and implementation ledger.
 - FaultNet-Architecture-Pack/docs/: These seven companion specifications.
-- labs/: Future separate procedures/evidence; not yet populated.
+- labs/packet-tracer/: Three saved routing projects, procedures, configurations, previews, and reviewed live simulation observations.
 
 ## Operations
 Run npm start from the Git root. Port/init failure closes already opened listeners and reports an error. Stop/shutdown cancels probing, clears held proxy work, saves terminal evidence, and closes listeners. Failed saves are reported; no silent successful shutdown with retained unsaved evidence.
@@ -45,4 +45,4 @@ Run npm start from the Git root. Port/init failure closes already opened listene
 One active experiment, no hidden retries, 120-second probing deadline. Refer to contracts for all numeric limits. A crash may lose observations since the last phase save; restart labels active saved records interrupted.
 
 ## Open work
-Packet Tracer topology/routing requirements, Wireshark access, deadline/rubric, other-laptop verification, and release acceptance remain unresolved. Node 24 compatibility is unverified.
+Packet Tracer artifacts require integration review. Wireshark access, deadline/rubric, other-laptop verification, and release acceptance remain unresolved. The application test suite passed on Node 24.14.1; the reference runtime remains Node 22.23.1.

@@ -31,4 +31,4 @@ Settings display input ranges/units. Baseline-only disables fault inputs. Active
 - Outcomes do not rely on color alone. Test keyboard, contrast, reflow, and browser behavior on rendered UI; implemented semantics alone do not certify accessibility.
 
 ## Verification
-See [HANDOFF.md](../../HANDOFF.md) for observed browser workflows and remaining checks. Reference is Chromium-based desktop browsing on Windows; other browsers/mobile are unverified. Separate lab observations remain pending.
+See [HANDOFF.md](../../HANDOFF.md) for observed browser workflows and remaining checks. Reference is Chromium-based desktop browsing on Windows; other browsers/mobile are unverified. Separate Packet Tracer observations are in labs/packet-tracer; Wireshark observations remain pending. The dashboard's existing footer still needs its pending-evidence wording updated, as proposed in docs/codebase-review.md.

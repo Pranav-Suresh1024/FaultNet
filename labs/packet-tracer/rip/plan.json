@@ -1,0 +1,332 @@
+{
+  "name": "faultnet-rip-triangle",
+  "devices": [
+    {
+      "name": "R1",
+      "model": "2911",
+      "category": "router",
+      "role": "edge_router",
+      "x": 180,
+      "y": 100,
+      "interfaces": {
+        "GigabitEthernet0/0": "10.0.0.1/30",
+        "GigabitEthernet0/1": "10.0.0.10/30",
+        "GigabitEthernet0/2": "192.168.0.1/24"
+      },
+      "gateway": "",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    },
+    {
+      "name": "R2",
+      "model": "2911",
+      "category": "router",
+      "role": "core_router",
+      "x": 430,
+      "y": 100,
+      "interfaces": {
+        "GigabitEthernet0/0": "10.0.0.2/30",
+        "GigabitEthernet0/1": "10.0.0.5/30",
+        "GigabitEthernet0/2": "192.168.1.1/24"
+      },
+      "gateway": "",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    },
+    {
+      "name": "R3",
+      "model": "2911",
+      "category": "router",
+      "role": "edge_router",
+      "x": 680,
+      "y": 40,
+      "interfaces": {
+        "GigabitEthernet0/0": "10.0.0.6/30",
+        "GigabitEthernet0/1": "10.0.0.9/30",
+        "GigabitEthernet0/2": "192.168.2.1/24"
+      },
+      "gateway": "",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    },
+    {
+      "name": "SW1",
+      "model": "2960-24TT",
+      "category": "switch",
+      "role": "access_switch",
+      "x": 180,
+      "y": 250,
+      "interfaces": {},
+      "gateway": "",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    },
+    {
+      "name": "PC1",
+      "model": "PC-PT",
+      "category": "pc",
+      "role": "end_host",
+      "x": 100,
+      "y": 400,
+      "interfaces": {
+        "FastEthernet0": "192.168.0.2/24"
+      },
+      "gateway": "192.168.0.1",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    },
+    {
+      "name": "PC2",
+      "model": "PC-PT",
+      "category": "pc",
+      "role": "end_host",
+      "x": 180,
+      "y": 400,
+      "interfaces": {
+        "FastEthernet0": "192.168.0.3/24"
+      },
+      "gateway": "192.168.0.1",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    },
+    {
+      "name": "SW2",
+      "model": "2960-24TT",
+      "category": "switch",
+      "role": "access_switch",
+      "x": 430,
+      "y": 250,
+      "interfaces": {},
+      "gateway": "",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    },
+    {
+      "name": "PC3",
+      "model": "PC-PT",
+      "category": "pc",
+      "role": "end_host",
+      "x": 350,
+      "y": 400,
+      "interfaces": {
+        "FastEthernet0": "192.168.1.2/24"
+      },
+      "gateway": "192.168.1.1",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    },
+    {
+      "name": "PC4",
+      "model": "PC-PT",
+      "category": "pc",
+      "role": "end_host",
+      "x": 430,
+      "y": 400,
+      "interfaces": {
+        "FastEthernet0": "192.168.1.3/24"
+      },
+      "gateway": "192.168.1.1",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    },
+    {
+      "name": "SW3",
+      "model": "2960-24TT",
+      "category": "switch",
+      "role": "access_switch",
+      "x": 680,
+      "y": 250,
+      "interfaces": {},
+      "gateway": "",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    },
+    {
+      "name": "PC5",
+      "model": "PC-PT",
+      "category": "pc",
+      "role": "end_host",
+      "x": 600,
+      "y": 400,
+      "interfaces": {
+        "FastEthernet0": "192.168.2.2/24"
+      },
+      "gateway": "192.168.2.1",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    },
+    {
+      "name": "PC6",
+      "model": "PC-PT",
+      "category": "pc",
+      "role": "end_host",
+      "x": 680,
+      "y": 400,
+      "interfaces": {
+        "FastEthernet0": "192.168.2.3/24"
+      },
+      "gateway": "192.168.2.1",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    }
+  ],
+  "modules": [],
+  "links": [
+    {
+      "device_a": "R1",
+      "port_a": "GigabitEthernet0/0",
+      "device_b": "R2",
+      "port_b": "GigabitEthernet0/0",
+      "cable": "cross"
+    },
+    {
+      "device_a": "R2",
+      "port_a": "GigabitEthernet0/1",
+      "device_b": "R3",
+      "port_b": "GigabitEthernet0/0",
+      "cable": "cross"
+    },
+    {
+      "device_a": "R3",
+      "port_a": "GigabitEthernet0/1",
+      "device_b": "R1",
+      "port_b": "GigabitEthernet0/1",
+      "cable": "cross"
+    },
+    {
+      "device_a": "R1",
+      "port_a": "GigabitEthernet0/2",
+      "device_b": "SW1",
+      "port_b": "GigabitEthernet0/1",
+      "cable": "straight"
+    },
+    {
+      "device_a": "R2",
+      "port_a": "GigabitEthernet0/2",
+      "device_b": "SW2",
+      "port_b": "GigabitEthernet0/1",
+      "cable": "straight"
+    },
+    {
+      "device_a": "R3",
+      "port_a": "GigabitEthernet0/2",
+      "device_b": "SW3",
+      "port_b": "GigabitEthernet0/1",
+      "cable": "straight"
+    },
+    {
+      "device_a": "SW1",
+      "port_a": "FastEthernet0/1",
+      "device_b": "PC1",
+      "port_b": "FastEthernet0",
+      "cable": "straight"
+    },
+    {
+      "device_a": "SW1",
+      "port_a": "FastEthernet0/2",
+      "device_b": "PC2",
+      "port_b": "FastEthernet0",
+      "cable": "straight"
+    },
+    {
+      "device_a": "SW2",
+      "port_a": "FastEthernet0/1",
+      "device_b": "PC3",
+      "port_b": "FastEthernet0",
+      "cable": "straight"
+    },
+    {
+      "device_a": "SW2",
+      "port_a": "FastEthernet0/2",
+      "device_b": "PC4",
+      "port_b": "FastEthernet0",
+      "cable": "straight"
+    },
+    {
+      "device_a": "SW3",
+      "port_a": "FastEthernet0/1",
+      "device_b": "PC5",
+      "port_b": "FastEthernet0",
+      "cable": "straight"
+    },
+    {
+      "device_a": "SW3",
+      "port_a": "FastEthernet0/2",
+      "device_b": "PC6",
+      "port_b": "FastEthernet0",
+      "cable": "straight"
+    }
+  ],
+  "dhcp_pools": [],
+  "static_routes": [],
+  "ospf_configs": [],
+  "rip_configs": [
+    {
+      "router": "R1",
+      "version": 2,
+      "networks": [
+        "10.0.0.0",
+        "192.168.0.0"
+      ],
+      "no_auto_summary": true
+    },
+    {
+      "router": "R2",
+      "version": 2,
+      "networks": [
+        "10.0.0.0",
+        "192.168.1.0"
+      ],
+      "no_auto_summary": true
+    },
+    {
+      "router": "R3",
+      "version": 2,
+      "networks": [
+        "10.0.0.0",
+        "192.168.2.0"
+      ],
+      "no_auto_summary": true
+    }
+  ],
+  "eigrp_configs": [],
+  "vlans": [],
+  "access_ports": [],
+  "trunks": [],
+  "subinterfaces": [],
+  "validations": [
+    {
+      "check_type": "ping",
+      "from_device": "PC1",
+      "to_target": "PC6",
+      "expected": "Reply"
+    }
+  ],
+  "dual_stack": false,
+  "errors": [],
+  "warnings": []
+}

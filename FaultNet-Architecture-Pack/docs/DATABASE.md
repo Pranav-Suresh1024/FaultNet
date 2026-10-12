@@ -29,7 +29,7 @@ Restart labels saved active records interrupted. Latest in-phase observations ma
 ## Queries, exports, and transfer
 List newest first, read by validated identifier, compare compatible protocols, export validated JSON or fixed-column CSV. CSV protects formula-sensitive text and preserves empty-run metadata. No pagination is included in this small local lab; revisit for a large archive.
 
-Synthetic fixtures are built by agents inside temporary test directories. Records/captures are ignored by Git and do not move with source pushes. Deliberately review/export/transfer evidence separately if needed. No automatic evidence backup is configured.
+Synthetic fixtures are built by agents inside temporary test directories. Records/captures are ignored by Git and do not move with source pushes. Deliberately review/export/transfer evidence separately if needed. No automatic evidence backup is configured. This branch deliberately transfers reviewed Packet Tracer simulator artifacts under labs/packet-tracer; application records and raw captures remain excluded.
 
 ## Validation evidence
 Storage, corruption, restart interruption, chronology, failure retention, and export parity checks are in tests/storage.test.js, tests/runner.test.js, tests/api.test.js, and tests/lifecycle.test.js. Exact outcomes are recorded in [HANDOFF.md](../../HANDOFF.md).

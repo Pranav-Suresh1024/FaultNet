@@ -18,9 +18,17 @@ Choose a baseline or baseline/fault/recovery run. Delay, bandwidth restriction, 
 npm test
 ```
 
-Tests use temporary storage and ephemeral ports. Runtime results go to ignored `results/`; code pushes do not transfer those records or captures. Phase-boundary saving can lose latest observations on a hard crash; failed saves are shown explicitly. Lab evidence and other-laptop validation remain pending.
+Tests use temporary storage and ephemeral ports. Runtime results go to ignored `results/`; code pushes do not transfer those records or captures. Phase-boundary saving can lose latest observations on a hard crash; failed saves are shown explicitly. Reviewed static/RIPv2/OSPF Packet Tracer projects and live observations are now in [labs/packet-tracer](labs/packet-tracer/README.md) on task/packet-tracer-labs. Wireshark evidence and other-laptop validation remain pending.
 
 The [Windows CI workflow](.github/workflows/checks.yml) runs the same tests on branch pushes and pull requests. The application checkpoint passed from a fresh GitHub checkout; check the current branch's result before integration.
+
+## Packet Tracer and review
+
+- [Three Packet Tracer projects and repeatable procedure](labs/packet-tracer/README.md).
+- [Observed baseline, outage, and recovery results](labs/packet-tracer/LIVE-VERIFICATION.md).
+- [Codebase review and proposed app improvements](docs/codebase-review.md).
+
+The lab branch is based on task/faultnet-mvp and contains the application checkpoint plus the lab additions. No main merge is implied.
 
 ## Shared context
 

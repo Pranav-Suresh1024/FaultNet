@@ -1,0 +1,5 @@
+enable
+configure terminal
+hostname SW3
+end
+write memory

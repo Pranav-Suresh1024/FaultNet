@@ -1,0 +1,25 @@
+{
+  "scenario": "static",
+  "date": "2026-10-12",
+  "simulator": "Cisco Packet Tracer 9.0.1",
+  "method": "Live MCP pt_verify_connectivity from PC1 to 192.168.1.2; fault by disabling R1 GigabitEthernet0/0; port restored before saving",
+  "networkDevicesPlanned": 12,
+  "linksPlanned": 12,
+  "reopenedDeviceCount": 13,
+  "reopenedLinkCount": 12,
+  "auxiliaryDevice": "Packet Tracer Power Distribution Device0",
+  "baseline": [
+    "2/4 (initial ARP warm-up)",
+    "4/4"
+  ],
+  "fault": [
+    "0/4"
+  ],
+  "restored": [
+    "3/4 (initial restoration)",
+    "4/4"
+  ],
+  "routeAfterFault": "No alternate static route to destination LAN; observed reachability failed.",
+  "project": "FaultNet-static.pkt",
+  "projectReopened": true
+}

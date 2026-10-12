@@ -30,6 +30,6 @@ Check behavior against PRD feature IDs and contracts; test meaningful success/fa
 - Start: npm start (node src/main.js).
 - Test: npm test (node --test).
 - Whitespace: git diff --check.
-- No separate build, format, lint, typecheck, or lab-automation command is configured.
+- No separate application build, format, lint, or typecheck is configured. Optional lab-specific Python helpers are documented under labs/packet-tracer and do not add application dependencies.
 
 Actual outcomes/environment are recorded in [HANDOFF.md](../../HANDOFF.md), not inferred from the presence of a script.

@@ -30,3 +30,7 @@ Final independent targeted review: no remaining critical/important defect found 
 
 ## CI configuration provenance
 Pinned v7 action commits were resolved from the official [checkout](https://github.com/actions/checkout) and [setup-node](https://github.com/actions/setup-node) repositories. Workflow uses read-only repository permission, no persisted checkout credentials or dependency cache, the committed runtime and npm test. The application commit's remote checkout/runtime/test steps passed; verify future tips separately.
+
+## Packet Tracer checkpoint — 12 October 2026
+
+User requested static/RIPv2/OSPF coverage and upload to a separate branch. task/packet-tracer-labs adds three .pkt projects and reviewed live observations under labs/packet-tracer. See its README and LIVE-VERIFICATION.md for exact topology, results, transients, and reproducibility limits. npm test from the fresh application checkout on Node 24.14.1 passed 26/26 (about 17.8 seconds). docs/codebase-review.md contains suggestions and a reproduced saved-selection defect; application logic is unchanged. Wireshark, other laptops, reference-runtime current-branch CI, and integration remain separate checks.

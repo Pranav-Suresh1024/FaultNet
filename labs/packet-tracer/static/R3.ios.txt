@@ -1,0 +1,25 @@
+enable
+configure terminal
+hostname R3
+no ip domain-lookup
+
+interface GigabitEthernet0/0
+ ip address 10.0.0.6 255.255.255.252
+ no shutdown
+ exit
+
+interface GigabitEthernet0/1
+ ip address 10.0.0.9 255.255.255.252
+ no shutdown
+ exit
+
+interface GigabitEthernet0/2
+ ip address 192.168.2.1 255.255.255.0
+ no shutdown
+ exit
+
+ip route 192.168.0.0 255.255.255.0 10.0.0.10
+ip route 192.168.1.0 255.255.255.0 10.0.0.5
+
+end
+write memory

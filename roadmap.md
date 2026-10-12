@@ -2,7 +2,7 @@
 
 **Goal:** Deliver a reproducible local network-resilience lab with baseline/fault/recovery measurements, saved results, exports, and separate network-lab evidence.
 
-**Status:** Implementation resumed on 12 October 2026 after the concrete application contracts were presented. The local application checkpoint is implemented on `task/faultnet-mvp` with tests/review; it is not yet integrated into main. Lab/report/release and other-laptop validation remain pending.
+**Status:** Implementation resumed on 12 October 2026 after the concrete application contracts were presented. The local application checkpoint is implemented on `task/faultnet-mvp` with tests/review; it is not yet integrated into main. Static/RIPv2/OSPF Packet Tracer artifacts and observations are in review on task/packet-tracer-labs. Wireshark/report/release and other-laptop validation remain pending.
 
 **Architecture:** Plain browser dashboard, Node.js control service, fixed demo server, fault proxy, and local JSON records. The dashboard/control path stays usable while demo traffic is impaired. Packet Tracer and Wireshark provide separate evidence.
 
@@ -65,8 +65,8 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 | R12 | Phase comparison and saved-run browser | R04, R05, R11 | C | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
 | R13 | JSON/CSV export and dashboard download | R04, R05, R10, R12 | B then C | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
 | R14 | End-to-end, failure-path, and security regression checks | R07-R13 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
-| R15 | Packet Tracer procedure and topology | R01 lab decisions | C | Planned | Unassigned |
-| R16 | Recorded Packet Tracer evidence | R15 | C | Planned | Tool/environment access unverified |
+| R15 | Packet Tracer procedure and topology | R01 lab decisions | C | In review | task/packet-tracer-labs; labs/packet-tracer/README.md and three .pkt projects |
+| R16 | Recorded Packet Tracer evidence | R15 | C | In review | Packet Tracer 9.0.1; baseline/fault/restoration pings and route checks; LIVE-VERIFICATION.md |
 | R17 | Wireshark capture procedure | R01 lab decisions, R06 | C | Planned | Capture availability/permissions unverified |
 | R18 | Recorded Wireshark evidence | R14, R17 | C | Planned | No capture results yet |
 | R19 | Fresh-checkout verification across all three laptops | R14 | A + all laptops | Planned | Unassigned |
@@ -212,8 +212,8 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 
 **Proposed files:** `labs/packet-tracer/README.md`, approved `.pkt` topology, reviewed observations/screenshots.
 
-- [ ] R15: Define the approved topology/protocol scenarios, repeatable steps, expected observable behavior, tool version, and evidence checklist. Do not assume RIP/OSPF coverage before R01.
-- [ ] R16: Execute available GUI steps, record actual observations and limitations, and review evidence before committing it.
+- [x] R15: User requested static/RIPv2/OSPF; three-router alternate-path topology, procedure, addresses, tool version, and expected behavior documented in labs/packet-tracer/README.md.
+- [x] R16: Built and tested all three projects through the live MCP; saved/reopened .pkt files, recorded exact ping transients and failover routes, and captured canvas previews. Artifacts remain In review until integration.
 
 **Done when:** Another operator can reproduce the procedure and distinguish simulated observations from application measurements. If execution is unavailable, keep R16 blocked and report the missing evidence. **Coverage:** F-06 simulation.
 

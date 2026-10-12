@@ -1,0 +1,19 @@
+{
+  "protocol": "static",
+  "validation": {
+    "valid": true,
+    "error_count": 0,
+    "warning_count": 0,
+    "errors": [],
+    "warnings": []
+  },
+  "deviceCount": 12,
+  "linkCount": 12,
+  "pcSource": "PC1 192.168.0.2/24",
+  "pcTarget": "PC3 192.168.1.2/24",
+  "faultLink": "R1 GigabitEthernet0/0 <-> R2 GigabitEthernet0/0",
+  "evidenceStatus": "live Packet Tracer deployed, measured, saved, and reopened; see measure-evidence.json",
+  "projectBytes": 61871,
+  "projectSha256": "76043a0d69ff1256bc41ac1099418abf3acc0715caa4af6a370eba9f99a15f0b",
+  "preview": "topology.png"
+}

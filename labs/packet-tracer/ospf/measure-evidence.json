@@ -1,0 +1,27 @@
+{
+  "scenario": "ospf",
+  "date": "2026-10-12",
+  "simulator": "Cisco Packet Tracer 9.0.1",
+  "method": "Live MCP pt_verify_connectivity from PC1 to 192.168.1.2; fault by disabling R1 GigabitEthernet0/0; port restored before saving",
+  "networkDevicesPlanned": 12,
+  "linksPlanned": 12,
+  "reopenedDeviceCount": 13,
+  "reopenedLinkCount": 12,
+  "auxiliaryDevice": "Packet Tracer Power Distribution Device0",
+  "baseline": [
+    "0/4 (initial protocol convergence)",
+    "0/4",
+    "3/4",
+    "4/4"
+  ],
+  "fault": [
+    "3/4 (convergence)",
+    "4/4"
+  ],
+  "restored": [
+    "4/4"
+  ],
+  "routeAfterFault": "O 192.168.1.0/24 [110/3] via 10.0.0.9, GigabitEthernet0/1 (R3 path)",
+  "project": "FaultNet-ospf.pkt",
+  "projectReopened": true
+}

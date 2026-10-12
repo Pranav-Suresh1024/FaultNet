@@ -25,7 +25,7 @@ Protect experiment controls, fixed demo target, saved evidence, and separate cap
 - CSV escapes quotes and protects spreadsheet formula prefixes. JSON/export excludes bodies, credentials, cookies, capability, and captures.
 
 ## Persistence/privacy
-Stop/shutdown clears faults, cancels probes, and reports save failure. Corrupt/unsupported evidence is identified explicitly. Generated results/captures remain outside Git. Scope capture to synthetic demo traffic, review before sharing, and label simulation/capture/application evidence separately. Capture permissions remain unverified; no compliance claim is made.
+Stop/shutdown clears faults, cancels probes, and reports save failure. Corrupt/unsupported evidence is identified explicitly. Generated application records and raw captures remain outside Git. The user explicitly selected the reviewed Packet Tracer projects, previews, and sanitized simulator observations for branch upload. Scope capture to synthetic demo traffic, review before sharing, and label simulation/capture/application evidence separately. Capture permissions remain unverified; no compliance claim is made.
 
 ## Dependencies and review
 No third-party packages. Commit manifests/lockfile; review necessity before adding packages or changing boundaries. No public deployment or security weakening is authorized. Independent review found and prompted fixes for URL authorization, record chronology, header-deadline enforcement, shutdown persistence, and stale UI selection handling. Regression checks accompany the fixes.

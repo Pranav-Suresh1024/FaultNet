@@ -1,0 +1,29 @@
+enable
+configure terminal
+hostname R2
+no ip domain-lookup
+
+interface GigabitEthernet0/0
+ ip address 10.0.0.2 255.255.255.252
+ no shutdown
+ exit
+
+interface GigabitEthernet0/1
+ ip address 10.0.0.5 255.255.255.252
+ no shutdown
+ exit
+
+interface GigabitEthernet0/2
+ ip address 192.168.1.1 255.255.255.0
+ no shutdown
+ exit
+
+router rip
+ version 2
+ network 10.0.0.0
+ network 192.168.1.0
+ no auto-summary
+ exit
+
+end
+write memory

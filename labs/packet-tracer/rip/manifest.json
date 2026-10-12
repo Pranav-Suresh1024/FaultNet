@@ -1,0 +1,19 @@
+{
+  "protocol": "rip",
+  "validation": {
+    "valid": true,
+    "error_count": 0,
+    "warning_count": 0,
+    "errors": [],
+    "warnings": []
+  },
+  "deviceCount": 12,
+  "linkCount": 12,
+  "pcSource": "PC1 192.168.0.2/24",
+  "pcTarget": "PC3 192.168.1.2/24",
+  "faultLink": "R1 GigabitEthernet0/0 <-> R2 GigabitEthernet0/0",
+  "evidenceStatus": "live Packet Tracer deployed, measured, saved, and reopened; see measure-evidence.json",
+  "projectBytes": 61915,
+  "projectSha256": "14941527fcea9c90350de0fc0f9b3c4d5ac70bae704dc3e7f3503c3cdd7f0903",
+  "preview": "topology.png"
+}

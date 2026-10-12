@@ -165,10 +165,10 @@ Startup wires shared dependencies once; test fixtures can inject local test reso
 
 ## Separate network labs and remaining questions
 
-- Proposed Packet Tracer minimum: two small LANs joined by routers; demonstrate a reachable baseline, link disruption, and restoration with ping observations and topology screenshots. Routing uses explicitly documented static routes for the minimum lab. RIP/OSPF comparisons are added only if the owner/course rubric requires them; that decision stays open.
+- User-approved Packet Tracer scope (12 October 2026): static routing plus RIPv2 and OSPF comparisons. Three 2911 routers in a triangle, three switches, six PCs; disable R1-R2 and verify static outage versus dynamic failover through R3. Packet Tracer 9.0.1 projects, previews, repeatable steps, and actual observations are under labs/packet-tracer. Simulator evidence stays separate from application HTTP metrics.
 - Proposed Wireshark minimum: synthetic demo/proxy traffic only, using the supported Windows loopback capture interface. Verify installation/capture privileges; compare normal, delayed, throttled, and interrupted application traffic with timestamped observations. Do not derive TCP retransmission/RTT claims unless the actual capture supports them.
 - Record versions, interfaces, filters, scenario settings, observations, and limitations in separate lab folders. Raw captures remain outside Git; reviewed sanitized evidence needs deliberate transfer/approval.
-- Course rubric, exact deadline, RIP/OSPF requirements, Packet Tracer version, Wireshark availability, and capture privileges remain unverified. They gate affected lab/report tasks; they do not require agents to invent results.
+- Course rubric, exact deadline, Wireshark availability, and capture privileges remain unverified. RIP/OSPF were explicitly requested and Packet Tracer 9.0.1 was observed; remaining questions gate only their affected work.
 
 ## Laptop coordination status
 
