@@ -14,6 +14,8 @@ Open [FaultNet](http://127.0.0.1:3000). Keep the numeric host: `localhost` is re
 
 Choose a baseline or baseline/fault/recovery run. Delay, bandwidth restriction, and connection interruption affect only the synthetic 64 KiB demo. View phase summaries, saved compatible runs, and JSON/CSV downloads. Low bandwidth can intentionally exceed the timeout. Measurements are HTTP outcomes/elapsed time, not IP packet loss or RTT.
 
+The dashboard has sidebar section navigation, measured summary cards, a phase-median response-time chart, and compact experiment controls. Missing measurements remain unavailable; chart/table regions support keyboard scrolling on narrow screens. This laptop's UI work stays on task/faultnet-mvp while teammate Packet Tracer work stays on its separate lab branch.
+
 ```powershell
 npm test
 ```

@@ -1,4 +1,4 @@
-import { metric, compareRuns } from './results.js';
+import { metric, compareRuns, phaseView } from './results.js';
 
 const el = id => document.getElementById(id);
 let token, selected = null, activeId = null, timer = null, refreshing = false, selectionVersion = 0, refreshAgain = false, starting = false;
@@ -16,9 +16,54 @@ function rows(id, data) {
     return row;
   }));
 }
+function faultName(fault) {
+  return fault.type === 'delay' ? `Response delay · ${fault.delayMs} ms`
+    : fault.type === 'bandwidth' ? `Bandwidth restriction · ${fault.rateKiBps} KiB/s`
+    : fault.type === 'interruption' ? 'Connection interruption' : 'No injected fault';
+}
+function renderChart(chart) {
+  const make = (name, attributes, text) => {
+    const node = document.createElementNS('http://www.w3.org/2000/svg', name);
+    for (const [key, value] of Object.entries(attributes)) node.setAttribute(key, value);
+    if (text !== undefined) node.textContent = text;
+    return node;
+  };
+  const svg = make('svg', { viewBox: '0 0 620 210', role: 'img', 'aria-label': 'Median full-response time in milliseconds. '
+    + chart.map(item => `${item.phase}: ${item.medianMs === null ? 'no successful probes' : metric(item.medianMs) + ' ms'}`).join('. ') });
+  const maximum = Math.max(1, ...chart.map(item => item.medianMs ?? 0));
+  chart.forEach((item, index) => {
+    const y = 16 + index * 65;
+    svg.append(make('text', { x: 0, y: y + 16 }, item.phase[0].toUpperCase() + item.phase.slice(1)),
+      make('text', { x: 0, y: y + 35, class: 'sample-label' }, `${item.successes}/${item.eligible} successful`));
+    if (item.medianMs === null) svg.append(make('text', { x: 105, y: y + 16 }, 'No successful probes'));
+    else {
+      const width = item.medianMs / maximum * 420;
+      svg.append(make('rect', { x: 105, y, width: 420, height: 20, rx: 3, class: 'chart-track' }),
+        make('rect', { x: 105, y, width, height: 20, rx: 3, class: 'chart-' + item.phase }),
+        make('text', { x: 105 + width + 10, y: y + 16 }, metric(item.medianMs)));
+    }
+  });
+  el('latency-chart').replaceChildren(svg);
+}
 function render(record) {
   selected = record;
-  el('run-info').textContent = `${record.createdAt} · ${record.state} · ${record.settings.mode} · fault: ${JSON.stringify(record.settings.fault)} · ${record.id}`;
+  el('run-info').textContent = `${record.createdAt} · ${record.settings.mode} · ${faultName(record.settings.fault)} · Run ${record.id}`;
+  el('run-badge').textContent = record.state;
+  el('run-badge').setAttribute('data-state', record.state);
+  const view = phaseView(record), s = view.summary;
+  const phase = view.phase === 'baseline' ? 'Baseline' : 'Faulty phase';
+  el('metric-availability').textContent = metric(s.availability, true);
+  el('availability-note').textContent = `${phase} · ${s.successCount}/${s.eligibleCount} successful`;
+  el('metric-latency').textContent = metric(s.medianElapsedMs);
+  el('latency-note').textContent = `${phase} · Successful responses`;
+  el('metric-throughput').textContent = metric(s.meanThroughputKiBps);
+  el('throughput-note').textContent = `${phase} · 64 KiB payload`;
+  el('metric-recovery').textContent = metric(record.recovery.durationMs);
+  el('recovery-note').textContent = record.settings.mode === 'baseline' ? 'Not applicable to baseline'
+    : record.recovery.observed ? 'Confirmed · 3 consecutive successes'
+    : ['running', 'stopping'].includes(record.state) ? 'Awaiting confirmation'
+    : record.state === 'completed' ? 'Not observed within 15 seconds' : 'Incomplete experiment';
+  renderChart(view.chart);
   rows('phases', ['baseline', 'faulty', 'recovery'].map(phase => {
     const s = record.summary[phase];
     return [phase, `${s.attemptCount} / ${s.cancelledCount}`, `${s.successCount} / ${s.eligibleCount}`, metric(s.availability, true), metric(s.medianElapsedMs), metric(s.p95ElapsedMs), metric(s.meanThroughputKiBps)];
@@ -47,13 +92,13 @@ async function history() {
 }
 async function comparison() {
   el('comparison-wrap').hidden = true;
-  el('comparison-note').textContent = '';
+  el('comparison-note').textContent = 'Select a run and another experiment to compare their measurements.';
   if (!selected || !el('compare').value) return;
   const current = selected, comparedId = el('compare').value;
   const other = (await (await api('experiments/' + comparedId)).json()).experiment;
   if (selected !== current || el('compare').value !== comparedId) return;
   if (!compareRuns(current, other)) { el('comparison-note').textContent = 'These runs have incompatible protocol settings. Compare runs with the same mode, count, interval, timeout, payload contract, and recovery rules.'; return; }
-  el('comparison-note').textContent = `Selected fault: ${JSON.stringify(current.settings.fault)}. Compared fault: ${JSON.stringify(other.settings.fault)}. States: ${current.state} / ${other.state}.`;
+  el('comparison-note').textContent = `Selected: ${faultName(current.settings.fault)} (${current.state}). Compared: ${faultName(other.settings.fault)} (${other.state}).`;
   rows('comparison', ['baseline', 'faulty', 'recovery'].map(phase => {
     const a = current.summary[phase], b = other.summary[phase];
     return [phase, `${metric(a.availability, true)} / ${metric(b.availability, true)}`, `${metric(a.medianElapsedMs)} / ${metric(b.medianElapsedMs)}`, `${metric(a.meanThroughputKiBps)} / ${metric(b.meanThroughputKiBps)}`];
@@ -82,6 +127,8 @@ async function refresh() {
     if (version !== selectionVersion) { refreshAgain = true; return; }
     activeId = status.activeExperimentId;
     el('status').textContent = `Demo: ${status.demoReady ? 'ready' : 'unavailable'} · Storage: ${status.storageReady ? 'ready' : 'unavailable'} · Phase: ${status.phase || 'idle'} · Fault: ${status.fault.type}`;
+    el('status').setAttribute('data-ready', String(status.demoReady && status.storageReady));
+    el('phase-label').textContent = status.phase || 'Idle';
     el('start').disabled = starting || Boolean(activeId) || !status.demoReady || !status.storageReady;
     el('stop').disabled = !activeId; el('fields').disabled = Boolean(activeId);
     if (activeId || selected) {

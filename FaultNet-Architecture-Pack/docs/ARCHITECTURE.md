@@ -20,7 +20,7 @@ Implement [PRD F-01 through F-07](PRD.md#feature-specifications) as a local resi
 3. Runner probes the proxy, which forwards only to the fixed demo server.
 4. Comparison runs execute baseline, fault, fault clearance, and recovery; baseline-only runs skip fault/recovery.
 5. Records save before start acceptance, at phase boundaries, and terminal cleanup.
-6. Dashboard displays phase summaries, incomplete/unsaved state, compatible run comparisons, and protected JSON/CSV downloads.
+6. Dashboard displays measured summary cards/phase-median chart, phase tables, incomplete/unsaved state, compatible run comparisons, and protected JSON/CSV downloads. The visual redesign does not alter HTTP APIs or record semantics.
 
 Control traffic stays separate from impaired demo traffic. Actual HTTP elapsed time is not RTT. Packet Tracer simulation and Wireshark observations are independent evidence sources.
 

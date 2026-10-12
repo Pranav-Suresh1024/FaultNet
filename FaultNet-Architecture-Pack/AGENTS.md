@@ -5,7 +5,7 @@
 - The user authorized repository setup, documentation, commits/pushes, and subsequently resumed application implementation on 12 October 2026 after the concrete contracts were presented. Follow current HANDOFF.md rather than historical document-preparation boundaries.
 - Resolve paths relative to the checkout. The repository is shared across three laptops with different local paths and Codex accounts; do not depend on the original laptop's absolute destination.
 - Subsequent task status is recorded in [HANDOFF.md](../HANDOFF.md) and [roadmap.md](../roadmap.md). The user requested implementation, then explicitly paused it for roadmap preparation; honor the latest pause/resume instruction.
-- Read the [approved application contracts](../docs/implementation-contracts.md). Lab scenarios remain proposals. The teammate is idle and access is planned for the morning.
+- Read the [approved application contracts](../docs/implementation-contracts.md), including the user-approved reference-inspired UI redesign. This laptop owns UI/design/context on task/faultnet-mvp; teammate's Packet Tracer/.pkt work is on a separate task/packet-tracer-labs branch. Lab results and other-laptop operation remain unverified.
 
 ## Project context
 FaultNet is a Windows-first, local network-resilience lab project.

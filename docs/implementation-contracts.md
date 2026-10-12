@@ -145,10 +145,11 @@ Startup wires shared dependencies once; test fixtures can inject local test reso
 
 ## Dashboard proposal
 
-- One page: settings and start/stop controls; readiness/current phase; comparison table; saved-run list; JSON/CSV export. Poll active status/results every 1000 ms; pause polling when idle and refresh after user actions.
+- User-approved redesign on 12 October 2026: [ClipTheme Packet dashboard](https://www.cliptheme.com/demo/packet/LAYOUT-1/#!/app/dashboard) is a visual reference. Use a charcoal sidebar/topbar, light canvas, measured summary cards, phase-median chart, compact settings, saved-run selection, comparison tables, and downloads. Keep one page with real section links; do not copy reference code or introduce its Angular/Bootstrap dependencies.
+- Poll active status/results every 1000 ms; pause polling when idle and refresh after user actions. Cards show baseline metrics until a faulty attempt exists, then faulty metrics; label that phase. Recovery duration is null unless confirmed. Chart uses stored successful-probe phase medians and counts; absent values say no successful probes rather than plotting zero.
 - Controls show valid ranges and units. Baseline mode disables fault inputs with an explanation. Stop stays available during running/stopping, and confirmed fault clearance appears only after cleanup.
 - Empty, loading, running, stopping, stopped, failed, interrupted, denied, unsaved, incomplete, and populated states have explicit text. Prevent duplicate starts and ignore stale responses when selection changes.
-- Light theme: background `#f8fafc`, surface `#ffffff`, text `#0f172a`, primary `#1d4ed8`, error `#b91c1c`; system UI font, 16 px body, 8 px spacing unit, 8 px control radius. Maximum content width 1200 px; stack panels below 768 px. These are approved implementation values, not an accessibility certification.
+- Approved visual tokens: canvas `#f3f4f7`, surface `#ffffff`, text `#303440`, accent `#b9382c`, muted `#626979`, sidebar/topbar `#2b2e3b`; system UI font with 16 px root and compact component typography. Main content maximum 1500 px plus 216 px desktop sidebar; controls/panels use 4–5 px radii. Stack panels below 950 px, switch sidebar navigation to horizontal links below 768 px. Overflowing tables/charts remain keyboard-scrollable. White focus outlines on the dark sidebar, accent outlines on light surfaces. These values are not an accessibility certification.
 - Semantic controls/labels/tables, visible keyboard focus, text with color indicators, restrained polite status announcements, no automatic motion. Contrast, zoom/reflow, keyboard paths, and browser behavior must be checked on the rendered UI.
 - Reference browsers: installed Chromium-based Edge/Chrome on Windows; record actual versions during verification. Mobile support is not a release promise.
 
@@ -172,6 +173,6 @@ Startup wires shared dependencies once; test fixtures can inject local test reso
 
 ## Laptop coordination status
 
-- The user confirms the teammate is not working currently and plans to grant the other laptop's access in the morning. No collaborator invitation or remote-laptop verification has been performed by this agent.
-- This checkout is the active sequential application writer; teammate is idle. Proposed A/B/C lanes become actual assignments only when the user requests concurrent work.
+- The user now reports the teammate is setting up Packet Tracer and has created a separate branch with .pkt files; origin/task/packet-tracer-labs is observed. Remote-laptop application operation and collaborator access have not been verified by this agent.
+- For the approved UI update, this checkout owns public/, UI tests, and shared design/context on task/faultnet-mvp. The user explicitly requested staying on this branch; teammate lab work remains on its separate branch. Do not merge or overwrite lab work. Resolve any shared-context conflict during reviewed integration.
 - Before handing over, commit/push context and verify the remote SHA; the receiving agent reads current approval status, roadmap ownership, and HANDOFF.md before making changes.

@@ -10,7 +10,7 @@
 
 The [application contracts](docs/implementation-contracts.md) define the concrete API/protocol. Actual module/test paths are in the task branch; laptop lanes remain proposals until assigned. Resolve lab-specific choices before affected lab work.
 
-This checkout owns sequential application work; teammate is idle with access planned for the morning. The user's latest start request approves proceeding with the presented application choices and supersedes the roadmap pause. [Implementation evidence](docs/implementation-progress.md) records checks and remaining limits.
+The user approved the reference-inspired UI redesign on the existing task/faultnet-mvp branch. This checkout owns public/, UI tests, and shared design/context; teammate is working on Packet Tracer in a separate task/packet-tracer-labs branch. Application implementation is resumed. [Implementation evidence](docs/implementation-progress.md) records checks and remaining limits. Keep lab work separate and reconcile shared context during integration.
 
 ## Global constraints
 
@@ -65,8 +65,8 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 | R12 | Phase comparison and saved-run browser | R04, R05, R11 | C | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
 | R13 | JSON/CSV export and dashboard download | R04, R05, R10, R12 | B then C | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
 | R14 | End-to-end, failure-path, and security regression checks | R07-R13 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
-| R15 | Packet Tracer procedure and topology | R01 lab decisions | C | Planned | Unassigned |
-| R16 | Recorded Packet Tracer evidence | R15 | C | Planned | Tool/environment access unverified |
+| R15 | Packet Tracer procedure and topology | R01 lab decisions | C | In progress | Teammate / task/packet-tracer-labs, user-reported; not independently reviewed |
+| R16 | Recorded Packet Tracer evidence | R15 | C | Planned | Teammate reports .pkt files; recorded scenario evidence not independently verified |
 | R17 | Wireshark capture procedure | R01 lab decisions, R06 | C | Planned | Capture availability/permissions unverified |
 | R18 | Recorded Wireshark evidence | R14, R17 | C | Planned | No capture results yet |
 | R19 | Fresh-checkout verification across all three laptops | R14 | A + all laptops | Planned | Unassigned |

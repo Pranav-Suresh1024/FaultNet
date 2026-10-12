@@ -4,7 +4,7 @@
 Use the approved [test/evidence protocol](../../docs/implementation-contracts.md#test-and-evidence-protocol) to verify [PRD F-01 through F-07](PRD.md#feature-specifications) and [security](SECURITY.md). Application test code is written by agents. Never infer IP packet loss or RTT from HTTP outcomes.
 
 ## Test layers
-- Unit: Settings, metrics, record structure/chronology, safe exports, and presentation/compatibility.
+- Unit: Settings, metrics, record structure/chronology, safe exports, presentation/compatibility, and dashboard phase selection/chart data with missing values preserved.
 - Integration: Real local HTTP demo/proxy/API; delay/throttle/interruption; cancellation; persistence failure/restart; header deadlines and port cleanup.
 - Lifecycle: Baseline/fault/clear/recovery, repeated start/stop, no-recovery window, and failed shutdown saves.
 - Browser: Rendered dashboard controls, phase output, saved selection/comparison, stop, and downloads. Node tests alone do not certify UI behavior.
