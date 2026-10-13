@@ -16,6 +16,8 @@ Choose a baseline or baseline/fault/recovery run. Delay, bandwidth restriction, 
 
 The dashboard has sidebar section navigation, measured summary cards, a phase-median response-time chart, and compact experiment controls. Missing measurements remain unavailable; chart/table regions support keyboard scrolling on narrow screens. This laptop's UI work stays on task/faultnet-mvp while teammate Packet Tracer work stays on its separate lab branch.
 
+Select a scenario preset, edit its values, or reuse a saved run's settings; these actions configure a new run without starting it. Choose Auto/baseline/faulty/recovery to inspect phase statistics, individual attempts, successful-response distribution, outcome counts, and changes from baseline. Expand the analysis sections for charts and exact measurements. Failure durations are not successful response latency; recovery time describes the whole run.
+
 ```powershell
 npm test
 ```

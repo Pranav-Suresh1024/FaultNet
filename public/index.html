@@ -28,11 +28,12 @@
         <div class="page-heading"><div><p class="eyebrow">OVERVIEW</p><h1>Experiment dashboard</h1><p class="page-description">See how your application responds to a controlled connection fault.</p></div><span id="run-badge" class="state-badge" data-state="empty">No run selected</span></div>
         <p id="status" class="service-status" role="status">Connecting to the local services…</p>
         <p id="message" role="alert" hidden></p>
+        <div class="view-controls"><label>Summarize phase<select id="summary-phase"><option value="auto">Auto · baseline, then faulty</option><option value="baseline">Baseline</option><option value="faulty">Faulty</option><option value="recovery">Recovery</option></select></label><p class="note">Cards and detailed analysis follow this phase. Recovery time describes the whole run.</p></div>
         <section class="metric-grid" aria-label="Selected experiment summary">
           <article class="metric-card"><span class="metric-label">Availability</span><strong id="metric-availability">—</strong><span id="availability-note" class="metric-note">Select or start an experiment</span></article>
           <article class="metric-card"><span class="metric-label">Median response time</span><strong><span id="metric-latency">—</span><small>ms</small></strong><span id="latency-note" class="metric-note">Successful responses only</span></article>
           <article class="metric-card"><span class="metric-label">Mean throughput</span><strong><span id="metric-throughput">—</span><small>KiB/s</small></strong><span id="throughput-note" class="metric-note">Whole-response payload delivery</span></article>
-          <article class="metric-card"><span class="metric-label">Observed recovery</span><strong><span id="metric-recovery">—</span><small>ms</small></strong><span id="recovery-note" class="metric-note">Three consecutive successes</span></article>
+          <article class="metric-card"><span class="metric-label">Observed recovery · run</span><strong><span id="metric-recovery">—</span><small>ms</small></strong><span id="recovery-note" class="metric-note">Three consecutive successes</span></article>
         </section>
         <div class="dashboard-grid">
           <div class="results-column">
@@ -44,6 +45,15 @@
               <div class="table-scroll" tabindex="0" role="region" aria-label="Phase results table, horizontally scrollable"><table><caption>Measured results by phase</caption><thead><tr><th scope="col">Phase</th><th scope="col">Attempts / cancelled</th><th scope="col">Success / eligible</th><th scope="col">Availability</th><th scope="col">Median (ms)</th><th scope="col">p95 (ms)</th><th scope="col">Mean KiB/s</th></tr></thead><tbody id="phases"></tbody></table></div>
               <div class="panel-bottom"><p class="note">Elapsed time covers the complete HTTP response. — means no applicable measurement.</p><div class="actions"><button id="json" class="secondary" disabled>Download JSON</button><button id="csv" class="secondary" disabled>Download CSV</button></div></div>
             </section>
+            <section class="panel analysis-panel" aria-labelledby="analysis-title">
+              <div class="panel-heading"><div><p class="eyebrow">INSPECT THE EVIDENCE</p><h2 id="analysis-title">Detailed phase analysis</h2></div><span class="subtle-tag">Measured samples</span></div>
+              <p class="note">Timing statistics use successful complete responses. Percentiles describe these samples; small runs do not establish confidence.</p>
+              <div class="table-scroll" tabindex="0" role="region" aria-label="Selected phase statistics, horizontally scrollable"><table><caption>Selected phase statistics and changes from baseline</caption><thead><tr><th scope="col">Measurement</th><th scope="col">Value</th></tr></thead><tbody id="statistics"></tbody></table></div>
+              <details open><summary>Probe-by-probe durations</summary><p id="probe-note" class="note">Select a run to inspect attempts.</p><div id="probe-chart" class="latency-chart" tabindex="0" role="region" aria-label="Probe durations chart, horizontally scrollable"><p class="empty-chart">No run selected.</p></div></details>
+              <details><summary>Response-time distribution</summary><div id="distribution-chart" class="latency-chart" tabindex="0" role="region" aria-label="Successful response-time distribution, horizontally scrollable"><p class="empty-chart">No run selected.</p></div></details>
+              <details open><summary>Success, failure and cancellation</summary><div id="outcome-chart" class="latency-chart" tabindex="0" role="region" aria-label="Probe outcome counts, horizontally scrollable"><p class="empty-chart">No run selected.</p></div></details>
+              <details><summary>Exact probe measurements</summary><div class="table-scroll" tabindex="0" role="region" aria-label="Exact probe measurements, horizontally scrollable"><table><caption>Selected phase attempts; elapsed includes failed and cancelled durations</caption><thead><tr><th scope="col">Attempt</th><th scope="col">Phase</th><th scope="col">Started (UTC)</th><th scope="col">Outcome</th><th scope="col">Elapsed (ms)</th><th scope="col">Bytes</th><th scope="col">HTTP status</th></tr></thead><tbody id="probes"></tbody></table></div></details>
+            </section>
           </div>
           <section id="experiment-panel" class="panel experiment-panel" aria-labelledby="settings-title">
             <div class="panel-heading"><div><p class="eyebrow">CONFIGURATION</p><h2 id="settings-title">New experiment</h2></div><span class="subtle-tag">Demo only</span></div>
@@ -51,6 +61,7 @@
             <form id="settings">
               <fieldset id="fields"><legend class="sr-only">Experiment settings</legend>
                 <div class="fields">
+                  <label class="full-field">Scenario preset<select id="scenario"><option value="">Custom settings</option></select></label>
                   <label class="full-field">Mode<select id="mode"><option value="comparison">Baseline → fault → recovery</option><option value="baseline">Baseline only</option></select></label>
                   <label class="full-field">Fault<select id="fault"><option value="delay">Response delay</option><option value="bandwidth">Bandwidth restriction</option><option value="interruption">Connection interruption</option></select></label>
                   <label id="delay-label" class="full-field">Delay (ms)<input id="delay" type="number" min="0" max="2000" step="1" value="500" required></label>
@@ -60,6 +71,8 @@
                   <label class="full-field">Request timeout (ms)<input id="timeout" type="number" min="500" max="5000" step="1" value="3000" required></label>
                 </div>
               </fieldset>
+              <p id="scenario-note" class="note">Select a preset or edit custom settings; a preset never starts a run.</p>
+              <button id="reuse" type="button" class="secondary" disabled>Reuse selected run settings</button>
               <p id="fault-hint" class="fault-hint"></p>
               <div class="actions experiment-actions"><button id="start" type="submit" disabled>Start experiment</button><button id="stop" type="button" class="secondary" disabled>Stop experiment</button></div>
               <p class="note experiment-limit">One active run · 120-second probing limit<br>Recovery: 3 successes within 15 seconds</p>

@@ -1,4 +1,6 @@
 import { metric, compareRuns, phaseView } from './results.js';
+import { scenarioProfiles, settingsFromRecord } from './scenarios.js';
+import { renderCharts } from './charts.js';
 
 const el = id => document.getElementById(id);
 let token, selected = null, activeId = null, timer = null, refreshing = false, selectionVersion = 0, refreshAgain = false, starting = false;
@@ -21,37 +23,13 @@ function faultName(fault) {
     : fault.type === 'bandwidth' ? `Bandwidth restriction · ${fault.rateKiBps} KiB/s`
     : fault.type === 'interruption' ? 'Connection interruption' : 'No injected fault';
 }
-function renderChart(chart) {
-  const make = (name, attributes, text) => {
-    const node = document.createElementNS('http://www.w3.org/2000/svg', name);
-    for (const [key, value] of Object.entries(attributes)) node.setAttribute(key, value);
-    if (text !== undefined) node.textContent = text;
-    return node;
-  };
-  const svg = make('svg', { viewBox: '0 0 620 210', role: 'img', 'aria-label': 'Median full-response time in milliseconds. '
-    + chart.map(item => `${item.phase}: ${item.medianMs === null ? 'no successful probes' : metric(item.medianMs) + ' ms'}`).join('. ') });
-  const maximum = Math.max(1, ...chart.map(item => item.medianMs ?? 0));
-  chart.forEach((item, index) => {
-    const y = 16 + index * 65;
-    svg.append(make('text', { x: 0, y: y + 16 }, item.phase[0].toUpperCase() + item.phase.slice(1)),
-      make('text', { x: 0, y: y + 35, class: 'sample-label' }, `${item.successes}/${item.eligible} successful`));
-    if (item.medianMs === null) svg.append(make('text', { x: 105, y: y + 16 }, 'No successful probes'));
-    else {
-      const width = item.medianMs / maximum * 420;
-      svg.append(make('rect', { x: 105, y, width: 420, height: 20, rx: 3, class: 'chart-track' }),
-        make('rect', { x: 105, y, width, height: 20, rx: 3, class: 'chart-' + item.phase }),
-        make('text', { x: 105 + width + 10, y: y + 16 }, metric(item.medianMs)));
-    }
-  });
-  el('latency-chart').replaceChildren(svg);
-}
 function render(record) {
   selected = record;
   el('run-info').textContent = `${record.createdAt} · ${record.settings.mode} · ${faultName(record.settings.fault)} · Run ${record.id}`;
   el('run-badge').textContent = record.state;
   el('run-badge').setAttribute('data-state', record.state);
-  const view = phaseView(record), s = view.summary;
-  const phase = view.phase === 'baseline' ? 'Baseline' : 'Faulty phase';
+  const view = phaseView(record, el('summary-phase').value), s = view.summary;
+  const phase = { baseline: 'Baseline', faulty: 'Faulty phase', recovery: 'Recovery' }[view.phase];
   el('metric-availability').textContent = metric(s.availability, true);
   el('availability-note').textContent = `${phase} · ${s.successCount}/${s.eligibleCount} successful`;
   el('metric-latency').textContent = metric(s.medianElapsedMs);
@@ -63,7 +41,21 @@ function render(record) {
     : record.recovery.observed ? 'Confirmed · 3 consecutive successes'
     : ['running', 'stopping'].includes(record.state) ? 'Awaiting confirmation'
     : record.state === 'completed' ? 'Not observed within 15 seconds' : 'Incomplete experiment';
-  renderChart(view.chart);
+  renderCharts(document, view);
+  el('probe-note').textContent = phase + ' · ' + view.probes.length + ' attempts. ● Successful · × Failed · ■ Cancelled. Failure/cancellation durations are not successful response latency.';
+  const stats = view.statistics, delta = view.baselineDelta;
+  const signed = value => value === null ? '—' : (value > 0 ? '+' : '') + metric(value);
+  rows('statistics', [
+    ['Successful timing samples', String(stats.sampleCount)], ['Mean / median / p95 (ms)', [stats.meanMs, stats.medianMs, stats.p95Ms].map(value => metric(value)).join(' / ')],
+    ['Minimum / maximum (ms)', [stats.minMs, stats.maxMs].map(value => metric(value)).join(' / ')],
+    ['Attempts / eligible / cancelled', [s.attemptCount, s.eligibleCount, s.cancelledCount].join(' / ')],
+    ['Median change from baseline (ms / %)', signed(delta.medianMs) + ' / ' + signed(delta.medianPercent)],
+    ['Availability change (percentage points)', signed(delta.availabilityPoints)],
+    ['Throughput change (KiB/s)', signed(delta.throughputKiBps)],
+  ]);
+  rows('probes', view.probes.map((item, index) => [String(index + 1), item.phase, item.startedAt,
+    item.successful ? 'successful' : item.outcome, metric(item.elapsedMs), String(item.bytesReceived), item.httpStatus ?? '—']));
+  el('reuse').disabled = Boolean(activeId) || starting;
   rows('phases', ['baseline', 'faulty', 'recovery'].map(phase => {
     const s = record.summary[phase];
     return [phase, `${s.attemptCount} / ${s.cancelledCount}`, `${s.successCount} / ${s.eligibleCount}`, metric(s.availability, true), metric(s.medianElapsedMs), metric(s.p95ElapsedMs), metric(s.meanThroughputKiBps)];
@@ -116,6 +108,13 @@ function faultFields() {
     : el('fault').value === 'interruption' ? 'Each faulty request is deliberately interrupted; recovery probes begin after the fault is cleared.'
     : 'The configured delay is added before the demo response. Delays longer than the request timeout cause failed probes.';
 }
+function applySettings(settings) {
+  el('mode').value = settings.mode;
+  el('fault').value = settings.fault.type === 'none' ? 'delay' : settings.fault.type;
+  for (const [id, value] of Object.entries({ count: settings.probeCount, interval: settings.intervalMs, timeout: settings.timeoutMs,
+    delay: settings.fault.delayMs ?? 500, rate: settings.fault.rateKiBps ?? 32 })) el(id).value = String(value);
+  faultFields();
+}
 async function refresh() {
   if (refreshing) { refreshAgain = true; return; }
   refreshing = true;
@@ -131,6 +130,7 @@ async function refresh() {
     el('phase-label').textContent = status.phase || 'Idle';
     el('start').disabled = starting || Boolean(activeId) || !status.demoReady || !status.storageReady;
     el('stop').disabled = !activeId; el('fields').disabled = Boolean(activeId);
+    el('reuse').disabled = Boolean(activeId) || starting || !selected;
     if (activeId || selected) {
       const record = (await (await api('experiments/' + (activeId || selected.id))).json()).experiment;
       if (version === selectionVersion) render(record);
@@ -148,6 +148,23 @@ async function refresh() {
 async function action(work) { message(); try { await work(); } catch (error) { message(error.message); } }
 el('mode').addEventListener('change', faultFields);
 el('fault').addEventListener('change', faultFields);
+el('scenario').addEventListener('change', () => {
+  if (activeId || starting) return;
+  const profile = scenarioProfiles.find(item => item.id === el('scenario').value);
+  if (profile) { applySettings(profile.settings); el('scenario-note').textContent = profile.description + ' Edit any setting before starting.'; }
+});
+el('fields').addEventListener('input', event => {
+  if (event.target.id !== 'scenario') { el('scenario').value = ''; el('scenario-note').textContent = 'Custom settings. Select a preset to reset the controls.'; }
+});
+el('fields').addEventListener('change', event => {
+  if (event.target.id !== 'scenario') { el('scenario').value = ''; el('scenario-note').textContent = 'Custom settings. Select a preset to reset the controls.'; }
+});
+el('reuse').addEventListener('click', () => {
+  if (!selected || activeId || starting) return;
+  applySettings(settingsFromRecord(selected)); el('scenario').value = '';
+  el('scenario-note').textContent = 'Copied settings from run ' + selected.id + '. Edit or start a new run; saved evidence is unchanged.';
+});
+el('summary-phase').addEventListener('change', () => { if (selected) render(selected); });
 el('settings').addEventListener('submit', event => {
   event.preventDefault();
   action(async () => {
@@ -181,4 +198,5 @@ for (const format of ['json', 'csv']) el(format).addEventListener('click', () =>
   const link = document.createElement('a'); link.href = url; link.download = `faultnet-${id}.${format}`; link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }));
+el('scenario').replaceChildren(new Option('Custom settings', ''), ...scenarioProfiles.map(profile => new Option(profile.name, profile.id)));
 action(async () => { token = (await (await fetch('/api/session')).json()).token; faultFields(); await refresh(); });

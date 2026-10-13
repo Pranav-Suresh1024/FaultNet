@@ -17,7 +17,7 @@ The [dashboard contract](../../docs/implementation-contracts.md#dashboard-propos
 | Panel stack / navigation reflow | Below 950 px / below 768 px |
 
 ## Layout and components
-One page with sidebar section links and a compact topbar. Four cards summarize availability, median response time, mean payload throughput, and confirmed recovery. Cards label baseline until a faulty attempt exists, then faulty phase. The central chart shows actual phase medians and sample counts; missing successful responses are explicitly labelled and never drawn as zero. Compact experiment controls sit alongside the analysis on wide screens; saved selection and compatible cross-run comparisons follow. JSON/CSV downloads stay protected by the existing API capability.
+One page with sidebar links and a compact topbar. Four cards summarize availability, median response time, mean throughput, and confirmed run-level recovery. Auto selects baseline until a faulty attempt exists; explicit phase selection controls cards and detailed analysis. The median chart retains all phases. Probe durations, successful-response distribution, outcome counts and captioned tables expose actual observations; failures/cancellations have text and distinct symbols. Missing values remain unavailable. Editable scenario controls and saved-run reuse sit alongside analysis; compatible comparisons and protected downloads follow.
 
 Tables retain phase labels, counts, units, and — for unavailable measurements. Overflowing charts/tables have focusable, labelled scroll regions to retain data and legible chart labels on narrow screens. SVG chart labels describe values in text for assistive technology.
 

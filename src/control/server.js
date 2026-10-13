@@ -8,7 +8,8 @@ import { objectKeys } from './validation.js';
 import { problem, safeError } from '../errors.js';
 
 const assets = { '/': ['index.html', 'text/html; charset=utf-8'], '/app.js': ['app.js', 'text/javascript; charset=utf-8'],
-  '/results.js': ['results.js', 'text/javascript; charset=utf-8'], '/styles.css': ['styles.css', 'text/css; charset=utf-8'] };
+  '/results.js': ['results.js', 'text/javascript; charset=utf-8'], '/scenarios.js': ['scenarios.js', 'text/javascript; charset=utf-8'],
+  '/charts.js': ['charts.js', 'text/javascript; charset=utf-8'], '/styles.css': ['styles.css', 'text/css; charset=utf-8'] };
 
 export async function startControl({ port = 3000, runner, store }) {
   let security;

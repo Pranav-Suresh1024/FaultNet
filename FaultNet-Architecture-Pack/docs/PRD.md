@@ -74,6 +74,7 @@ The following acceptance criteria use the approved concrete application contract
 | F-05 | Retain evidence | Save local JSON records until manually deleted | A saved record can be reopened; failed writes are reported; no automatic expiration occurs | Must |
 | F-06 | Support course analysis | Document separate Packet Tracer/Wireshark experiments | Evidence identifies its source, topology/environment, procedure, and observations; simulated measurements are never presented as real application measurements | Must |
 | F-07 | Recover from UI and permission errors | Show explicit states and enforce local control boundaries | Loading, empty, error, stopped, and populated states are visible; prohibited requests cannot change configuration or access results | Must |
+| F-08 | Customize and inspect experiments | Editable scenario presets, saved-run reuse, phase selection, probe/distribution/outcome visuals and fuller statistics | Controls do not silently start runs or mutate evidence; successful timings and all-attempt outcomes remain distinct; missing values stay unavailable | Approved 13 Oct |
 
 ## Success measures
 - Measure application request outcomes, elapsed time, delivered throughput, and observed recovery.

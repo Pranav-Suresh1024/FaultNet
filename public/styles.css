@@ -50,6 +50,18 @@ p { margin: 8px 0 16px; }
 .service-status[data-ready="false"]::before { background: #b9382c; }
 #message { border-left: 3px solid #b9382c; color: #9d2820; background: #fff0ee; padding: 14px 16px; border-radius: 4px; font-size: 14px; }
 .metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 22px; }
+.view-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 20px; margin-bottom: 16px; }
+.view-controls label { width: 260px; max-width: 100%; }
+.view-controls .note { margin: 0; flex: 1; min-width: 180px; }
+.analysis-panel { margin-top: 20px; }
+details { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 12px; }
+summary { cursor: pointer; font-size: 13px; font-weight: 600; padding: 4px 0; }
+details .table-scroll { margin-top: 16px; }
+.chart-axis { stroke: #8995ad; stroke-width: 1; }
+.outcome-successful { fill: #237c59; }
+.outcome-failed { fill: #b9382c; }
+.outcome-cancelled { fill: #626979; }
+.failed-marker { stroke: #b9382c; stroke-width: 2; fill: none; }
 .metric-card { padding: 18px 20px; border: 1px solid var(--line); border-radius: 5px; background: white; min-width: 0; }
 .metric-label { display: block; font-size: 11px; letter-spacing: .5px; color: var(--muted); }
 .metric-card strong { display: flex; gap: 6px; align-items: baseline; font-size: 28px; font-weight: 600; margin: 9px 0 5px; line-height: 1.2; color: #343949; }

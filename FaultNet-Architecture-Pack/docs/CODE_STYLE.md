@@ -9,6 +9,7 @@ JavaScript ES modules on reference Node.js 22.23.1, semantic HTML, plain CSS/bro
 ## Organization and coding rules
 - Agents write all application and test code. The user supplies decisions and access.
 - Keep browser presentation separate from server validation, authorization, lifecycle, faults, and storage.
+- Workbench presets live in public/scenarios.js, measured derivation in public/results.js, SVG rendering in public/charts.js and event orchestration in public/app.js; do not add stored metrics solely for presentation.
 - Use platform facilities and introduce shared helpers only for an actual repeated need.
 - Validate inputs at trust boundaries; do not silently round, clamp, default invalid values, or retry probes.
 - Bound asynchronous operations, support cancellation, and clear faults on stop/failure/shutdown.

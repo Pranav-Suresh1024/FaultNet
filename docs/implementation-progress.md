@@ -30,3 +30,11 @@ UI independent review found a low-contrast red focus outline on charcoal; sideba
 
 ## CI configuration provenance
 Pinned v7 action commits were resolved from the official [checkout](https://github.com/actions/checkout) and [setup-node](https://github.com/actions/setup-node) repositories. Workflow uses read-only repository permission, no persisted checkout credentials or dependency cache, the committed runtime and npm test. The application commit's remote checkout/runtime/test steps passed; verify future tips separately.
+
+## Workbench checkpoint — 13 October 2026
+
+The user authorized both plans before sequential execution. Task 1 data tests failed then passed (5/5): phase selection, missing/zero values, successful statistics/distribution, baseline deltas, six valid presets and independent reuse. Task 2 controls failed then passed; original async regression retained. Browser preset input bubbling initially cleared the selection; a regression failed then passed after excluding preset events from Custom marking.
+
+Final expansion suite: 32/32 PASS, about 18.3 seconds; delay median difference 511.0 ms and rates 31.66/31.70/31.86 KiB/s. Rendered preset/edit/reuse, stored bandwidth/recovery analysis, failed-only null distribution, real 2-probe outage with recovery (local run 1b80d458…), JSON download and 360 px reflow checked. Charts/tables stay labelled and horizontally scrollable. Full screen-reader/zoom and other-laptop runtime remain open. No new packages/schema/export fields.
+
+Feature work stops at this checkpoint. Audit-plan reassessment is next; audit defects are not yet fixed.

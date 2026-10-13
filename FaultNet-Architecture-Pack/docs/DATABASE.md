@@ -13,6 +13,7 @@ Required root fields: schemaVersion, id, createdAt, startedAt, endedAt, state, s
 - UTC timestamps describe chronology; elapsed durations use a monotonic clock.
 - Observations record phase, startedAt, elapsedMs, outcome, httpStatus, bytesReceived, successful.
 - Summaries derive from the same observations. Cancelled probes are excluded from availability; missing metrics are null.
+- Workbench min/max, histogram bins, probe visuals and baseline changes are derived in the browser from these same observations/summaries, without new stored fields or a schema migration. Reuse copies editable settings only.
 - Recovery records clearance, confirmation, criterion/window, observed state, and nullable duration. Baseline recovery is not applicable.
 - Persistence explicitly identifies saved or failed evidence; errors contain safe categories/messages.
 - Reviewed evidence references identify packet_tracer or wireshark material under labs/. No evidence-edit API exists.

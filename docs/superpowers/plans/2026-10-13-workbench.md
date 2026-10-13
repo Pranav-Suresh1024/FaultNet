@@ -32,10 +32,10 @@
 
 **Interfaces:** scenarios exports scenarioProfiles and settingsFromRecord(record). results keeps metric/compareRuns and extends phaseView(record, preference = 'auto') with statistics, probes, outcomes, histogram, and baselineDelta. Existing summary/chart fields remain compatible.
 
-- [ ] Write failing tests for all six valid presets, fresh copied settings, explicit recovery selection, empty/failure/cancelled samples, real zero, [0,10,20,30] mean 15 / median 15 / p95 30 / range 0–30, histogram counts, and baseline deltas.
-- [ ] Run node --test tests/ui.test.js; expect assertion failures for missing helpers/new data.
-- [ ] Implement immutable copied presets and derivation from observations, reusing stored summary definitions without adding stored fields.
-- [ ] Run the focused tests; expect all pass.
+- [x] Write failing tests for all six valid presets, fresh copied settings, explicit recovery selection, empty/failure/cancelled samples, real zero, [0,10,20,30] mean 15 / median 15 / p95 30 / range 0–30, histogram counts, and baseline deltas.
+- [x] Run node --test tests/ui.test.js; expect assertion failures for missing helpers/new data.
+- [x] Implement immutable copied presets and derivation from observations, reusing stored summary definitions without adding stored fields.
+- [x] Run the focused tests; expect all pass.
 
 ### Task 2: Controls and visual analysis
 
@@ -43,16 +43,16 @@
 
 **Interfaces:** renderCharts(document, view) updates the median, probe, distribution, and outcome regions from Task 1 data. app connects scenario/phase/reuse controls and renders captioned descriptive/probe tables.
 
-- [ ] Add browser-harness assertions for preset application, Custom after edit, reuse without POST, explicit phase display, active settings disabling, and retain existing delayed-refresh regression. Run tests to see the new behavior absent.
-- [ ] Add labelled controls and SVG regions with fixed same-origin assets. Render failures/cancellations with different symbols and text; show attempt duration separately from successful latency.
-- [ ] Keep configuration changes idle-only; show editable profile descriptions and run-level recovery labels.
-- [ ] Run node --test tests/ui.test.js tests/browser-state.test.js tests/api.test.js; expect all pass.
+- [x] Add browser-harness assertions for preset application, Custom after edit, reuse without POST, explicit phase display, active settings disabling, and retain existing delayed-refresh regression. Run tests to see the new behavior absent.
+- [x] Add labelled controls and SVG regions with fixed same-origin assets. Render failures/cancellations with different symbols and text; show attempt duration separately from successful latency.
+- [x] Keep configuration changes idle-only; show editable profile descriptions and run-level recovery labels.
+- [x] Run node --test tests/ui.test.js tests/browser-state.test.js tests/api.test.js; expect all pass.
 
 ### Task 3: Verify and checkpoint the expansion
 
 **Files:** docs/implementation-contracts.md, affected architecture specifications, README.md, HANDOFF.md, roadmap.md, docs/implementation-progress.md.
 
-- [ ] Run npm test; expect all pass without changing tolerance.
-- [ ] Render desktop/narrow UI; apply/edit presets, reuse, change phases, inspect real failure/zero/missing data, stop, compare and download. Record actual evidence and unavailable checks.
-- [ ] Update approved contracts and shared progress; review safe source/tests/docs only, commit and push on current branch; verify remote SHA.
-- [ ] Stop feature development. Assess every audit-plan item against this exact checkpoint and record retained/revised items before coding fixes.
+- [x] Run npm test; expect all pass without changing tolerance.
+- [x] Render desktop/narrow UI; apply/edit presets, reuse, change phases, inspect real failure/zero/missing data, stop, compare and download. Record actual evidence and unavailable checks.
+- [x] Update approved contracts and shared progress; review safe source/tests/docs only, commit and push on current branch; verify remote SHA.
+- [x] Stop feature development. Assess every audit-plan item against this exact checkpoint and record retained/revised items before coding fixes.

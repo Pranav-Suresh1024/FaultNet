@@ -22,6 +22,7 @@ Protect experiment controls, fixed demo target, saved evidence, and separate cap
 - Fixed target, fixed asset allowlist, UUID identifiers, fixed storage root, bounded record reads.
 - Content Security Policy uses same-origin scripts and prohibits framing; nosniff and no-store headers.
 - Browser renders text through textContent; no arbitrary HTML or shell execution.
+- Workbench SVG/scenario assets are explicitly allowlisted. Presets can target only the existing demo/fault types; copied settings exclude evidence metadata and session capabilities. No browser credential persistence is added.
 - CSV escapes quotes and protects spreadsheet formula prefixes. JSON/export excludes bodies, credentials, cookies, capability, and captures.
 
 ## Persistence/privacy

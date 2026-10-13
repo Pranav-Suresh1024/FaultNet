@@ -4,7 +4,7 @@
 Use the approved [test/evidence protocol](../../docs/implementation-contracts.md#test-and-evidence-protocol) to verify [PRD F-01 through F-07](PRD.md#feature-specifications) and [security](SECURITY.md). Application test code is written by agents. Never infer IP packet loss or RTT from HTTP outcomes.
 
 ## Test layers
-- Unit: Settings, metrics, record structure/chronology, safe exports, presentation/compatibility, and dashboard phase selection/chart data with missing values preserved.
+- Unit: Settings, metrics, record chronology, exports, presentation/compatibility, six presets/reuse, phase statistics/distributions/deltas, and missing/zero/failed/cancelled evidence.
 - Integration: Real local HTTP demo/proxy/API; delay/throttle/interruption; cancellation; persistence failure/restart; header deadlines and port cleanup.
 - Lifecycle: Baseline/fault/clear/recovery, repeated start/stop, no-recovery window, and failed shutdown saves.
 - Browser: Rendered dashboard controls, phase output, saved selection/comparison, stop, and downloads. Node tests alone do not certify UI behavior.
@@ -38,4 +38,4 @@ Use synthetic responses, temporary storage, ephemeral loopback ports, and guaran
 - No build/typecheck/lab-automation command is configured.
 
 ## Release criteria and results
-Application checkpoint validation does not finish the full course project. Required lab evidence, all-three-laptop checks, rubric/deadline confirmation, and release acceptance remain gates. Record Passed, Failed, Not run, and Unavailable separately in the [handoff](../../HANDOFF.md) and [implementation ledger](../../docs/implementation-progress.md). No crash/power-loss durability or exhaustive browser/security certification is claimed.
+Application checkpoint validation does not finish the full course project. Required lab evidence, both-active-laptop checks, rubric/deadline confirmation, and release acceptance remain gates. Record Passed, Failed, Not run, and Unavailable separately in the [handoff](../../HANDOFF.md) and [implementation ledger](../../docs/implementation-progress.md). No crash/power-loss durability or exhaustive browser/security certification is claimed.
