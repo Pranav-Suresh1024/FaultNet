@@ -25,14 +25,14 @@ test('startup port conflicts release already opened listeners', async t => {
   const occupied = await startDemo({ port: 0 });
   t.after(() => occupied.close());
   const temporary = await startDemo({ port: 0 }); const demoPort = temporary.port; await temporary.close();
-  await assert.rejects(startApp({ demoPort, proxyPort: occupied.port, controlPort: 0 }), { code: 'EADDRINUSE' });
+  await assert.rejects(startApp({ demoPort, proxyPort: occupied.port, controlPort: 0, livePort: 0 }), { code: 'EADDRINUSE' });
   const reused = await startDemo({ port: demoPort }); await reused.close();
 });
 
 test('failed shutdown persistence still closes every application listener', async t => {
   const root = await mkdtemp(join(tmpdir(), 'faultnet-close-'));
   t.after(() => rm(root, { recursive: true, force: true }));
-  const app = await startApp({ controlPort: 0, proxyPort: 0, demoPort: 0, resultsRoot: root });
+  const app = await startApp({ controlPort: 0, proxyPort: 0, demoPort: 0, livePort: 0, resultsRoot: root });
   const origin = `http://127.0.0.1:${app.port}`;
   const token = (await (await fetch(origin + '/api/session')).json()).token;
   await fetch(origin + '/api/experiments', { method: 'POST', headers: { Origin: origin, 'X-FaultNet-Token': token,
@@ -40,4 +40,14 @@ test('failed shutdown persistence still closes every application listener', asyn
   await rm(root, { recursive: true, force: true }); await writeFile(root, 'occupied');
   await assert.rejects(app.close(), { code: 'storage_unavailable' });
   const reused = await startDemo({ port: app.port }); await reused.close();
+  const liveReused = await startDemo({ port: app.livePort }); await liveReused.close();
+});
+
+test('fourth-listener collision releases the demo and experiment proxy ports', async t => {
+  const occupied = await startDemo({ port: 0 }); t.after(() => occupied.close());
+  const first = await startDemo({ port: 0 }), second = await startDemo({ port: 0 });
+  const demoPort = first.port, proxyPort = second.port; await first.close(); await second.close();
+  await assert.rejects(startApp({ demoPort, proxyPort, controlPort: 0, livePort: occupied.port }), { code: 'EADDRINUSE' });
+  const demo = await startDemo({ port: demoPort }), proxy = await startDemo({ port: proxyPort });
+  await demo.close(); await proxy.close();
 });

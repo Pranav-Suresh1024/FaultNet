@@ -1,5 +1,19 @@
 # Implementation ledger
 
+## Live cockpit extension — 13 October 2026
+
+[Design](superpowers/specs/2026-10-13-live-proxy-design.md), [plan](superpowers/plans/2026-10-13-live-proxy.md), and current [handoff](../HANDOFF.md#live-proxy-extension--13-october-2026). User requested implementation on the existing application branch; independent FaultNet source and current-file reference-name removal. Experiments/schema/lab branch remain separate.
+
+Task 1 real HTTP regressions: RED missing live modules; GREEN routing/query/method/body, both-direction pacing/delay/jitter, status extremes/mocks/header effects, legal HEAD/204/gzip, deterministic body failure/reset, privacy/capacity and destination checks. Additional early upstream response test exposed unfinished-upload cleanup and IPv4 selection issues; fixed cancellable source and settled response handling. Invalid initial config now closes any opened listener.
+
+Task 2 RED missing livePort/collision behavior; GREEN protected config/activity/reset/clear/probe endpoints, safe asset serving, fourth-listener startup/shutdown and existing API/storage regressions. Task 3 RED missing UI/model; GREEN native controls/drafts/presets/rule CRUD/reload/reset/filter/sample. Pending sample test failed across Apply then passed after independent sample-busy tracking. Monitor polling does not overwrite drafts.
+
+Fresh reviewer: no Critical; Important cockpit navigation rejected by same-site metadata and omitted cloud metadata destination; regraded the entry link's forced /payload as Important for a custom frontend. All three reproductions failed before their fixes and passed afterward. Targeted final live/UI tests18/18, full suite60/60,0 failures,18.2s. Delay difference510.7ms; goodputs31.71/31.82/31.88KiB/s within original bounds. No deferred minors.
+
+Rendered Edge QA blocked by ERR_BLOCKED_BY_CLIENT; no bypass/visual/accessibility claim. Reviewer declined exact visual parity, rendered/native access, external HTTPS/other laptops/labs/CI/production and final docs. Root accepts these as explicit verification limits; docs/links/name scans are checked separately, remote CI after push. Implementation decisions: fourth listener isolates live/experiment work; stay on authorized branch; native execution/manual ignored Windows ledger; one connected milestone. No source history rewrite or new dependency.
+
+Final running-process smoke: cockpit/workbench/assets200, 65,536-byte sample83.0ms at configured50ms delay, injected503, two monitor entries, Reset/Clear passed. Final live state normal/empty. Existing27 records validate without writes; 93 local links across22 Markdown files resolve; current reference-name scan and whitespace review pass. Remote push/CI results are checked after the local commit and reported outside HANDOFF.md.
+
 Plan: [roadmap.md](../roadmap.md). Specification: [implementation contracts](implementation-contracts.md). Current portable state: [HANDOFF.md](../HANDOFF.md).
 
 The user's 12 October implementation-start request resumes application work. The user then approved a reference-inspired dashboard redesign on the existing task/faultnet-mvp branch (UI base 675ce81). This checkout owns public/, UI tests, and shared design/context; teammate's Packet Tracer/.pkt work is on task/packet-tracer-labs. Lab/rubric/tool questions and recorded lab evidence remain separate gates.

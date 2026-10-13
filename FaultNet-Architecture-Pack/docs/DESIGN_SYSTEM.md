@@ -4,6 +4,8 @@
 The [dashboard contract](../../docs/implementation-contracts.md#dashboard-proposal) was approved with the 12 October implementation-resume request, then updated by the user's reference-inspired redesign approval. The [ClipTheme Packet dashboard](https://www.cliptheme.com/demo/packet/LAYOUT-1/#!/app/dashboard) supplies visual direction: charcoal shell, compact white panels, restrained red accent, and prominent metrics. This is an original plain HTML/CSS/JavaScript implementation. No general accessibility-compliance or mobile-release claim is made.
 
 ## Visual tokens
+The experiment workbench keeps the tokens below. The 13 October live cockpit is an independently written dark monospace page with an amber masthead (#f4b544), dark canvas (#101113), bordered controls and three columns: setup/presets/headers; network/failure/rules; traffic. At 1100 px the monitor follows two columns; at 640 px controls stack. `/` opens the cockpit and `/workbench` preserves the original dashboard.
+
 | Token | Value |
 | --- | --- |
 | Background / surface | #f3f4f7 / #ffffff |
@@ -26,6 +28,7 @@ Settings display input ranges/units. Baseline-only disables fault inputs. Active
 Display the conservative probing upper bound against 120 seconds and explain which settings to reduce. Validate after preset/reuse/input changes. Comparison and saved-record errors stay in their panels; healthy service readiness can still enable valid new experiments.
 
 ## States and accessibility
+- Live: pending edits are labelled Draft until Apply, polling touches only the monitor, applied configuration reloads from server memory, and Reset discards drafts/clears faults/cancels active live traffic. Sample GET has a labelled five-second ceiling and stays disabled until its request settles, even across Apply/Reset. Monitor statistics refer to the latest 50 finished requests; filters do not change configuration or totals. All rules render as text-safe labelled inputs with keyboard-operable Add/Remove buttons.
 - Empty: No experiment selected; show the start workflow.
 - Running/stopping: Label state/phase; availability, attempts/cancellations, and fault status stay visible.
 - Stopped/failed/interrupted: Preserve available evidence and label incomplete recovery.

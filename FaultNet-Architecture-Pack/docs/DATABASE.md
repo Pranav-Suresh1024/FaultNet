@@ -6,6 +6,8 @@ The application [record/persistence contract](../../docs/implementation-contract
 ## Storage model
 One local results/{UUID-v4}.json per experiment, schemaVersion 1. No database service, tenants, expiry, deletion endpoint, or migrations. Retention lasts until a separately authorized filesystem deletion. Capture data remains separate.
 
+The 13 October live cockpit has a separate memory-only configuration and latest-50 traffic window. Neither is written under results/ or browser storage. Reload preserves applied memory state; restarting Node resets live settings/monitor. Live Clear monitor does not delete experiment files. Traffic rows exclude query strings, bodies, cookies, credentials, tokens and target URLs; pathname/method/status/time/bytes/outcome/fault labels are retained. No persistent live export is implemented.
+
 ## Schema
 Required root fields: schemaVersion, id, createdAt, startedAt, endedAt, state, settings, observations, summary, recovery, persistence, error, evidenceReferences. See the contract for exact types and fixed normalized settings.
 

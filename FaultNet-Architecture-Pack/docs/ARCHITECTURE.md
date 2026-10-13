@@ -8,11 +8,11 @@ Implement [PRD F-01 through F-07](PRD.md#feature-specifications) as a local resi
 
 ## Stack and boundaries
 - Node.js 22.23.1, ES modules, built-in HTTP/filesystem/crypto/test facilities; no third-party packages.
-- Plain browser HTML/CSS/JavaScript. One process, three listeners explicitly bound to 127.0.0.1.
-- Dashboard/control on port 3000; fixed demo on 3001; fault proxy on 3002. Canonical dashboard URL uses the numeric host.
-- Demo GET /payload returns status 200 and 65,536 synthetic F bytes. The proxy supports only this fixed target/path/method.
+- Plain browser HTML/CSS/JavaScript. One process, four listeners explicitly bound to 127.0.0.1.
+- Cockpit/control on port 3000; workbench at /workbench; fixed demo on 3001; experiment proxy on 3002; live proxy on 8080. Canonical control URL uses the numeric host.
+- Demo GET /payload returns status 200 and 65,536 synthetic F bytes. The experiment proxy supports only this fixed target/path/method; the live proxy supports protected configurable development origins and streaming HTTP requests.
 - Local schema-v1 JSON records under results/, excluded from Git. No database service or account system.
-- No public deployment, arbitrary targets, production traffic, genuine IP packet-loss injection, or automated lab integration.
+- No public deployment, unconfigured forward proxying, production traffic, genuine IP packet-loss injection, or automated lab integration. Live configuration follows the [13 October extension](../../docs/implementation-contracts.md#live-proxy-extension--13-october-2026).
 
 ## Request and data flow
 1. Dashboard obtains an in-memory capability and sends protected same-origin API requests.
@@ -25,7 +25,9 @@ Implement [PRD F-01 through F-07](PRD.md#feature-specifications) as a local resi
 Control traffic stays separate from impaired demo traffic. Actual HTTP elapsed time is not RTT. Packet Tracer simulation and Wireshark observations are independent evidence sources.
 
 ## Interfaces
-Implemented routes, response/error shapes, settings, and module interfaces are defined by the [API contract](../../docs/implementation-contracts.md#api-contract). GET /api/session issues the per-process capability; all other APIs require it. No caller-selected URL or filesystem path is accepted.
+Implemented experiment routes are defined by the [API contract](../../docs/implementation-contracts.md#api-contract); live routes/configuration by the extension above. GET /api/session issues the per-process capability; all other APIs require it. Experiment APIs accept no caller-selected URL/filesystem path. Live target origins are configured only through protected control, resolved/checked once per request and pinned to the checked address.
+
+Live requests snapshot applied configuration, choose a unified/split origin or injected/mock response, stream body data with bounded chunks/backpressure, apply response effects and append a private bounded activity entry. Apply changes new requests; Reset cancels existing requests. Both live configuration and monitor remain in memory, isolated from the persistent runner.
 
 ## Project structure
 - public/: Dashboard assets, served through an explicit allowlist.
@@ -33,6 +35,8 @@ Implemented routes, response/error shapes, settings, and module interfaces are d
 - src/control/: HTTP API, security, and settings validation.
 - src/experiments/: Probes, summaries, lifecycle/cancellation.
 - src/proxy/ and src/demo/: Controlled traffic and fixed synthetic server.
+- src/live/: Validated live configuration, DNS/target boundary, streaming faults and bounded memory traffic window.
+- public/live.html, live.css, live.js, live-model.js: Cockpit, control orchestration, presets and traffic derivation.
 - src/storage/: Validated JSON records and exports.
 - src/app.js and src/main.js: Startup and shutdown.
 - tests/: Built-in Node tests with temporary storage and ephemeral ports.

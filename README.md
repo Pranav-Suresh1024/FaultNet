@@ -10,7 +10,15 @@ Use the reference Node.js **22.23.1** recorded in `.node-version`. No external p
 npm start
 ```
 
-Open [FaultNet](http://127.0.0.1:3000). Keep the numeric host: `localhost` is rejected by the control boundary. Ports 3000/3001/3002 must be free; the app reports conflicts rather than terminating other programs. Stop with Ctrl+C.
+Open [FaultNet live cockpit](http://127.0.0.1:3000). Keep the numeric host: `localhost` is rejected by the control boundary. Ports 3000/3001/3002/8080 must be free; the app reports conflicts rather than terminating other programs. Stop with Ctrl+C.
+
+The cockpit routes live development traffic through [the application entry](http://127.0.0.1:8080/). Initially it forwards to the synthetic demo on 3001, which exposes only `/payload`; use Send sample for that target. Choose a unified target or separate frontend/backend origins and backend path prefixes. Targets are HTTP/HTTPS origins such as `http://127.0.0.1:4000`, with no URL credentials, path, query or fragment. Use development services only. Point your application's browser/client at port 8080; embedded absolute API URLs must also be configured to use that proxy origin. WebSockets, CONNECT and public forwarding are excluded.
+
+Edit paired sliders/numbers or select a network preset, then **Apply changes**. Request/response delay and jitter use milliseconds; upload/download use **KiB/s**, with zero unlimited. You can combine network effects with a 60-second timeout, stalled body, disconnect, probabilistic path/status rules, CORS/cache removal, mismatched Content-Type or local JSON mocks. Mocks bypass upstream; status rules take precedence. The form remains a draft until Apply. **Reset faults** discards drafts, restores normal live forwarding and cancels active live requests while keeping applied targets/routes.
+
+**Send sample** makes a GET using the applied configuration with a five-second ceiling. The traffic monitor shows real outcome/status/elapsed time/bytes and applied effects, duration bars, filters and statistics for the latest 50 finished requests. **Clear monitor** clears this memory window only. Live configuration and monitor survive page refresh but reset when Node restarts; they are not experiment evidence or disk records. Queries, bodies, cookies, credentials and target URLs are excluded from logs, though pathnames can contain application identifiers.
+
+Open [the experiment workbench](http://127.0.0.1:3000/workbench) for the original saved baseline/fault/recovery workflow below. Its fixed target, metrics, records and JSON/CSV exports remain unchanged and operate independently of live proxy settings.
 
 Choose a baseline or baseline/fault/recovery run. Delay, bandwidth restriction, and connection interruption affect only the synthetic 64 KiB demo. View phase summaries, saved compatible runs, and JSON/CSV downloads. Low bandwidth can intentionally exceed the timeout. Measurements are HTTP outcomes/elapsed time, not IP packet loss or RTT.
 
@@ -105,4 +113,4 @@ The original initialization notes described `/workspace/FaultNet` with Git, Pyth
 Work in the existing checkout; each cloud task already has an isolated
 environment, so an additional Git worktree is unnecessary.
 
-The application branch has package manifests, built-in Node tests, and three local services. There are zero external packages and no build step. Keep the lockfile under version control. Cloud/Node 24 compatibility remains unverified; use the reference runtime and run the actual tests.
+The application branch has package manifests, built-in Node tests, and four local listeners. There are zero external packages and no build step. Keep the lockfile under version control. Cloud/Node 24 compatibility remains unverified; use the reference runtime and run the actual tests.

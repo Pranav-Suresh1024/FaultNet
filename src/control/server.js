@@ -7,12 +7,14 @@ import { exportRecord } from '../storage/export.js';
 import { objectKeys } from './validation.js';
 import { problem, safeError } from '../errors.js';
 
-const assets = { '/': ['index.html', 'text/html; charset=utf-8'], '/app.js': ['app.js', 'text/javascript; charset=utf-8'],
+const assets = { '/': ['live.html', 'text/html; charset=utf-8'], '/workbench': ['index.html', 'text/html; charset=utf-8'],
+  '/live.js': ['live.js', 'text/javascript; charset=utf-8'], '/live-model.js': ['live-model.js', 'text/javascript; charset=utf-8'],
+  '/live.css': ['live.css', 'text/css; charset=utf-8'], '/app.js': ['app.js', 'text/javascript; charset=utf-8'],
   '/results.js': ['results.js', 'text/javascript; charset=utf-8'], '/scenarios.js': ['scenarios.js', 'text/javascript; charset=utf-8'],
   '/charts.js': ['charts.js', 'text/javascript; charset=utf-8'], '/protocol.js': ['protocol.js', 'text/javascript; charset=utf-8'],
   '/styles.css': ['styles.css', 'text/css; charset=utf-8'] };
 
-export async function startControl({ port = 3000, runner, store }) {
+export async function startControl({ port = 3000, runner, store, live }) {
   let security;
   const server = createServer(serverOptions, async (req, res) => {
     res.setHeader('Cache-Control', 'no-store');
@@ -31,6 +33,28 @@ export async function startControl({ port = 3000, runner, store }) {
         res.writeHead(200, { 'Content-Type': type }).end(body); return;
       }
       if (path === '/api/session') { expectMethod('GET'); json(200, { token: security.token }); return; }
+      if (path === '/api/live/config') {
+        if (req.method === 'GET') json(200, { config: live.getConfig(), proxyUrl: `http://127.0.0.1:${live.port}` });
+        else { expectMethod('POST'); json(200, { config: live.setConfig(await readBody(req)) }); }
+        return;
+      }
+      if (path === '/api/live/activity') { expectMethod('GET'); json(200, live.activity()); return; }
+      if (path === '/api/live/reset' || path === '/api/live/activity/clear') {
+        expectMethod('POST');
+        const body = await readBody(req, true);
+        if (!objectKeys(body, []) || Object.keys(body).length) throw problem('invalid_input', 400, 'This action expects an empty JSON object.');
+        if (path === '/api/live/reset') json(200, { config: await live.reset() });
+        else { live.clearActivity(); json(200, live.activity()); }
+        return;
+      }
+      if (path === '/api/live/probe') {
+        expectMethod('POST');
+        const body = await readBody(req);
+        if (!objectKeys(body, ['path']) || typeof body.path !== 'string') throw problem('invalid_input', 400, 'Sample expects a path only.');
+        const controller = new AbortController();
+        res.once('close', () => controller.abort());
+        json(200, await live.probe(body.path, controller.signal)); return;
+      }
       if (path === '/api/status') {
         expectMethod('GET');
         let storageReady = false;

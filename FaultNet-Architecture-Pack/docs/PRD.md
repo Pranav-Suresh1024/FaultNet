@@ -10,9 +10,10 @@ The user resumed implementation on 12 October 2026 after reviewing the [implemen
 - Problem: The project investigates how unreliable networks affect web application availability, performance, and recovery.
 - Target users: A student lab operator. Instructors review exported results and supporting evidence.
 - Desired outcome: Reproducible comparisons between normal, faulty, and recovery conditions, with network observations distinguished from application measurements.
-- Reference: https://github.com/Rohith-JN/chaos-proxy — conceptual inspiration only; its code and stack are not adopted.
 
 ## MVP scope
+The user requested a live proxy expansion on 13 October. [Updated contracts](../../docs/implementation-contracts.md#live-proxy-extension--13-october-2026) supersede the original product's demo-only target boundary. The fixed experiment workflow below remains available; the independently implemented live cockpit adds configurable development targets and real traffic controls.
+
 - Must ship:
   - Local web dashboard and a small demo web server.
   - Baseline experiments.
@@ -21,11 +22,11 @@ The user resumed implementation on 12 October 2026 after reviewing the [implemen
   - Local JSON records and JSON/CSV export.
   - Separately documented Packet Tracer and Wireshark experiments.
 - Explicitly excluded:
-  - Public deployment, multi-user accounts, tenant management, arbitrary external targets, and production traffic.
+  - Public deployment, multi-user accounts, tenant management, unconfigured forward proxying, and production traffic.
   - Genuine IP packet-loss injection in the first MVP.
   - Automatic integration between Packet Tracer and the real application.
   - Automatic capture or analysis of Wireshark files.
-  - Copying the reference implementation.
+  - Adopting external implementation source.
 - Constraints:
   - Windows-first web application.
   - All application coding performed by agents.
@@ -75,6 +76,8 @@ The following acceptance criteria use the approved concrete application contract
 | F-06 | Support course analysis | Document separate Packet Tracer/Wireshark experiments | Evidence identifies its source, topology/environment, procedure, and observations; simulated measurements are never presented as real application measurements | Must |
 | F-07 | Recover from UI and permission errors | Show explicit states and enforce local control boundaries | Loading, empty, error, stopped, and populated states are visible; prohibited requests cannot change configuration or access results | Must |
 | F-08 | Customize and inspect experiments | Editable scenario presets, saved-run reuse, phase selection, probe/distribution/outcome visuals and fuller statistics | Controls do not silently start runs or mutate evidence; successful timings and all-attempt outcomes remain distinct; missing values stay unavailable | Approved 13 Oct |
+| F-09 | Test live development applications | Unified/split routing, delay/jitter, bidirectional limits, connection modes, status/header/mock rules | Protected Apply/Reset changes real forwarding; reset cancels active work; validate targets/inputs and retain the fixed workbench | Requested 13 Oct |
+| F-10 | Inspect live traffic | Latest 50 memory entries, window statistics/duration bars, filters, clear and sample GET | Show actual outcome/time/bytes/fault labels, exclude queries/bodies/secrets, distinguish process memory from saved experiments | Requested 13 Oct |
 
 ## Success measures
 - Measure application request outcomes, elapsed time, delivered throughput, and observed recovery.

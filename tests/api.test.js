@@ -9,7 +9,7 @@ import { startApp } from '../src/app.js';
 
 async function fixture(t) {
   const root = await mkdtemp(join(tmpdir(), 'faultnet-api-'));
-  const app = await startApp({ controlPort: 0, demoPort: 0, proxyPort: 0, resultsRoot: root });
+  const app = await startApp({ controlPort: 0, demoPort: 0, proxyPort: 0, livePort: 0, resultsRoot: root });
   t.after(async () => { await app.close(); await rm(root, { recursive: true, force: true }); });
   const origin = `http://127.0.0.1:${app.port}`;
   const token = (await (await fetch(origin + '/api/session')).json()).token;
@@ -17,6 +17,33 @@ async function fixture(t) {
     headers: { 'X-FaultNet-Token': token, Origin: origin, 'Content-Type': 'application/json', ...options.headers } });
   return { root, app, origin, token, request };
 }
+
+test('live configuration and sample APIs retain control protections and reset semantics', async t => {
+  const { origin, request, app } = await fixture(t);
+  assert.ok(app.livePort > 0);
+  assert.equal((await fetch(origin + '/api/live/config')).status, 403);
+  const initial = await (await request('/api/live/config')).json();
+  assert.equal(initial.config.failureMode, 'normal');
+  assert.equal(initial.proxyUrl, `http://127.0.0.1:${app.livePort}`);
+  let response = await request('/api/live/config', { method: 'POST', body: JSON.stringify({ ...initial.config, responseDelayMs: 30 }) });
+  assert.equal(response.status, 200);
+  assert.equal((await request('/api/live/config', { method: 'POST', body: '{}' })).status, 400);
+  assert.equal((await request('/api/live/config', { method: 'PUT' })).status, 405);
+  assert.equal((await request('/api/live/reset', { method: 'POST', headers: { Origin: 'https://evil.example' }, body: '{}' })).status, 403);
+  assert.equal((await request('/api/live/reset', { method: 'POST', body: '{"extra":true}' })).status, 400);
+  assert.equal((await request('/api/live/probe', { method: 'POST', body: '{"path":"http://example.com"}' })).status, 400);
+  response = await request('/api/live/probe', { method: 'POST', body: '{"path":"/payload"}' });
+  const sample = await response.json();
+  assert.equal(sample.status, 200); assert.equal(sample.bytes, 65536);
+  assert.equal(sample.outcome, 'completed'); assert.ok(sample.elapsedMs >= 25);
+  assert.equal((await (await request('/api/live/activity')).json()).entries.length, 1);
+  assert.equal((await request('/api/live/activity/clear', { method: 'POST', body: '{}' })).status, 200);
+  assert.equal((await (await request('/api/live/activity')).json()).entries.length, 0);
+  response = await request('/api/live/reset', { method: 'POST', body: '{}' });
+  assert.equal((await response.json()).config.responseDelayMs, 0);
+  const blocked = { ...initial.config, target: origin };
+  assert.equal((await request('/api/live/config', { method: 'POST', body: JSON.stringify(blocked) })).status, 400);
+});
 
 test('API rejects untrusted origins, hosts, malformed input and unauthorized results', async t => {
   const { origin, request } = await fixture(t);
@@ -91,7 +118,7 @@ test('canonicalized and absolute-form API paths retain capability and Origin che
 
 test('dashboard serves only allowlisted assets with protective browser headers', async t => {
   const { origin } = await fixture(t);
-  for (const path of ['/', '/app.js', '/results.js', '/styles.css']) {
+  for (const path of ['/', '/workbench', '/live.js', '/live-model.js', '/live.css', '/app.js', '/results.js', '/styles.css']) {
     const response = await fetch(origin + path);
     assert.equal(response.status, 200);
     assert.match(response.headers.get('content-security-policy'), /script-src 'self'/);

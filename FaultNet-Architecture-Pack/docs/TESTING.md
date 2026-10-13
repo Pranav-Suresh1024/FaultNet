@@ -4,6 +4,7 @@
 Use the approved [test/evidence protocol](../../docs/implementation-contracts.md#test-and-evidence-protocol) to verify [PRD F-01 through F-07](PRD.md#feature-specifications) and [security](SECURITY.md). Application test code is written by agents. Never infer IP packet loss or RTT from HTTP outcomes.
 
 ## Test layers
+- Live: real local HTTP unified/split/query/method/body routing, checked destinations, status probability extremes, mock/header effects, delay/jitter/both-direction body pacing, stalled/truncated responses, reset/early-upload cleanup, HEAD/no-body/gzip framing, monitor privacy/capacity, protected APIs and fourth-listener lifecycle. UI harness exercises the actual live handlers for presets/drafts/sliders/mode/rules/Apply/Reset/reload/filter/sample and pending sample isolation. Rendered Edge verification is currently blocked by ERR_BLOCKED_BY_CLIENT; harness checks do not replace a visual/accessibility inspection.
 - Unit: Settings, metrics, record chronology, exports, presentation/compatibility, six presets/reuse, phase statistics/distributions/deltas, and missing/zero/failed/cancelled evidence.
 - Integration: Real local HTTP demo/proxy/API; delay/throttle/interruption; cancellation; persistence failure/restart; header deadlines and port cleanup.
 - Lifecycle: Baseline/fault/clear/recovery, repeated start/stop, no-recovery window, and failed shutdown saves.

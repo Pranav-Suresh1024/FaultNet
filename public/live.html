@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FaultNet · Live proxy cockpit</title>
+  <link rel="stylesheet" href="/live.css"><script type="module" src="/live.js"></script>
+</head>
+<body>
+  <a class="skip" href="#cockpit">Skip to proxy controls</a>
+  <div class="shell">
+    <header class="masthead">
+      <div class="identity"><strong>FAULTNET<span class="wordmark-dot"> / </span>LIVE PROXY</strong><span id="sync-state" role="status">Connecting…</span></div>
+      <div class="header-actions"><a href="/workbench">Experiment workbench ↗</a><button type="button" id="reload">Reload applied</button><button type="button" id="reset">Reset faults</button><button id="apply" type="submit" form="live-form" disabled>System synced</button></div>
+    </header>
+    <div class="connection-bar"><span>APPLICATION ENTRY <a id="proxy-url" href="http://127.0.0.1:8080/" target="_blank" rel="noopener">http://127.0.0.1:8080</a></span><span>LOCAL CONTROL · CONFIGURATION IN MEMORY</span></div>
+    <p id="live-error" role="alert" hidden></p>
+    <main id="cockpit" tabindex="-1">
+      <h1 class="visually-hidden">FaultNet live proxy cockpit</h1>
+      <form id="live-form" class="cockpit-grid">
+        <div class="column">
+          <section aria-labelledby="setup-title">
+            <h2 id="setup-title"><span>01</span> Proxy setup</h2>
+            <label>Routing mode<select id="mode"><option value="unified">Unified · one application</option><option value="split">Split · frontend + backend</option></select></label>
+            <div id="unified-target"><label>Application target<input id="target" type="url" maxlength="512" required placeholder="http://127.0.0.1:3001"></label></div>
+            <div id="split-targets" hidden><label>Frontend target<input id="frontendTarget" type="url" maxlength="512" required></label><label>Backend target<input id="backendTarget" type="url" maxlength="512" required></label><label>Backend route prefixes<input id="backendRoutes" maxlength="2048" placeholder="/api, /graphql"></label></div>
+            <p class="hint">Point your browser or client at the application entry above. The built-in demo exposes /payload (use Send sample); your application's entry is /. Targets are development HTTP/HTTPS origins; paths and queries pass through. No WebSockets or CONNECT tunnels.</p>
+          </section>
+          <section aria-labelledby="presets-title">
+            <h2 id="presets-title"><span>02</span> Quick presets</h2>
+            <div id="presets" class="preset-list"></div>
+            <p class="hint">Illustrative network profiles. Presets edit delay, jitter and bandwidth only. Apply to activate.</p>
+          </section>
+          <section aria-labelledby="headers-title">
+            <h2 id="headers-title"><span>03</span> Response headers</h2>
+            <label class="check"><input id="stripCORS" type="checkbox">Strip CORS headers</label><p class="hint">Remove Access-Control-* from upstream responses.</p>
+            <label class="check"><input id="stripCache" type="checkbox">Strip cache headers</label><p class="hint">Remove cache directives, expiry and validators.</p>
+            <label class="check"><input id="corruptContentType" type="checkbox">Mismatch Content-Type</label><p class="hint">Send an unexpected type to test client parsing.</p>
+          </section>
+          <section class="usage-note" aria-labelledby="usage-title"><h2 id="usage-title">Start here</h2><ol><li>Use the demo target for your first test.</li><li>Select a preset and Apply changes.</li><li>Send a sample request; watch traffic on the right.</li><li>Reset faults to restore normal forwarding.</li></ol><p class="hint">Reset discards pending edits and cancels active live requests. Live settings and traffic disappear when Node restarts. Saved experiments remain in the workbench.</p></section>
+        </div>
+        <div class="column">
+          <section aria-labelledby="network-title"><h2 id="network-title"><span>04</span> Network dynamics</h2><div id="network-controls"></div><p class="hint">0 KiB/s means unlimited. Jitter varies each direction's delay by ± the chosen amount, clamped at zero. Limits shape body delivery, not IP packet loss.</p></section>
+          <section aria-labelledby="failure-title"><h2 id="failure-title"><span>05</span> Connection failures</h2>
+            <label>Failure mode<select id="failureMode"><option value="normal">Normal · no connection failure</option><option value="timeout">Timeout · wait 60 seconds before headers</option><option value="hang_body">Stall body · send headers then wait</option><option value="close_body">Disconnect · break body delivery</option></select></label>
+            <p class="hint">Applies to each eligible response. HEAD and no-body responses remain legal. Stalled requests end on cancel/reset or at the 120-second ceiling.</p>
+          </section>
+          <section aria-labelledby="status-title"><div class="section-heading"><h2 id="status-title"><span>06</span> Status injection</h2><button type="button" id="add-status" aria-label="Add status rule">＋ Add</button></div><p class="hint">Path prefixes, HTTP errors 400–599, probability 0–100%. First matching selected rule wins, before mocks.</p><div id="status-rules"></div></section>
+          <section aria-labelledby="mock-title"><div class="section-heading"><h2 id="mock-title"><span>07</span> JSON response mocks</h2><button type="button" id="add-mock" aria-label="Add JSON mock rule">＋ Add</button></div><p class="hint">Return local JSON without contacting upstream. Eight rules maximum; 1024 bytes per body. Response faults still apply.</p><div id="mock-rules"></div></section>
+        </div>
+        <div class="column monitor-column">
+          <section aria-labelledby="monitor-title"><div class="section-heading"><h2 id="monitor-title"><span>08</span> Live traffic monitor</h2><button type="button" id="clear-monitor">Clear monitor</button></div>
+            <p id="monitor-error" role="alert" hidden></p>
+            <div class="traffic-stats"><div><span>REQUESTS</span><strong id="traffic-count">0</strong></div><div><span>ALTERED</span><strong id="traffic-altered">0</strong></div><div><span>ERROR / CANCEL</span><strong id="traffic-errors">0</strong></div><div><span>MEDIAN · ms</span><strong id="traffic-median">—</strong></div></div>
+            <p class="hint" id="traffic-note">Latest 50 finished requests · no bodies, query strings or credentials stored.</p>
+            <div id="traffic-chart" aria-label="Request duration visualization"></div>
+            <div class="sample-row"><label>Sample GET path<input id="sample-path" value="/payload" maxlength="512"></label><button type="button" id="sample">Send sample</button></div><p id="sample-result" class="hint" role="status">Sample timeout: 5 seconds. Samples use the applied configuration.</p>
+            <div class="monitor-toolbar"><label>Show<select id="traffic-filter"><option value="all">All traffic</option><option value="altered">Altered requests</option><option value="errors">Errors / cancellations</option><option value="clean">Clean requests</option></select></label><span id="active-count" role="status">0 in flight</span></div>
+          </section>
+          <div id="traffic-list" class="traffic-list" aria-label="Finished request details"><p class="empty">Waiting for traffic. Send a sample or use the application entry.</p></div>
+        </div>
+      </form>
+    </main>
+    <footer>FaultNet · development traffic only · Apply changes affects new requests · monitor is a rolling memory window</footer>
+  </div>
+</body>
+</html>

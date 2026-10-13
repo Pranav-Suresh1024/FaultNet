@@ -31,7 +31,7 @@ Summarize relevant approved decisions, proposals, unresolved items, and acceptan
 - Do not invent requirements, credentials, capabilities, measurements, or test results.
 - Keep proposals and unresolved decisions visibly labeled; document approval does not silently approve proposed implementation choices.
 - Use Node.js and plain HTML/CSS/JavaScript within the approved local architecture.
-- Enforce loopback-only controls and demo-only fault injection.
+- Enforce loopback-only listeners. Experiment faults remain demo-only; the 13 October live extension permits validated operator-configured development targets, under the updated contracts.
 - Do not assume localhost alone prevents unauthorized browser requests.
 - Keep application measurements, Packet Tracer simulations, and Wireshark observations distinct.
 - Never store request bodies, credentials, or cookies in experiment records or logs.
@@ -51,7 +51,7 @@ Application work is now authorized within the approved contracts. Independent la
 
 ## Boundaries
 - No public deployment, production migration, or unreviewed stack/boundary changes. Application coding and authorized branch pushes are permitted by the current user request.
-- No arbitrary external fault targets or production traffic.
+- No production traffic or public forwarding service. Live development origins require protected configuration and resolved-address checks; experiment probes remain fixed-target.
 - No assumed Packet Tracer/Wireshark automation.
 - Deployment, destructive actions, production migrations, and external messaging require explicit task authorization.
 - Template instructions do not grant that authorization.
@@ -64,7 +64,7 @@ Application work is now authorized within the approved contracts. Independent la
 - Document pack: Approved by the project owner; proposals and unresolved items retain their labels.
 - Approved command sections: [Code Style](docs/CODE_STYLE.md#verified-commands) and [Testing](docs/TESTING.md#verified-commands).
 - Commands: npm start and npm test; see verified-command sections and HANDOFF.md for outcomes.
-- Sensitive systems: No external services or credentials approved.
+- Sensitive systems: No external account/credential connection is configured. Live development origins are operator-selected through protected configuration; no production traffic is authorized.
 - Confirmed local tool: Cisco Packet Tracer; version unverified.
-- Application contracts: Node.js 22.23.1, no external packages, ports 3000/3001/3002, schema v1, bounded measurements, and dashboard tokens.
+- Application contracts: Node.js 22.23.1, no external packages, ports 3000/3001/3002/8080, schema v1, bounded measurements, cockpit/workbench and capability-protected control.
 - Outstanding gates: Required lab evidence, Wireshark availability/permissions, Packet Tracer version/scenarios, grading rubric, deadline interpretation, other-laptop verification, and release acceptance.

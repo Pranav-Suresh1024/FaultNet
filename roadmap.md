@@ -4,7 +4,7 @@
 
 **Status:** Implementation resumed on 12 October 2026 after the concrete application contracts were presented. The local application checkpoint is implemented on `task/faultnet-mvp` with tests/review; it is not yet integrated into main. Lab/report/release and other-laptop validation remain pending.
 
-**Architecture:** Plain browser dashboard, Node.js control service, fixed demo server, fault proxy, and local JSON records. The dashboard/control path stays usable while demo traffic is impaired. Packet Tracer and Wireshark provide separate evidence.
+**Architecture:** Plain browser cockpit/workbench, Node.js control, fixed demo/experiment proxy, separate live development proxy, and local JSON experiment records. Control stays usable while application traffic is impaired. Packet Tracer and Wireshark provide separate evidence.
 
 **Source specifications:** [PRD](FaultNet-Architecture-Pack/docs/PRD.md), [Architecture](FaultNet-Architecture-Pack/docs/ARCHITECTURE.md), [Database](FaultNet-Architecture-Pack/docs/DATABASE.md), [Security](FaultNet-Architecture-Pack/docs/SECURITY.md), [Design System](FaultNet-Architecture-Pack/docs/DESIGN_SYSTEM.md), [Code Style](FaultNet-Architecture-Pack/docs/CODE_STYLE.md), and [Testing](FaultNet-Architecture-Pack/docs/TESTING.md).
 
@@ -16,13 +16,15 @@ The user approved the reference-inspired UI redesign on the existing task/faultn
 
 - Agents write all application and test code. The user supplies decisions and access; GUI observations may require the user's machine.
 - Windows-first, Node.js, plain HTML/CSS/JavaScript, and local JSON. No frontend framework, TypeScript, or database service has been approved.
-- Fault injection affects the fixed demo target only; controls bind to loopback. Enforce browser-origin protections as well as loopback binding.
-- No public deployment, production traffic, arbitrary external targets, genuine IP packet-loss injection, or automatic Packet Tracer/Wireshark integration.
+- Experiment injection affects only the fixed demo; the 13 October live extension supports protected, validated development origins. All listeners bind to loopback and enforce browser-origin boundaries.
+- No public deployment, production traffic, unconfigured forward proxying, genuine IP packet-loss injection, or automatic Packet Tracer/Wireshark integration.
 - Measurements distinguish HTTP outcomes from RTT, retransmissions, and packet loss. Missing observations are not zero or fabricated success.
 - Records/logs/exports exclude request bodies, credentials, and cookies. Review captures before any sharing; generated evidence is not automatically backed up by Git.
 - Application runtime, ports, packages, limits, API/schema, and visual tokens follow the approved contracts. Lab scenarios remain R01 decisions. Use Node's built-in capabilities.
 
 ## Coordination across two active laptops
+The user requested the live proxy extension on 13 October. Its [design](docs/superpowers/specs/2026-10-13-live-proxy-design.md) and [plan](docs/superpowers/plans/2026-10-13-live-proxy.md) cover R23: configuration/forwarding, protected API/lifecycle, then cockpit/review/handoff. This application's laptop owns all affected source/tests/context on task/faultnet-mvp; the teammate's Packet Tracer branch remains separate. Fixed schema/results are preserved.
+
 
 Use A, B, and C as logical responsibility lanes, not laptop counts. The user confirmed two active laptops on 13 October 2026; the third is inactive. Lanes can also be executed sequentially on one laptop; no simultaneous work is assumed or authorized by this document.
 
@@ -73,6 +75,7 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 | R20 | Final report, demo instructions, and release checkpoint | R14, R16, R18, R19 | A then C | Planned | Rubric/deadline confirmation pending |
 | R21 | Editable experiment workbench | User's 13 Oct approval, R14 | Current laptop | In review | task/faultnet-mvp; six presets, reuse/phase controls, real charts/statistics, 32 tests |
 | R22 | Reassessed audit fixes | R21 checkpoint | Current laptop | In review | Five findings plus two review cases fixed; 40 tests; see handoff/implementation ledger; not merged |
+| R23 | Live proxy cockpit and traffic controls | User's 13 Oct expansion request, R22 | Current laptop | In review | Independent live forwarding/cockpit; 60 tests; rendered Edge checks blocked; not merged |
 
 ## Task details and completion checks
 

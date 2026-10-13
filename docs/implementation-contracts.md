@@ -2,11 +2,22 @@
 
 **Status: Application contracts approved; implementation resumed 12 October 2026.** The user asked to start implementation after the technical proposal was presented. That request approves proceeding with these application choices and supersedes the roadmap preparation pause. Lab scenarios below remain proposals; rubric/tool questions gate their affected tasks. Current implementation and validation are in [HANDOFF.md](../HANDOFF.md).
 
-Read with [roadmap.md](../roadmap.md) and the [architecture pack](../FaultNet-Architecture-Pack/AGENTS.md). All agents use these application contracts and update affected documents before changing them. This does not broaden the approved MVP.
+Read with [roadmap.md](../roadmap.md) and the [architecture pack](../FaultNet-Architecture-Pack/AGENTS.md). All agents use these application contracts and update affected documents before changing them. The live extension below supersedes the earlier demo-only product boundary; fixed experiment and record contracts remain unchanged.
+
+## Live proxy extension — 13 October 2026
+
+The user requested a close functional/visual live proxy cockpit and removal of reference names from current files. This is implementation authorization on the existing application branch; independent FaultNet source is used. The [design](superpowers/specs/2026-10-13-live-proxy-design.md) records implementation decisions under that request, and the [plan](superpowers/plans/2026-10-13-live-proxy.md) records acceptance checks. Historical Git commits are retained.
+
+- Four loopback listeners: control 3000, demo 3001, fixed experiment proxy 3002, live development proxy 8080. `/` serves the cockpit; `/workbench` retains the dashboard. No schema migration, package or lab merge.
+- Live configuration supports unified/split HTTP/HTTPS development origins, backend prefixes, both-direction delay/bandwidth, jitter, four connection modes, status probability rules, header controls and JSON mocks. Exact bounds/precedence/cancellation are in the design; these rules do not change experiment measurements.
+- GET/POST `/api/live/config` returns `{config}` (GET also returns `proxyUrl`). GET `/api/live/activity` returns `{entries,activeCount}`. POST `/api/live/reset` and `/api/live/activity/clear` expect `{}`. POST `/api/live/probe` expects `{path}` and returns `{status,bytes,elapsedMs,outcome}` with a five-second ceiling. Existing capability/Origin/Host/8192-byte/rate protections apply.
+- Live targets are origin URLs without URL credentials, paths, queries or fragments. Validate resolved addresses, forbid protected local listener ports/metadata/unspecified/multicast addresses, and pin the checked DNS result for the outgoing connection. No automatic redirects, CONNECT, WebSocket proxying, public listeners or production traffic.
+- Configuration and latest 50 finished requests are process memory only. Apply affects new requests; Reset retains applied targets/routes, clears faults/rules, discards drafts and cancels live work. Restart restores the local demo and clears live history. Persistent experiment files are unchanged.
+- Monitor records method, pathname, status, elapsed milliseconds, bytes, outcome and fault labels. Queries, bodies, credentials, cookies, tokens and target URLs are excluded. Pathnames themselves can contain sensitive application identifiers; use synthetic/development traffic and review before sharing a screenshot.
 
 ## Recommended approach
 
-Use Node.js built-in HTTP, filesystem, crypto, timing, and test facilities, with a plain browser dashboard. A single Node process owns three separate loopback listeners, the experiment lifecycle, and safe local persistence. This gives a reproducible local lab without package dependencies.
+Use Node.js built-in HTTP, filesystem, crypto, timing, and test facilities, with plain browser pages. A single Node process owns four separate loopback listeners, the experiment lifecycle, and safe local persistence. This gives a reproducible local lab without package dependencies.
 
 Separate operating-system processes would isolate failures more strongly but add startup/cleanup coordination. A web framework and frontend framework would add dependencies without providing a required MVP feature. Neither alternative is recommended for this first version.
 
@@ -15,7 +26,7 @@ Separate operating-system processes would isolate failures more strongly but add
 - Reference runtime: Node.js **22.23.1**, observed on the current Windows laptop; record it in a committed `.node-version`. Other laptops install/use the same reference runtime. Node 24 compatibility may be checked later; it is not assumed.
 - JavaScript ES modules (`type: module`), semantic HTML, plain CSS, browser JavaScript. No third-party runtime or test packages initially.
 - Configured scripts: `npm start` -> `node src/main.js`; `npm test` -> `node --test`. Both have been executed locally. package-lock.json is committed with zero external dependencies; package downloads are unnecessary.
-- Control/dashboard: `http://127.0.0.1:3000`; demo: `127.0.0.1:3001`; proxy: `127.0.0.1:3002`. All listeners bind explicitly to `127.0.0.1`. The dashboard uses the canonical numeric host; `localhost` is not an alternative Host value.
+- Control/cockpit: `http://127.0.0.1:3000`; workbench: `/workbench`; demo: `127.0.0.1:3001`; experiment proxy: `127.0.0.1:3002`; live proxy: `127.0.0.1:8080`. All listeners bind explicitly to `127.0.0.1`. Controls use the canonical numeric host; `localhost` is not an alternative control Host value.
 - Start demo and proxy before exposing ready control services. If any port is occupied or initialization fails, report the error and close already-started listeners. Do not terminate other programs or silently choose another public port.
 - Automated tests use ephemeral local ports and temporary storage via internal test parameters, not user-selectable target URLs or paths.
 - On normal shutdown, stop the experiment, cancel timers/probes, clear faults, close sockets/listeners, and await the final save. After a hard process crash, startup converts persisted active states to `interrupted` and records missing observations explicitly; faults always start disabled.
