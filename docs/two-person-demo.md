@@ -1,6 +1,6 @@
 # FaultNet: two-person demonstration
 
-Target: 12–15 minutes, followed by questions. A owns application operation; B owns packet/routing explanations and Packet Tracer operation. Speak only the quoted lines. Actions are stage directions. Replace bracketed values with observations from the screen; predictions are not results.
+Target: 15–18 minutes for the full rubric-aligned presentation, followed by questions. For a shorter slot, show rehearsed bandwidth/interruption records and retain the what-if evaluation and all four components. A owns application operation; B owns packet/routing explanations and Packet Tracer operation. Speak only the quoted lines. Actions are stage directions. Replace bracketed values with observations from the screen; predictions are not results. The [main demo script](demo-script.md) now maps the 30-mark rubric and includes exact what-if/report/individual-assessment checks; follow those additions as well as these speaking handoffs.
 
 The story: **establish normal behavior, introduce a controlled fault, inspect its effect, remove it, verify recovery.** Application fault injection and Packet Tracer routing are separate experiments answering related resilience questions.
 
@@ -81,7 +81,7 @@ A selects Complete HTTP outage; restore common settings and Start. After complet
 
 > A dash for faulty successful-response latency means there were no successful samples; it does not mean zero milliseconds. Each run saves its settings, timestamps and individual observations as local JSON. JSON and CSV downloads let us inspect the evidence behind the charts. The preset values are predefined; the measurements are collected from actual requests.
 
-If asked about other scenarios: Mild/severe delay differ in delay magnitude; Timeout stress makes the delay exceed the client timeout. These presets reuse the same three mechanisms. Show the timeout preset only if time permits; its different timeout makes it incompatible with the other common-protocol comparisons.
+If asked about other scenarios: Mild/severe delay differ in delay magnitude; Timeout stress makes the delay exceed the client timeout. These presets reuse the same three mechanisms. For the rubric evaluation in section 7, use the explicitly controlled 1000 ms delay / 500-versus-2000 ms timeout pair from the main demo script, keeping all other settings fixed; do not substitute preset defaults. The changed timeout intentionally makes the pair incompatible with the saved-run comparison dropdown.
 
 ## 4. Wireshark — B explains, A operates, 2 minutes
 
@@ -177,7 +177,25 @@ Again show `show ip route`; `O` identifies an OSPF route. The previously verifie
 
 Use simulation event/path views if rehearsed, but routing-table entries plus ping are the core evidence. If Fast Forward Time is used, describe it as advancing simulated time; do not report wall-clock convergence speed from it.
 
-## 7. Close — A and B, 45 seconds
+## 7. Rubric evaluation — both, 2–3 minutes
+
+Before closing, perform the controlled timeout pair from [demo-script.md](demo-script.md): same 1000 ms delay, three probes and 250 ms wait, with 500 ms then 2000 ms timeout. A runs or reopens the labelled records; B reads the actual successful counts/availability and timing/outcomes. Use the evidence table/exports because the saved comparison control requires matching timeouts.
+
+**A:**
+
+> Our question is whether increasing the timeout solves the delayed connection. We kept the fault and workload unchanged and changed only the client's waiting limit.
+
+**B — after observing:**
+
+> The shorter timeout shows [actual outcome] and the longer timeout shows [actual outcome]. Completion [did/did not] improve in these observations, while the injected delay remained. A longer timeout allows more waiting; it trades failure-detection speed for tolerance, rather than removing the fault.
+
+**A:**
+
+> Our fixed payload and controlled settings make these cases reproducible. The limits are the small sample, synthetic local workload and separate routing simulation. Larger repeated trials, different payload sizes and carefully timestamped routing convergence are proposed improvements; we have not performed them here.
+
+Both people must be able to justify the metrics, interpret packet/route evidence and explain these limits independently. The report's five marks require a separate complete report; this script does not supply or claim one.
+
+## 8. Close — A and B, 45 seconds
 
 **A:**
 

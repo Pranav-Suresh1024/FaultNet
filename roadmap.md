@@ -53,7 +53,7 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 | ID | Small deliverable | Depends on | Lane | Status | Assigned laptop / branch / evidence |
 | --- | --- | --- | --- | --- | --- |
 | R00 | Repository and portable context | None | A | Done | Setup verified in commit `1e75729`; other laptops' access unverified |
-| R01 | Approve runtime, measurement, API/schema, security, UI, and lab contracts | User resumes implementation | A + user | In review | Application contracts approved/resumed; lab/rubric decisions remain open |
+| R01 | Approve runtime, measurement, API/schema, security, UI, and lab contracts | User resumes implementation | A + user | In review | Application approved; 30-mark rubric supplied 14 Oct; remaining lab/release details open |
 | R02 | Fixed demo response and startup/shutdown | R01 | A | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
 | R03 | Local control security and input validation | R01 | A | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
 | R04 | JSON record persistence and safe reads | R01 | B | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
@@ -72,7 +72,7 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 | R17 | Wireshark capture procedure | R01 lab decisions, R06 | C | In review | docs/wireshark-guide.md; Wireshark 4.6.9/loopback and actual capture permissions verified on current laptop |
 | R18 | Recorded Wireshark evidence | R14, R17 | C | In review | Current laptop / task/faultnet-mvp; four scenarios in one bounded capture, sanitized observations in docs/verification-2026-10-13.md |
 | R19 | Fresh-checkout verification across both active laptops | R14 | A + both laptops | Planned | Lab branch upload confirmed; other laptop's application checkout/runtime still unverified |
-| R20 | Final report, demo instructions, and release checkpoint | R14, R16, R18, R19 | A then C | Planned | Rubric/deadline confirmation pending |
+| R20 | Final report, demo instructions, and release checkpoint | R14, R16, R18, R19 | A then C | In progress | Rubric mapped in demo scripts; final report, full rehearsal and release acceptance outstanding |
 | R21 | Editable experiment workbench | User's 13 Oct approval, R14 | Current laptop | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
 | R22 | Reassessed audit fixes | R21 checkpoint | Current laptop | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
 | R23 | Live proxy cockpit and traffic controls | User's 13 Oct expansion request, R22 | Current laptop | In review | main / PR #1; live forwarding/cockpit integrated; full rendered live-control rehearsal remains |
@@ -84,9 +84,9 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 
 **Owns:** Updates to the seven specification documents and shared contracts. No application code.
 
-**Contract artifact:** [docs/implementation-contracts.md](docs/implementation-contracts.md). The user resumed application implementation after the proposal. Application decisions are approved; lab/rubric/tool questions remain open. Teammate access is not a blocker for this sequential local application work.
+**Contract artifact:** [docs/implementation-contracts.md](docs/implementation-contracts.md). The user resumed application implementation after the proposal. Application decisions are approved; the user supplied the 30-mark rubric on 14 October and it is mapped in docs/demo-script.md. Remaining lab/tool/release details are open. Teammate access is not a blocker for this sequential local application work.
 
-- [ ] Record the user's implementation-resume instruction, course rubric, and confirmed deadline; record unavailable information explicitly.
+- [ ] Implementation resume and individual rubric are recorded (Understand 3 / Apply 5 / Analyze 7 / Evaluate/higher 10 / Report 5). User indicated next-day submission on 14 October; exact submission time and mandatory report format remain unspecified.
 - [ ] Approve runtime/module format, required packages (if any), ports, storage directory, and proposed file ownership. Define reproducible start/test commands as planned commands until implemented and verified.
 - [ ] Approve the demo's expected status/body contract; probe counts, intervals, timeout/payload limits, fault limits, concurrency, and maximum experiment duration.
 - [ ] Define availability denominator, cancellation handling, timing/throughput units, percentile rule, recovery success count/window, and timing/throttling test tolerances. Clarify whether a baseline-only run is supported.

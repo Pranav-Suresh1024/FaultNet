@@ -1,6 +1,20 @@
 # FaultNet demonstration script
 
-Use this as a 10–12 minute presentation. Instructions labelled **Do** are actions; **Say** is text you can read aloud. Actual measured values replace bracketed placeholders. The appearance rollback/archive request is paused; this script uses the currently implemented pages.
+Updated for the user's 30-mark rubric supplied on 14 October 2026. Allow 15–18 minutes for the full demonstration; for a shorter slot, show rehearsed bandwidth/interruption records and use the comparison run's own baseline instead of a separate baseline-only run. Keep the analysis, what-if evaluation, live cockpit, Wireshark and routing evidence. Instructions labelled **Do** are actions; **Say** is text you can read aloud. Replace bracketed values with actual observations. The current application baseline is main; the older appearance rollback/archive request remains paused.
+
+## Rubric and two-person responsibilities
+
+The assessment is individual: both people must understand all components and be able to justify results, even though they divide screen operation. A operates/explains the workbench and live cockpit; B explains packet evidence and operates Packet Tracer. Wireshark runs on the application laptop; A can click while B explains. Use the [two-person script](two-person-demo.md) for speaking handoffs; this document supplies the rubric/evidence checklist and exact experiments.
+
+| Category | Marks | Demonstration evidence |
+| --- | ---: | --- |
+| Understand | 3 | Sections 1–2: problem, objectives, proxy/HTTP/TCP, metrics and distinct purposes of all four tools. |
+| Apply | 5 | Sections 3–10: real fault injection, saved results/exports, live requests, packet capture and routing configuration. |
+| Analyze | 7 | Sections 4–9: measured baseline changes, expected versus observed delivery time, timestamp/stream interpretation and changed routing-table entries. |
+| Evaluate and higher | 10 | Sections 11–12: one-variable what-if experiment, evidence-based judgments, design tradeoffs, limitations and proposed improvements. |
+| Complete and correct report | 5 | Submission checklist below: methodology/settings, traceable results, screenshots/captures, analysis/evaluation and references. A demo script is not the finished report. |
+
+Analysis and evaluation account for 17 marks. For each main case, state the hypothesis, show the actual result, then explain the conclusion and its limits; do not spend the whole presentation naming controls.
 
 ## Prepare before presenting
 
@@ -12,11 +26,13 @@ Use this as a 10–12 minute presentation. Instructions labelled **Do** are acti
 
    Keep this terminal open. If the site already works, do not start a second instance. A port-conflict message means another listener is running; do not terminate unfamiliar processes.
 2. Bookmark the [experiment workbench](http://127.0.0.1:3000/workbench) and [live cockpit](http://127.0.0.1:3000/). Start the presentation on the workbench. Its status must say `Demo: ready` and `Storage: ready`. These are two pages of one application, with independent fault controls.
-3. Rehearse the four scenarios below. Use three probes, 250 ms wait and 5000 ms timeout in each. Save each run's JSON/CSV and note its ID. Existing records remain in ignored `results/`; refreshing does not delete them.
-4. Have Wireshark and the static/OSPF Packet Tracer projects ready. Do not switch this application checkout to the lab branch during presentation. Use separate .pkt files from the teammate or local review copies. On the current laptop, reviewed copies exist at `.codex/packet-tracer-review-9f72386/static/FaultNet-static.pkt` and `.codex/packet-tracer-review-9f72386/ospf/FaultNet-ospf.pkt`; these ignored files do not transfer with Git. Originals are on `task/packet-tracer-labs` under `labs/packet-tracer/`.
+3. Rehearse baseline/delay/bandwidth/interruption using three probes, 250 ms wait and 5000 ms timeout. Section 11 intentionally changes timeout for its what-if comparison. Save each run's JSON/CSV and note its ID. Existing records remain in ignored `results/`; refreshing does not delete them.
+4. Have Wireshark and the static/RIP/OSPF Packet Tracer projects ready. Do not switch this application checkout to the lab branch during presentation. Use separate .pkt files from the teammate or local review copies. On the current laptop, reviewed copies exist under `.codex/packet-tracer-review-9f72386/` in `static/`, `rip/` and `ospf/`; these ignored files do not transfer with Git. Originals are on `task/packet-tracer-labs` under `labs/packet-tracer/`.
 5. Keep rehearsed evidence as a backup. The current laptop also has an earlier, separately labelled 871-packet capture at `.codex/verification-20261013/faultnet-scenarios.pcapng`. It contains earlier two-probe tests, not the three-probe presentation below. Do not present it as a fresh capture. The tiny `faultnet-loopback.pcapng` is an unsuccessful earlier attempt; use the scenarios file.
 
 Editing a preset changes the scenario dropdown to **Custom settings**. This is expected: the edited values stay in place. Do not select the preset again afterward, because that restores its defaults.
+
+Prepare one evidence sheet with run ID, payload, fault settings, probe count/wait/timeout, phase successes/eligible, median response time, mean throughput, confirmed/unconfirmed recovery and capture filename. Use the baseline from the same comparison run when calculating a fault's effect. Small smoke tests illustrate behavior; do not report statistical confidence or unmeasured protocol convergence speeds.
 
 ## 1. Introduce the project — 45 seconds
 
@@ -94,6 +110,8 @@ Expected under healthy conditions: 3/3 complete responses and 100% availability.
 
 Expected: a roughly 500 ms increase in faulty full-response time, not an exact fixed total. Recovery confirmation is separate from each request's response time.
 
+**Analysis:** Calculate `faulty median − baseline median = [difference] ms` using this run's two phase medians. Compare the difference with 500 ms and explain any discrepancy from actual observations. Read availability and successful counts alongside latency. If no successful timings exist, preserve that missing value; never calculate a difference from a dash.
+
 ## 5. Demonstrate restricted bandwidth — 60 seconds
 
 **Do:**
@@ -112,6 +130,8 @@ Expected: a roughly 500 ms increase in faulty full-response time, not an exact f
 
 Allow roughly 6–10 seconds for this small run. The preset normally uses 16 KiB/s; explicitly changing it to 32 makes the demonstration shorter.
 
+**Analysis:** State the prediction before Start: `64 KiB / 32 KiB/s = 2 s`. Afterward compare the observed full-response time with that prediction and explain overhead/pacing. Do not confuse the 250 ms pause between probes with response latency or claim the result is interface bandwidth.
+
 ## 6. Demonstrate interruption and recovery — 60 seconds
 
 **Do:** Choose **Complete HTTP outage**, set probes 3/wait 250/timeout 5000, and start the comparison. Select **Faulty**, then **Recovery**, after completion.
@@ -126,9 +146,11 @@ Allow roughly 6–10 seconds for this small run. The preset normally uses 16 KiB
 
 If all faulty requests fail as intended, call this a controlled **HTTP connection outage**, not proven IP packet loss.
 
+**Analysis:** Contrast the delay run's successful-but-slow responses with this run's failed exchanges, using actual counts. Failed attempt durations remain visible in the exact probe table even when successful-response latency is unavailable. A completed experiment does not by itself establish confirmed recovery; show its explicit recovery result.
+
 ## 7. Show saved results — 45 seconds
 
-**Do:** Click **Download JSON** and **Download CSV** for a completed run. Go to **Saved experiments**, select a previous run using **Open an experiment**, and show it reopening. Expand **Exact probe measurements** if asked for raw measurements.
+**Do:** Click **Download JSON** and **Download CSV** for a completed run. Scroll to the **Saved experiments** panel and select a previous run using **Open an experiment**. The sidebar now only links Workbench and Live proxy cockpit. Expand **Exact probe measurements** to connect a phase summary to its individual timestamps/outcomes.
 
 **Say:**
 
@@ -164,6 +186,8 @@ Select a request packet, then **Analyze → Follow → TCP Stream**. Show `GET /
 
 If HTTP is not decoded, use **Analyze → Decode As → HTTP** for TCP port 3002. To find requests, use `tcp.port == 3002 && http.request`. In a fresh capture containing only the three-probe delay comparison, the first three GET requests are baseline; the fourth is the first faulty request. Select that request, follow its TCP stream, close the dialog and compare its request/response timestamps. Keep the capture and the exported run's phase timestamps together.
 
+Match the faulty probe's Started (UTC) timestamp to the captured request; UTC Date and Time of Day under View → Time Display Format helps align clocks. The fourth-request shortcut is invalid for a mixed capture or different probe counts. For bandwidth, identify the last response-body data as well as the first HTTP response; body completion is the relevant comparison with full-response elapsed time.
+
 **Say only after checking the observed timing:**
 
 > In this faulty connection, the time between the request and the first HTTP response is approximately [observed gap]. That supports the application's configured delay experiment. The dashboard measures the complete HTTP exchange, while the capture exposes the underlying packets. This gap is not TCP round-trip time.
@@ -176,7 +200,7 @@ Optional bandwidth/interruption captures use the same capture filter and setting
 
 > Packet Tracer is a separate simulation. It does not automatically receive FaultNet's settings or supply these dashboard results. We use it to demonstrate the related concept of reachability and recovery when a router link fails.
 >
-> The topology has three routers in a triangle. R3 provides an alternate route between the LANs behind R1 and R2. We compare configured static routes with OSPF, which exchanges routing information and can select that alternate path.
+> The topology has three routers in a triangle. R3 provides an alternate route between the LANs behind R1 and R2. We compare static routing, RIPv2 and OSPF using the same topology, destination and failed direct link.
 
 **Static routing:**
 
@@ -217,23 +241,83 @@ Optional bandwidth/interruption captures use the same capture filter and setting
 
 RIPv2 is an optional third comparison: open `FaultNet-rip.pkt` and repeat the same test. It is already part of the reviewed lab set, but skip this repetition if presentation time is limited.
 
-## 10. Optional live-cockpit extra — 45 seconds
+**Routing analysis/evaluation:** Include RIPv2 in the evidence sheet even if its live repetition is shortened. `R` identifies RIP and `O` identifies OSPF in `show ip route`. RIP uses hop count; OSPF uses cost/link-state information. Read the actual alternate next hop/interface and connect it to R1 → R3 → R2 on the topology. In this specific static control case there is no configured backup route; static routing can support backup configurations. An alternate physical path must also be usable by routing. Retain startup/ARP/convergence failures and distinguish them from a stable outage. If Fast Forward Time is used, disclose advancing simulated time; no wall-clock convergence comparison follows from it.
 
-Do this only after the main evidence, if time permits. Open the live cockpit, click **Reset faults**, and keep the unified target at the local demo. Click **Add** beside **Status injection**, set path prefix `/payload`, status `503`, probability `100`, then **Apply changes**. Leave sample path `/payload` and click **Send sample**. Show HTTP 503 in the sample result/monitor. Click **Reset faults** and send another sample; show HTTP 200 if successful.
+## 10. Live cockpit: manual testing and judgment — 90 seconds
+
+**Do:** Open the live cockpit. Confirm Routing mode **Unified**, Application target **http://127.0.0.1:3001**; Apply target edits if needed, then **Reset faults** and **Clear monitor**. Reset retains the applied target. Leave Sample GET path **/payload** and send a normal sample. Next set **Response delay = 500 ms**, **Apply changes**, and send another sample; read its actual elapsed time/effects. Reset again. Click **Add** beside **Status injection**, set path prefix **/payload**, status **503**, probability **100**, then **Apply changes** and **Send sample**. Finally Reset faults and send a restored sample. Wait for each sample to settle before changing configuration.
 
 **Say:**
 
-> This second page is the live configuration interface. It can combine delay, jitter, upload/download limits and response rules. Here I deliberately return an HTTP 503 error, then reset the configuration and verify a normal response.
+> The workbench is for repeatable saved comparisons. This cockpit supports manual requests through an applied development-proxy configuration. Draft edits do not affect traffic until Apply. We showed [actual normal result], [actual delayed result] and [actual injected status], then [actual restored result].
 >
-> This is an application error, not a lost IP packet. The live controls are independent of the saved experiment workflow, and the monitor retains only the latest 50 finished requests in process memory.
+> HTTP 503 is a valid HTTP response reporting an application error; that differs from a connection failing without a complete response. Using 100 percent probability makes this demonstration reproducible. Other controls support jitter, upload/download pacing, header changes and JSON mocks. The live controls are independent of the saved workbench experiments, and the monitor retains only the latest 50 finished requests in process memory.
+
+**Evaluation:** Explain why saved automated comparisons and manual development testing need different workflows. Live monitor entries are a rolling window, not a durable experiment archive; use workbench exports for repeatable evidence. Named network presets are illustrative settings, not measured carrier performance.
 
 Do not use the live cockpit's 60-second timeout mode in a short presentation: its sample request stops waiting after five seconds, which is a separate client limit. The synthetic demo exposes only `/payload`; its root `/` is not a frontend page.
 
-## 11. Finish — 20 seconds
+## 11. Controlled what-if: does a longer timeout solve delay? — 90–120 seconds
+
+**Question/hypothesis:** With a fixed 1000 ms injected delay, increasing the client timeout from 500 ms to 2000 ms is expected to allow more faulty requests to complete, while the delay itself remains. Verify the actual outcome; a busy system can differ from this expectation.
+
+**Do:** Use comparison mode and Response delay. Set Delay **1000 ms**, Probes **3**, Wait **250 ms**, Timeout **500 ms**; Start and retain this run/export. Use **Reuse selected run settings**, change only Timeout to **2000 ms**, and Start the second run. Keep the payload/fault/probe count/wait unchanged. Read the Faulty phase for both records from saved results or their exports. These settings are both within the server's combined budget.
+
+| Evidence to fill in after running | 500 ms timeout | 2000 ms timeout |
+| --- | --- | --- |
+| Run ID | [actual ID] | [actual ID] |
+| Faulty successful / eligible requests | [actual count] | [actual count] |
+| Faulty availability | [actual %] | [actual %] |
+| Median successful full-response time | [actual ms or —] | [actual ms or —] |
+| Failed attempt outcome/duration | [actual observations] | [actual observations] |
+| Recovery confirmed? | [actual outcome] | [actual outcome] |
+
+The Compare experiments dropdown deliberately treats these runs as incompatible because their timeouts differ. Use the evidence table/exports for this intentional one-variable evaluation; do not misdescribe that guard as a broken comparison. Use rehearsed records if time is short and label them as prior runs.
+
+**Say after observing the results:**
+
+> We changed only the timeout. The 500-millisecond case produced [actual outcome]; the 2000-millisecond case produced [actual outcome]. A longer timeout [did/did not] improve completion in these observations. It did not remove the configured delay. Allowing clients to wait longer trades quicker failure detection for more tolerance; the appropriate timeout depends on the application's response requirements.
+
+This is a designed what-if experiment, not a measured optimization of the underlying connection. Do not claim a universally optimal timeout from three probes or compare a missing successful median as zero.
+
+## 12. Justify choices, evaluate limitations and improvements — 60–90 seconds
+
+**Both presenters should be able to explain:**
+
+| Decision | Evidence-based justification / limit |
+| --- | --- |
+| Proxy interception and separate control port | Faults change real test traffic while control requests remain separate; this does not impair the entire laptop's network. |
+| Fixed 64 KiB payload and controlled settings | Keeps comparisons reproducible; results are specific to this local workload. |
+| Median plus counts, percentiles and exact probes | Median summarizes successful timings, while counts expose failures. Three samples and their p95 remain descriptive, not a statistical guarantee. |
+| Three-success recovery check | Requires repeated successful responses after clearance; the duration includes probing/waits and is not routing convergence time. |
+| Static/RIP/OSPF comparison | Same simulated topology/failure makes path-choice observations interpretable; current evidence does not rank protocol convergence speed. |
+
+**Say:**
+
+> Our evidence supports controlled HTTP fault injection and observed restoration for this local workload, together with alternate-route behavior in Packet Tracer. Limits include the small sample size, synthetic payload, local environment and separate simulation. HTTP interruption does not establish an IP packet-loss rate. Future evaluation could use larger repeated samples, different payload sizes, a configured development application, and carefully timestamped routing convergence tests. These are proposed improvements, not completed results.
+
+If a run does not support the expected conclusion, explain its recorded outcome instead. Describe which next experiment would distinguish an incorrect assumption from environment noise; never hide the failure.
+
+## 13. Finish — 20 seconds
 
 **Say:**
 
 > FaultNet demonstrates a complete testing sequence: establish normal behavior, inject a controlled fault, measure its effect, clear it, and check recovery. Saved application results, Wireshark packet observations and Packet Tracer routing simulations provide three clearly distinguished forms of evidence.
+
+## Report and evidence checklist — 5 marks
+
+The complete/correct report is a separate assessed deliverable. No final submission report is created by updating this script.
+
+- Include project/student identifiers, problem statement, objectives and explanations of HTTP/TCP, proxies, timing, goodput, timeout and routing concepts.
+- Include application architecture/request paths, listener roles, Packet Tracer topology/addressing/protocol configurations and the purpose of each tool.
+- Document environment, payload, probe count, wait, timeout, fault values, independent variable, controlled settings, hypotheses and actual run/capture identifiers.
+- Include measured phase tables/charts and matching screenshots; explain differences from baseline, packet timestamps/contents and routing-table changes. Keep application, capture and simulated-network results labelled separately.
+- Include the what-if table, justified conclusions, unsuccessful/transient observations, limitations and proposed improvements. Do not present prior two-probe evidence as today's three-probe run.
+- Include conclusions and references to tools/protocol documentation. Confirm required submission format with the course instructions; the supplied rubric does not specify a mandatory template or page count.
+
+## Individual assessment rehearsal
+
+Swap questions between presenters: explain the proxy request path; calculate 64/32 seconds; explain why a failed phase has no successful median; distinguish HTTP 503 from connection interruption; identify a faulty stream and its timing boundary; justify the timeout what-if; explain an alternate route and why current evidence cannot establish OSPF-versus-RIP speed. Each person should answer in their own words and connect the explanation to a visible observation.
 
 ## Short answers for questions
 
@@ -249,6 +333,9 @@ Do not use the live cockpit's 60-second timeout mode in a short presentation: it
 | Does static routing always fail after a link fault? | No. This specific lab intentionally lacks a backup static route. Other static configurations could have backup routes. |
 | Does FaultNet repair the network? | It clears its injected fault and checks responses; Packet Tracer's dynamic routing demonstrates alternate-path selection separately. |
 | Why two dashboards? | The workbench is for saved repeatable experiments; the live cockpit is for manual request configuration/monitoring. Both are FaultNet. |
+| Did increasing timeout fix the delay? | It changes how long the client waits. Show whether completion improved in the measured pair; the configured delay remains. |
+| Why are the timeout runs incompatible in Compare experiments? | That control requires matching measurement protocols. Different timeouts are intentionally compared outside it for the what-if analysis. |
+| What supports the evaluation marks? | A controlled experiment, interpreted observations, justified decisions and explicit limitations/improvements; a larger feature list alone does not. |
 
 ## If something fails during presentation
 
@@ -259,4 +346,4 @@ Do not use the live cockpit's 60-second timeout mode in a short presentation: it
 - **Packet Tracer ping fails at startup:** Allow ARP/interfaces/routes to settle, repeat and retain transient failures. Verify the selected file/interface and restore the link afterward. Do not promise immediate failover.
 - **Download does not complete:** Use the pre-downloaded matching JSON/CSV and identify its run ID. Do not spend the presentation debugging the download manager.
 
-Full rehearsal/rendered UI, fresh capture and fresh Packet Tracer operation for this script have not been performed. Steps are grounded in current source and existing bounded lab reviews; actual demonstration results must be observed.
+The rubric update is source/settings checked, not a fresh live rehearsal. Bounded workbench rendering and prior application/capture/routing evidence exist, but this complete presentation, its new timeout pair, fresh captures and lab reruns have not been executed for this revision. Both presenters must rehearse and fill the tables with actual observations; no score is guaranteed by the script.
