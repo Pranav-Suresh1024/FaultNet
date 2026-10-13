@@ -38,6 +38,8 @@ The [Windows CI workflow](.github/workflows/checks.yml) runs the same tests on b
 
 ## Shared context
 
+- [Demonstration script](docs/demo-script.md): beginner click-by-click presentation, spoken lines, Wireshark/Packet Tracer steps, questions and fallback evidence.
+
 - [AGENTS.md](AGENTS.md): rules every coding agent must follow.
 - [HANDOFF.md](HANDOFF.md): current progress, approvals, blockers, validation, and next action.
 - [roadmap.md](roadmap.md): full-project task board, dependencies, proposed laptop ownership, quality gates, and task handoff template.

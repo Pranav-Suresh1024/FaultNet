@@ -6,7 +6,7 @@ Use Wireshark to observe the real local HTTP experiment. Packet Tracer simulates
 
 On the current laptop, TShark reports Wireshark 4.6.9 and dumpcap lists `Adapter for loopback traffic capture` (`\Device\NPF_Loopback`). Fresh verification on 13 October 2026 captured 871 packets with zero capture drops while running baseline, delay, bandwidth, and interruption scenarios. Capture permission is now verified here; this supersedes the earlier unsuccessful attempt. See [actual observations and limits](verification-2026-10-13.md). Other laptops must verify their own installation and capture permissions.
 
-Open the dashboard at http://127.0.0.1:3000/. If it is unavailable, an agent should run the repository's `npm start` command. Wait for Demo and Storage to report ready.
+Open the experiment workbench at http://127.0.0.1:3000/workbench. The root URL now opens the separate live cockpit. If the app is unavailable, an agent should run the repository's `npm start` command. Wait for Demo and Storage to report ready. The [presentation script](demo-script.md) combines these packet steps with the application and Packet Tracer demonstrations.
 
 ## Capture one experiment
 
