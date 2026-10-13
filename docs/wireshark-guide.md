@@ -4,7 +4,7 @@ Use Wireshark to observe the real local HTTP experiment. Packet Tracer simulates
 
 ## Environment and prerequisites
 
-On the current laptop, TShark reports Wireshark 4.6.9 and dumpcap lists `Adapter for loopback traffic capture` (`\Device\NPF_Loopback`). This verifies installation/interface discovery, not permission to capture. An attempted five-second agent capture was rejected by automatic approval review as `blocked by policy`; no capture result is claimed.
+On the current laptop, TShark reports Wireshark 4.6.9 and dumpcap lists `Adapter for loopback traffic capture` (`\Device\NPF_Loopback`). Fresh verification on 13 October 2026 captured 871 packets with zero capture drops while running baseline, delay, bandwidth, and interruption scenarios. Capture permission is now verified here; this supersedes the earlier unsuccessful attempt. See [actual observations and limits](verification-2026-10-13.md). Other laptops must verify their own installation and capture permissions.
 
 Open the dashboard at http://127.0.0.1:3000/. If it is unavailable, an agent should run the repository's `npm start` command. Wait for Demo and Storage to report ready.
 
@@ -54,6 +54,8 @@ Zero matches is a valid observation. HTTP failure is not proof of IP packet loss
 
 If no packets appear, confirm the loopback interface, correct filter type, active experiment, and Start capture. If Windows reports a permission error, have the user handle the permission prompt or administrator launch; do not change security settings automatically.
 
-## Evidence still required
+## Recorded evidence and remaining work
 
-The four captures and their analysis have not yet been performed. Interface discovery does not complete roadmap R18. Keep raw files local; transfer them separately only after deliberate review/authorization.
+The four scenarios were captured together in one bounded local capture and analysed with TShark. The fresh checks used two probes per phase, 100 ms wait, and 5000 ms timeout; they are smoke evidence, not a larger performance study. Delay responses took about 0.51 seconds, 32 KiB/s responses about 2.01 seconds, and interruption streams closed with FIN without HTTP responses or RST. No control-port packets or retransmissions were observed. Recovery returned complete responses.
+
+Roadmap R18 is In review; the report still needs reviewed integration and any larger/per-scenario recordings required by the rubric. Keep raw files local; transfer them separately only after deliberate review/authorization. Source pushes transfer the sanitized Markdown observations, not captures or result records.

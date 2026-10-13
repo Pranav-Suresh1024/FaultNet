@@ -22,9 +22,9 @@ The user approved the reference-inspired UI redesign on the existing task/faultn
 - Records/logs/exports exclude request bodies, credentials, and cookies. Review captures before any sharing; generated evidence is not automatically backed up by Git.
 - Application runtime, ports, packages, limits, API/schema, and visual tokens follow the approved contracts. Lab scenarios remain R01 decisions. Use Node's built-in capabilities.
 
-## Coordination across three laptops
+## Coordination across two active laptops
 
-Use A, B, and C as logical lanes until actual laptops are assigned. The lanes can also be executed sequentially on one laptop; no simultaneous work is assumed or authorized by this document.
+Use A, B, and C as logical responsibility lanes, not laptop counts. The user confirmed two active laptops on 13 October 2026; the third is inactive. Lanes can also be executed sequentially on one laptop; no simultaneous work is assumed or authorized by this document.
 
 | Lane | Proposed responsibility | Exclusive/shared-file boundary |
 | --- | --- | --- |
@@ -38,11 +38,11 @@ For explicitly requested parallel work:
 1. A commits the task claim to this board and pushes it before another laptop starts. Record laptop, branch, owned paths, contract/base commit, and reviewer. Concurrent claims require A to reconcile them before work starts.
 2. Each task uses a branch such as `task/r06-delay`, based on the latest required dependencies. Do not share a working directory or push competing work to `main`.
 3. An agent edits only its owned files and scoped tests. Shared-file changes are proposed in its PR handoff for A to integrate; no silent interface changes.
-4. Task branches use their PR descriptions for progress and test evidence. A updates the shared roadmap/HANDOFF.md when integrating, preventing three agents from editing the same progress file.
+4. Task branches use their PR descriptions for progress and test evidence. A updates the shared roadmap/HANDOFF.md when integrating, preventing multiple agents from editing the same progress file.
 5. The assigned reviewer checks behavior, failure paths, security, and contract compatibility. Integrate only after the task's acceptance checks pass and merge authorization is established.
 6. Re-run affected integration checks against the combined tree. Individual branch checks do not prove the combined application works.
 
-The owner's two laptops and the friend's laptop each authenticate independently. The friend's GitHub account needs collaborator access to push to a private repository. Each Codex account reads committed context; local account memory is not a shared dependency.
+Each active laptop authenticates independently. A teammate's different GitHub account needs collaborator write access to push to a private repository. Each Codex account reads committed context; local account memory is not a shared dependency.
 
 ## Task board
 
@@ -67,9 +67,9 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 | R14 | End-to-end, failure-path, and security regression checks | R07-R13 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
 | R15 | Packet Tracer procedure and topology | R01 lab decisions | C | In review | Teammate / task/packet-tracer-labs / 9f72386; three saved projects independently opened/config reviewed, not merged |
 | R16 | Recorded Packet Tracer evidence | R15 | C | In review | Static outage and RIP/OSPF alternate routes independently checked; see docs/packet-tracer-review.md for scope/transients |
-| R17 | Wireshark capture procedure | R01 lab decisions, R06 | C | In review | docs/wireshark-guide.md; Wireshark 4.6.9/loopback discovered, actual capture permissions pending |
-| R18 | Recorded Wireshark evidence | R14, R17 | C | Planned | No capture results yet |
-| R19 | Fresh-checkout verification across all three laptops | R14 | A + all laptops | Planned | Unassigned |
+| R17 | Wireshark capture procedure | R01 lab decisions, R06 | C | In review | docs/wireshark-guide.md; Wireshark 4.6.9/loopback and actual capture permissions verified on current laptop |
+| R18 | Recorded Wireshark evidence | R14, R17 | C | In review | Current laptop / task/faultnet-mvp; four scenarios in one bounded capture, sanitized observations in docs/verification-2026-10-13.md |
+| R19 | Fresh-checkout verification across both active laptops | R14 | A + both laptops | Planned | Lab branch upload confirmed; other laptop's application checkout/runtime still unverified |
 | R20 | Final report, demo instructions, and release checkpoint | R14, R16, R18, R19 | A then C | Planned | Rubric/deadline confirmation pending |
 
 ## Task details and completion checks
@@ -226,7 +226,7 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 
 **Done when:** Claims are traceable to observed packets and limitations; HTTP failures are not presented as packet-loss rates. If capture is unavailable, keep R18 blocked and report the limitation. **Coverage:** F-06 capture.
 
-### R19: Three-laptop portability
+### R19: Two-laptop portability
 
 **Owns:** A's setup documentation and cross-laptop check records; no machine credentials are committed.
 
@@ -234,7 +234,7 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 - [ ] Verify safe handling of occupied ports, different local paths, missing tooling, and local-only results; record runtime/browser versions and check outcomes per laptop.
 - [ ] Demonstrate one handoff: one agent pushes its code/context, another pulls the matching SHA and identifies the correct next task without prior chat history.
 
-**Done when:** All three environments have recorded evidence, or remaining failures are clearly open blockers. One successful laptop does not imply all three pass.
+**Done when:** Both active environments have recorded evidence, or remaining failures are clearly open blockers. One successful laptop does not imply both pass. The inactive third laptop is excluded.
 
 ### R20: Report and release checkpoint
 

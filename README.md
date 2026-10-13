@@ -20,7 +20,7 @@ The dashboard has sidebar section navigation, measured summary cards, a phase-me
 npm test
 ```
 
-Tests use temporary storage and ephemeral ports. Runtime results go to ignored `results/`; code pushes do not transfer those records or captures. Phase-boundary saving can lose latest observations on a hard crash; failed saves are shown explicitly. Lab evidence and other-laptop validation remain pending.
+Tests use temporary storage and ephemeral ports. Runtime results go to ignored `results/`; code pushes do not transfer those records or captures. Phase-boundary saving can lose latest observations on a hard crash; failed saves are shown explicitly. [Fresh verification](docs/verification-2026-10-13.md) records local dashboard, Wireshark, and OSPF checks; other-laptop application validation remains pending.
 
 The [Windows CI workflow](.github/workflows/checks.yml) runs the same tests on branch pushes and pull requests. The application checkpoint passed from a fresh GitHub checkout; check the current branch's result before integration.
 
@@ -37,9 +37,9 @@ All application and test coding is performed by AI agents. The user provides req
 
 The committed files carry project context between accounts. Chat history, personal memories, installed plugins, and account settings are not part of this transfer. Codex reads repository `AGENTS.md` instructions before working: [official documentation](https://learn.chatgpt.com/docs/agent-configuration/agents-md).
 
-## Three-laptop workflow
+## Two-laptop workflow
 
-Use a separate Git clone on each laptop and GitHub as the transfer point. Two laptops use the owner's GitHub account; the third uses a friend's account. Each authenticates separately. The friend needs collaborator write access, granted by the owner in repository settings, to push branches directly. Otherwise use a fork and pull request. Codex account identity is separate from GitHub access.
+Use a separate Git clone on each active laptop and GitHub as the transfer point. The user confirmed on 13 October 2026 that only two laptops remain active; the third is no longer part of the work or verification gate. Each authenticates separately. A teammate using a different GitHub account needs collaborator write access, granted by the owner in repository settings, to push directly to a private repository. Codex account identity is separate from GitHub access.
 
 Use one active writer at a time: finish, update the handoff, commit, push, verify, then switch laptops. The next agent pulls the same branch and reads the handoff before editing. If working concurrently is explicitly requested, give each laptop a separate task branch and file ownership, then review and integrate through pull requests. Separate branches do not automatically prevent conflicts in shared files.
 

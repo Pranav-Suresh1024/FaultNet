@@ -11,7 +11,7 @@
 
 ## Shared working agreement
 - All application code and test code is written by AI agents; the user supplies requirements, decisions, and access, not manual code edits.
-- This repository is the shared source of project context across three laptops and different Codex accounts. Do not rely on another account's chat history, memory, plugins, or local paths.
+- This repository is the shared source of project context across two active laptops and different Codex accounts; the third laptop is inactive. Do not rely on another account's chat history, memory, plugins, or local paths.
 - Current authorization covers documentation, Git setup, commits, and pushes to `Pranav-Suresh1024/FaultNet`. Application work follows the latest pause/resume instruction in HANDOFF.md and requires resolution of the affected blocking decisions.
 - Preserve approved decisions and visibly label proposals, unresolved details, and untested claims. A handoff does not create new authorization.
 - Keep shared file references relative to this repository. Record machine-specific observations as observations, not universal setup requirements.
