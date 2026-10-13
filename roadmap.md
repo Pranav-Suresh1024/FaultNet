@@ -2,7 +2,7 @@
 
 **Goal:** Deliver a reproducible local network-resilience lab with baseline/fault/recovery measurements, saved results, exports, and separate network-lab evidence.
 
-**Status:** Implementation resumed on 12 October 2026 after the concrete application contracts were presented. The local application checkpoint is implemented on `task/faultnet-mvp` with tests/review; it is not yet integrated into main. Lab/report/release and other-laptop validation remain pending.
+**Status:** Application checkpoints from `task/faultnet-mvp` are integrated into `main` through [PR #1](https://github.com/Pranav-Suresh1024/FaultNet/pull/1), explicitly authorized by the user. Main is the shared application baseline. Lab integration, remaining UI acceptance, report/release and other-laptop validation remain pending.
 
 **Architecture:** Plain browser cockpit/workbench, Node.js control, fixed demo/experiment proxy, separate live development proxy, and local JSON experiment records. Control stays usable while application traffic is impaired. Packet Tracer and Wireshark provide separate evidence.
 
@@ -54,29 +54,29 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 | --- | --- | --- | --- | --- | --- |
 | R00 | Repository and portable context | None | A | Done | Setup verified in commit `1e75729`; other laptops' access unverified |
 | R01 | Approve runtime, measurement, API/schema, security, UI, and lab contracts | User resumes implementation | A + user | In review | Application contracts approved/resumed; lab/rubric decisions remain open |
-| R02 | Fixed demo response and startup/shutdown | R01 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
-| R03 | Local control security and input validation | R01 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
-| R04 | JSON record persistence and safe reads | R01 | B | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
-| R05 | Probe outcomes and measurement calculations | R01, R02 | B | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
-| R06 | Pass-through proxy and delay fault | R01, R02 | B | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
-| R07 | Bounded bandwidth restriction | R06 | B | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
-| R08 | Connection interruption and fault reset | R06 | B | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
-| R09 | Baseline/fault/recovery lifecycle and cancellation | R03-R08 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
-| R10 | Control/result API integration | R09 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
-| R11 | Accessible dashboard controls and states | R01, R10 | C | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
-| R12 | Phase comparison and saved-run browser | R04, R05, R11 | C | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
-| R13 | JSON/CSV export and dashboard download | R04, R05, R10, R12 | B then C | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
-| R14 | End-to-end, failure-path, and security regression checks | R07-R13 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R02 | Fixed demo response and startup/shutdown | R01 | A | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
+| R03 | Local control security and input validation | R01 | A | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
+| R04 | JSON record persistence and safe reads | R01 | B | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
+| R05 | Probe outcomes and measurement calculations | R01, R02 | B | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
+| R06 | Pass-through proxy and delay fault | R01, R02 | B | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
+| R07 | Bounded bandwidth restriction | R06 | B | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
+| R08 | Connection interruption and fault reset | R06 | B | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
+| R09 | Baseline/fault/recovery lifecycle and cancellation | R03-R08 | A | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
+| R10 | Control/result API integration | R09 | A | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
+| R11 | Accessible dashboard controls and states | R01, R10 | C | In review | main / PR #1; controls integrated; full accessibility/zoom acceptance remains |
+| R12 | Phase comparison and saved-run browser | R04, R05, R11 | C | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
+| R13 | JSON/CSV export and dashboard download | R04, R05, R10, R12 | B then C | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
+| R14 | End-to-end, failure-path, and security regression checks | R07-R13 | A | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
 | R15 | Packet Tracer procedure and topology | R01 lab decisions | C | In review | Teammate / task/packet-tracer-labs / 9f72386; three saved projects independently opened/config reviewed, not merged |
 | R16 | Recorded Packet Tracer evidence | R15 | C | In review | Static outage and RIP/OSPF alternate routes independently checked; see docs/packet-tracer-review.md for scope/transients |
 | R17 | Wireshark capture procedure | R01 lab decisions, R06 | C | In review | docs/wireshark-guide.md; Wireshark 4.6.9/loopback and actual capture permissions verified on current laptop |
 | R18 | Recorded Wireshark evidence | R14, R17 | C | In review | Current laptop / task/faultnet-mvp; four scenarios in one bounded capture, sanitized observations in docs/verification-2026-10-13.md |
 | R19 | Fresh-checkout verification across both active laptops | R14 | A + both laptops | Planned | Lab branch upload confirmed; other laptop's application checkout/runtime still unverified |
 | R20 | Final report, demo instructions, and release checkpoint | R14, R16, R18, R19 | A then C | Planned | Rubric/deadline confirmation pending |
-| R21 | Editable experiment workbench | User's 13 Oct approval, R14 | Current laptop | In review | task/faultnet-mvp; six presets, reuse/phase controls, real charts/statistics, 32 tests |
-| R22 | Reassessed audit fixes | R21 checkpoint | Current laptop | In review | Five findings plus two review cases fixed; 40 tests; see handoff/implementation ledger; not merged |
-| R23 | Live proxy cockpit and traffic controls | User's 13 Oct expansion request, R22 | Current laptop | In review | Independent live forwarding/cockpit; 60 tests; rendered Edge checks blocked; not merged |
-| R24 | Figma-first workbench visual redesign and cleanup | User's 13 Oct frontend-only/refinement requests, R21/R22 | Current laptop | In review | Two-link sidebar, filler removed; native HTML/CSS, preserved controls/logic; 61 tests, bounded in-app rendering/reflow; not merged |
+| R21 | Editable experiment workbench | User's 13 Oct approval, R14 | Current laptop | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
+| R22 | Reassessed audit fixes | R21 checkpoint | Current laptop | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
+| R23 | Live proxy cockpit and traffic controls | User's 13 Oct expansion request, R22 | Current laptop | In review | main / PR #1; live forwarding/cockpit integrated; full rendered live-control rehearsal remains |
+| R24 | Figma-first workbench visual redesign and cleanup | User's 13 Oct frontend-only/refinement requests, R21/R22 | Current laptop | In review | Two-link sidebar, filler removed; native HTML/CSS, preserved controls/logic; 61 tests, integrated via PR #1; bounded rendering/reflow passed, full keyboard/zoom acceptance remains |
 
 ## Task details and completion checks
 

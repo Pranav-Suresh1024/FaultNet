@@ -1,5 +1,13 @@
 # Implementation ledger
 
+## Main integration — 13 October 2026
+
+The user explicitly authorized merging the application into main. [PR #1](https://github.com/Pranav-Suresh1024/FaultNet/pull/1) merged task/faultnet-mvp with history preserved after fresh PR CI passed. GitHub's merge result was confirmed and the local main checkout fast-forwarded to the remote merge. Application/test/manifests/runtime/workflow trees exactly match the reviewed source branch; fresh npm test on main passed 61/61, zero skips, about 18.5 seconds.
+
+Main is now the shared application baseline; task/faultnet-mvp is retained. Packet Tracer branch task/packet-tracer-labs remains at 9f72386, unchanged/unmerged. Reviewed summaries are integrated, but .pkt files, captures and generated records are not part of this merge. README now directs new application clones to main and preserves safe switching/ownership for existing and lab checkouts.
+
+Roadmap functional application tasks R02–R10/R12–R14/R21–R22 are integrated and verified against their bounded recorded checks. R11/R23/R24 retain remaining full accessibility/zoom/live-rendered rehearsal acceptance; lab integration, R19 both-laptop runtime and R20 release/report remain separate gates. The merge does not complete an exhaustive security/accessibility certification, public deployment, the paused rollback/archive request or a full project rehearsal. Final main documentation SHA/CI are verified after push and reported outside HANDOFF.md.
+
 ## Workbench cleanup — 13 October 2026
 
 Latest user refinement removes sidebar wrapping/filler and extra navigation. Only plain FaultNet branding plus Workbench/Live proxy cockpit links remain; sidebar stays 216 px. Removed icons, slogans, static workflow rail, duplicate topbar labels, decorative pills and promotional empty-state copy; removed their unused CSS. All 60 IDs, 18 input/select/button/fieldset definitions and six select blocks match the preceding checkout. Backend/JS/live assets/manifests and actual experiment/history/comparison/export behavior are unchanged.

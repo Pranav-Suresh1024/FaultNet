@@ -1,10 +1,10 @@
 # FaultNet
 
-FaultNet is a Windows-first local network-resilience lab using Node.js, plain HTML/CSS/JavaScript, and local JSON records. The first application checkpoint is on `task/faultnet-mvp`; `main` still contains the preceding documentation baseline until reviewed integration.
+FaultNet is a Windows-first local network-resilience lab using Node.js, plain HTML/CSS/JavaScript, and local JSON records. The application is integrated into `main` through [pull request #1](https://github.com/Pranav-Suresh1024/FaultNet/pull/1). Use `main` as the shared application baseline; `task/faultnet-mvp` retains the implementation history and the teammate's Packet Tracer work remains on its separate lab branch.
 
 ## Run the application
 
-Use the reference Node.js **22.23.1** recorded in `.node-version`. No external packages or build step are required. From the Git root on the application branch:
+Use the reference Node.js **22.23.1** recorded in `.node-version`. No external packages or build step are required. From the Git root on `main` or an application task branch:
 
 ```powershell
 npm start
@@ -22,7 +22,7 @@ Open [the experiment workbench](http://127.0.0.1:3000/workbench) for the origina
 
 Choose a baseline or baseline/fault/recovery run. Delay, bandwidth restriction, and connection interruption affect only the synthetic 64 KiB demo. View phase summaries, saved compatible runs, and JSON/CSV downloads. Low bandwidth can intentionally exceed the timeout. Measurements are HTTP outcomes/elapsed time, not IP packet loss or RTT.
 
-The workbench has green-black navigation, a light canvas, measured summary cards, a dark phase-median chart stage, and a settings column. Navigation has only Workbench and Live proxy cockpit links; the latest cleanup removes decorative icons, slogans and workflow strip. [Initial editable Figma concept](https://www.figma.com/design/ssgBMbLH8CUmZGmzGNE9nE?node-id=4-264) and [current visual spec](docs/superpowers/specs/2026-10-13-workbench-visual-design.md) document the frontend-only redesign and refinements. Missing measurements remain unavailable; chart/table regions support keyboard scrolling on narrow screens. This laptop's UI work stays on task/faultnet-mvp while teammate Packet Tracer work stays on its separate lab branch.
+The workbench has green-black navigation, a light canvas, measured summary cards, a dark phase-median chart stage, and a settings column. Navigation has only Workbench and Live proxy cockpit links; the latest cleanup removes decorative icons, slogans and workflow strip. [Initial editable Figma concept](https://www.figma.com/design/ssgBMbLH8CUmZGmzGNE9nE?node-id=4-264) and [current visual spec](docs/superpowers/specs/2026-10-13-workbench-visual-design.md) document the frontend-only redesign and refinements. Missing measurements remain unavailable; chart/table regions support keyboard scrolling on narrow screens. This UI is integrated into main; teammate Packet Tracer work stays on its separate lab branch.
 
 Select a scenario preset, edit its values, or reuse a saved run's settings; these actions configure a new run without starting it. Choose Auto/baseline/faulty/recovery to inspect phase statistics, individual attempts, successful-response distribution, outcome counts, and changes from baseline. Expand the analysis sections for charts and exact measurements. Failure durations are not successful response latency; recovery time describes the whole run.
 
@@ -64,10 +64,12 @@ For the first checkout on another laptop, ask its agent to run this in a chosen 
 git clone https://github.com/Pranav-Suresh1024/FaultNet.git
 cd FaultNet
 git fetch origin
-git switch --track origin/task/faultnet-mvp
+git switch main
 ```
 
 Open the resulting `FaultNet` folder as the Codex project root. A different local path is fine. Prefer a folder outside OneDrive or other live file-sync services for new clones. This existing checkout remains in place; no personal files were moved. Do not share or file-sync `.git` or Codex credential/session folders.
+
+For existing application checkouts, have the agent inspect local work, fetch, switch to `main` only when safe, and pull `--ff-only`. Start new application task branches from updated main. The teammate's active lab checkout stays on `task/packet-tracer-labs` until its separate reviewed integration; do not automatically switch or merge it.
 
 Give the new agent this prompt:
 
