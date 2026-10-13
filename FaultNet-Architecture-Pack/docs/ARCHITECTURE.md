@@ -29,6 +29,7 @@ Implemented routes, response/error shapes, settings, and module interfaces are d
 
 ## Project structure
 - public/: Dashboard assets, served through an explicit allowlist.
+- public/protocol.js: Pure conservative budget formula/limit shared by the browser and server validator; contains no session or server-only data.
 - src/control/: HTTP API, security, and settings validation.
 - src/experiments/: Probes, summaries, lifecycle/cancellation.
 - src/proxy/ and src/demo/: Controlled traffic and fixed synthetic server.

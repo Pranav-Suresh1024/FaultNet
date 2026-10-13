@@ -38,3 +38,15 @@ The user authorized both plans before sequential execution. Task 1 data tests fa
 Final expansion suite: 32/32 PASS, about 18.3 seconds; delay median difference 511.0 ms and rates 31.66/31.70/31.86 KiB/s. Rendered preset/edit/reuse, stored bandwidth/recovery analysis, failed-only null distribution, real 2-probe outage with recovery (local run 1b80d458…), JSON download and 360 px reflow checked. Charts/tables stay labelled and horizontally scrollable. Full screen-reader/zoom and other-laptop runtime remain open. No new packages/schema/export fields.
 
 Feature work stops at this checkpoint. Audit-plan reassessment is next; audit defects are not yet fixed.
+
+## Audit fix checkpoint — 13 October 2026
+
+Post-expansion assessment at 074754c retained all five findings and adapted input wiring for preset/reuse controls. Ruling: allow unconfirmed timeout/cancellation scheduling overrun only when completion fits actual endedAt; successful confirmation remains constrained to the window. Reason: a dispatched timeout may run late; cost if wrong is overly strict or misleading evidence, pinned by validation tests.
+
+Storage regressions rejected fabricated before-clearance/confirmation/duration evidence on validation/save/export after RED→GREEN. Existing runner/lifecycle and valid rounding/stopped cases passed. UI regressions reproduced comparison Start lockout and missing budget feedback, then passed after panel error isolation and shared formula wiring. Stale comparison failure cannot overwrite a cleared selection.
+
+Cancellation coverage uses the test-only Node HTTP diagnostics channel to abort after actual body bytes arrive; cancelled partial evidence, cleared fault and next complete request passed without modifying the production probe API. README duplicate historical main-push section removed.
+
+Fresh final reviewer: no Critical findings; two Important cases (four-success delayed confirmation and unconfirmed completion past endedAt). Fix pass enforces the first qualifying streak and actual terminal completion bounds; new regression failed then passed. Storage 7/7 PASS; full suite 40/40 PASS in 18.2 seconds, calibration difference 506.6 ms / rates 31.77,31.85,31.76 KiB/s. All 20 local records validated without changes. No deferred minor findings. Reviewer declined native accessibility, other laptops, remote CI and labs; root rendered checks/CI cover their bounded scope, other-laptop/full accessibility remain open.
+
+Browser: actual excessive 145 s budget blocked Start; mild preset and reuse restored readiness and displayed 47.5/35.4 s upper bounds. Actual bandwidth Stop recorded cancelled evidence and cleared fault, then Start re-enabled. Compatible comparison, labelled real charts and 360 px reflow/40 px keyboard scroll passed; no console errors. No lab rerun or new captures for this source change.

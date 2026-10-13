@@ -74,3 +74,64 @@ test('record validation rejects observations and recovery outside the experiment
   comparison.recovery.removedAt = '2000-01-01T00:00:00.000Z';
   assert.throws(() => validateRecord(comparison), { code: 'record_corrupt' });
 });
+
+function recoveredFixture() {
+  const record = createRecord(normalizeSettings({}));
+  record.createdAt = record.startedAt = '2026-10-13T00:00:00.000Z';
+  record.state = 'completed'; record.endedAt = '2026-10-13T00:00:02.000Z';
+  record.recovery = { removedAt: '2026-10-13T00:00:01.000Z', confirmedAt: '2026-10-13T00:00:01.310Z',
+    observationWindowMs: 15000, successCountRequired: 3, observed: true, durationMs: 310 };
+  record.observations = [100, 200, 300].map(ms => ({ phase: 'recovery',
+    startedAt: new Date(Date.parse(record.recovery.removedAt) + ms).toISOString(), elapsedMs: 10,
+    outcome: 'response_complete', httpStatus: 200, bytesReceived: 65536, successful: true }));
+  return refreshRecord(record);
+}
+
+test('recovery validation rejects before-clearance probes, fabricated confirmation and mismatched duration on save/export', async t => {
+  const { store } = await fixture(t);
+  const valid = recoveredFixture();
+  assert.equal(validateRecord(valid), valid);
+  for (const change of [
+    r => { r.observations[0].startedAt = '2026-10-13T00:00:00.100Z'; },
+    r => { r.recovery.removedAt = null; r.recovery.observed = false; r.recovery.confirmedAt = null; r.recovery.durationMs = null; },
+    r => { r.recovery.confirmedAt = '2026-10-13T00:00:01.250Z'; r.recovery.durationMs = 250; },
+    r => { r.recovery.confirmedAt = '2026-10-13T00:00:01.900Z'; r.recovery.durationMs = 900; },
+    r => { r.recovery.durationMs = 100; },
+    r => { r.observations.pop(); refreshRecord(r); },
+  ]) {
+    const damaged = structuredClone(valid); change(damaged);
+    assert.throws(() => validateRecord(damaged), { code: 'record_corrupt' });
+    assert.throws(() => exportRecord(damaged, 'json'), { code: 'record_corrupt' });
+    await assert.rejects(store.saveRecord(damaged), { code: 'record_corrupt' });
+  }
+});
+
+test('recovery rounding and stopped timeout evidence remain valid; successful confirmation outside window is rejected', () => {
+  const rounded = recoveredFixture();
+  rounded.observations[2].elapsedMs = 10.8; rounded.recovery.durationMs = 310.9;
+  refreshRecord(rounded); assert.equal(validateRecord(rounded), rounded);
+  const stopped = recoveredFixture();
+  stopped.state = 'stopped'; stopped.endedAt = '2026-10-13T00:00:16.200Z';
+  stopped.recovery.observed = false; stopped.recovery.confirmedAt = null; stopped.recovery.durationMs = null;
+  stopped.observations = [{ ...stopped.observations[0], startedAt: '2026-10-13T00:00:15.900Z', elapsedMs: 150,
+    successful: false, outcome: 'timeout', httpStatus: null, bytesReceived: 0 }];
+  refreshRecord(stopped); assert.equal(validateRecord(stopped), stopped);
+  const late = recoveredFixture();
+  late.endedAt = '2026-10-13T00:00:17.000Z'; late.recovery.confirmedAt = '2026-10-13T00:00:16.500Z';
+  late.recovery.durationMs = 15000;
+  assert.throws(() => validateRecord(late), { code: 'record_corrupt' });
+});
+
+test('recovery confirms at its first qualifying streak and all known completions fit the actual experiment', () => {
+  const inflated = recoveredFixture();
+  inflated.observations.push({ ...inflated.observations[2], startedAt: '2026-10-13T00:00:01.400Z' });
+  inflated.recovery.confirmedAt = '2026-10-13T00:00:01.410Z'; inflated.recovery.durationMs = 410;
+  refreshRecord(inflated);
+  assert.throws(() => validateRecord(inflated), { code: 'record_corrupt' });
+  const impossible = recoveredFixture();
+  impossible.recovery.observed = false; impossible.recovery.confirmedAt = null; impossible.recovery.durationMs = null;
+  impossible.observations = [{ ...impossible.observations[0], elapsedMs: 60000, outcome: 'timeout',
+    successful: false, httpStatus: null, bytesReceived: 0 }];
+  refreshRecord(impossible);
+  assert.throws(() => validateRecord(impossible), { code: 'record_corrupt' });
+});

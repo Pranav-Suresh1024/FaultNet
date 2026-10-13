@@ -72,7 +72,7 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 | R19 | Fresh-checkout verification across both active laptops | R14 | A + both laptops | Planned | Lab branch upload confirmed; other laptop's application checkout/runtime still unverified |
 | R20 | Final report, demo instructions, and release checkpoint | R14, R16, R18, R19 | A then C | Planned | Rubric/deadline confirmation pending |
 | R21 | Editable experiment workbench | User's 13 Oct approval, R14 | Current laptop | In review | task/faultnet-mvp; six presets, reuse/phase controls, real charts/statistics, 32 tests |
-| R22 | Reassessed audit fixes | R21 checkpoint | Current laptop | Planned | Five fixes authorized; reassess after expansion before coding |
+| R22 | Reassessed audit fixes | R21 checkpoint | Current laptop | In review | Five findings plus two review cases fixed; 40 tests; see handoff/implementation ledger; not merged |
 
 ## Task details and completion checks
 

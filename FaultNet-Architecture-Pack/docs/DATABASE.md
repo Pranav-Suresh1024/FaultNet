@@ -22,6 +22,8 @@ Required root fields: schemaVersion, id, createdAt, startedAt, endedAt, state, s
 ## Validation and access
 Validate identifiers before building fixed-root paths. Read only regular nonsymlink JSON files up to 1 MiB. Reject unsupported schemas, unexpected fields, invalid settings, unordered/out-of-run observations, inconsistent summaries, and invalid recovery metadata. Lists report per-record errors alongside valid records. API access follows [SECURITY.md](SECURITY.md).
 
+Recovery validation enforces post-clearance observations, the first qualifying three-success streak, matching confirmation/duration, and completions within actual terminal endedAt, with 2 ms UTC/monotonic rounding allowance. Failed unconfirmed timeout dispatch may overrun its scheduled window only when consistent with the actual experiment ending. No record is silently repaired.
+
 ## Persistence and crash behavior
 Write a unique temporary file in the same directory, flush, close, then rename. Failed replacement preserves the previous valid file. Initial save precedes start acceptance; phase and terminal saves follow. Runtime save failure fails the experiment, clears faults, and preserves current evidence in memory for download until exit. Shutdown reports unsaved evidence.
 

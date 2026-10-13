@@ -18,6 +18,8 @@ The dashboard has sidebar section navigation, measured summary cards, a phase-me
 
 Select a scenario preset, edit its values, or reuse a saved run's settings; these actions configure a new run without starting it. Choose Auto/baseline/faulty/recovery to inspect phase statistics, individual attempts, successful-response distribution, outcome counts, and changes from baseline. Expand the analysis sections for charts and exact measurements. Failure durations are not successful response latency; recovery time describes the whole run.
 
+The form shows a conservative probing upper bound against 120 seconds. Reduce count, timeout or wait when it exceeds that limit; the server enforces the same formula. Saved-record/comparison errors stay separate from service readiness so reviewing bad evidence does not prevent a valid new experiment.
+
 ```powershell
 npm test
 ```
@@ -104,18 +106,3 @@ Work in the existing checkout; each cloud task already has an isolated
 environment, so an additional Git worktree is unnecessary.
 
 The application branch has package manifests, built-in Node tests, and three local services. There are zero external packages and no build step. Keep the lockfile under version control. Cloud/Node 24 compatibility remains unverified; use the reference runtime and run the actual tests.
-
-## Saving work
-
-Use the synchronization procedure above. This is the original shell example for an existing cloud checkout; verify its path and current branch first:
-
-```sh
-cd /workspace/FaultNet
-git status --short
-git diff
-git add <files>
-git commit -m "Describe the change"
-git push origin main
-```
-
-Keep credentials, local environment files, and generated outputs out of Git.

@@ -16,7 +16,7 @@ No new packages, schema migration, stored summary fields, external targets, jitt
 
 ## Audit fixes
 
-Validate every recovery probe against clearance and confirmation/window; allow 2 ms rounding tolerance when comparing wall-clock timestamps with monotonic elapsed durations. Confirmed recovery requires its actual terminal three successful probes; reject earlier/later fabricated confirmation and inconsistent duration. Preserve genuine stopped/failed/in-progress records and report bad evidence rather than rewriting it.
+Validate every recovery probe against clearance and confirmation/window; allow 2 ms rounding tolerance when comparing wall-clock timestamps with monotonic elapsed durations. Confirmed recovery requires the first qualifying three-success streak to terminate its recovery probes; reject earlier/later fabricated confirmation and inconsistent duration. Preserve genuine stopped/failed/in-progress records and report bad evidence rather than rewriting it.
 
 Service readiness must govern Start independently of comparison/history/selected-record errors. Comparison errors stay in their own panel and cannot leave Start stuck; stale comparison requests cannot overwrite newer selections.
 

@@ -41,3 +41,15 @@ test('cross-run compatibility includes protocol while allowing differing faults'
   b.settings.timeoutMs = 4000;
   assert.equal(compatible(a, b), false);
 });
+test('browser and server share exact conservative budget boundaries', async () => {
+  let protocol;
+  await assert.doesNotReject(async () => { protocol = await import('../public/protocol.js'); });
+  const twenty = { mode: 'comparison', probeCount: 20, intervalMs: 250, timeoutMs: 3000 };
+  assert.equal(protocol.experimentBudgetMs(twenty), 145000);
+  assert.equal(protocol.experimentBudgetMs({ ...twenty, probeCount: 10 }), 80000);
+  assert.equal(protocol.experimentBudgetMs({ ...twenty, probeCount: 15, intervalMs: 500 }), 120000);
+  assert.doesNotThrow(() => normalizeSettings({ ...twenty, probeCount: 15, intervalMs: 500 }));
+  assert.throws(() => normalizeSettings(twenty), { code: 'invalid_input' });
+  assert.equal(protocol.experimentBudgetMs({ ...twenty, mode: 'baseline' }), 65000);
+  assert.ok(Number.isNaN(protocol.experimentBudgetMs({ ...twenty, probeCount: NaN })));
+});

@@ -22,8 +22,9 @@ Use the approved [test/evidence protocol](../../docs/implementation-contracts.md
 | F-07 states/control denial | API regressions and bounded browser observations |
 | Host/Origin/capability/path security | Hostile Host/Origin, Unicode token, missing token/Origin, canonicalized/absolute paths |
 | Input/resource bounds | Wrong/unknown/null fields, invalid ID, oversize/malformed body, busy run, request rate, partial headers |
-| Cleanup | Delay cancellation, throttle stop observation, port collision cleanup, failed-save shutdown |
+| Cleanup | Delay cancellation, actual throttled-body cancellation after bytes arrive and next-request recovery, port collision cleanup, failed-save shutdown |
 | Export safety | Formula-sensitive text, missing metrics, empty-run metadata |
+| Audit regressions | Recovery-before-clearance/fabricated confirmation/duration/end-time rejection, valid rounding/stopped records, comparison/history/selection error isolation, stale comparison error and shared budget boundaries |
 
 ## Calibration
 Five baseline and five 500 ms delay samples: median difference 400–800 ms, timeout 3000 ms. Three 65,536-byte samples at 32 KiB/s: each whole-response goodput 24–36 KiB/s, timeout 5000 ms. Report actual observations, including failures; do not widen tolerance silently.

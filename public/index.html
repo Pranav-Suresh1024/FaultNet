@@ -74,6 +74,7 @@
               <p id="scenario-note" class="note">Select a preset or edit custom settings; a preset never starts a run.</p>
               <button id="reuse" type="button" class="secondary" disabled>Reuse selected run settings</button>
               <p id="fault-hint" class="fault-hint"></p>
+              <p id="budget-note" class="note budget-note" role="status"></p>
               <div class="actions experiment-actions"><button id="start" type="submit" disabled>Start experiment</button><button id="stop" type="button" class="secondary" disabled>Stop experiment</button></div>
               <p class="note experiment-limit">One active run · 120-second probing limit<br>Recovery: 3 successes within 15 seconds</p>
             </form>
@@ -85,6 +86,7 @@
             <p class="note">Reopen measurements and download their original records.</p>
             <label>Open an experiment<select id="history"><option value="">Choose a saved experiment</option></select></label>
             <p id="record-errors" role="status"></p>
+            <p id="selection-error" role="status"></p>
           </section>
           <section id="comparison-panel" class="panel" aria-labelledby="comparison-title">
             <div class="panel-heading"><div><p class="eyebrow">SIDE BY SIDE</p><h2 id="comparison-title">Compare experiments</h2></div><span class="subtle-tag">Same protocol</span></div>

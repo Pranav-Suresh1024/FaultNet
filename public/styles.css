@@ -115,6 +115,10 @@ button:disabled { opacity: .5; cursor: default; }
 .history-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 20px; margin-top: 20px; }
 #record-errors { color: #a42820; font-size: 12px; overflow-wrap: anywhere; }
 #record-errors:empty { display: none; }
+#selection-error { color: #a42820; font-size: 12px; overflow-wrap: anywhere; }
+#selection-error:empty { display: none; }
+.budget-note { padding: 10px; background: #f6f7fa; border-radius: 3px; }
+.budget-note[data-invalid="true"] { background: #fff0ee; color: #9d2820; }
 #comparison-note { margin: 12px 0 0; overflow-wrap: anywhere; }
 #comparison-wrap { margin-top: 14px; }
 footer { color: #626979; font-size: 11px; margin-top: 22px; padding-bottom: 8px; }

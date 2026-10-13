@@ -77,10 +77,30 @@ export function validateRecord(record) {
     || !nullableTime(recovery.removedAt) || !nullableTime(recovery.confirmedAt) || recovery.observationWindowMs !== 15000
     || recovery.successCountRequired !== 3 || !(recovery.durationMs === null || (Number.isFinite(recovery.durationMs) && recovery.durationMs >= 0 && recovery.durationMs <= 15000))
     || (settings.mode === 'baseline' ? recovery.observed !== null : typeof recovery.observed !== 'boolean')) corrupt();
+  const recoveryProbes = record.observations.filter(item => item.phase === 'recovery');
+  const cleared = Date.parse(recovery.removedAt), confirmed = Date.parse(recovery.confirmedAt);
+  // UTC strings round to milliseconds; probe and recovery durations use a monotonic clock.
+  const roundingMs = 2;
+  for (const item of recoveryProbes) {
+    const start = Date.parse(item.startedAt), end = start + item.elapsedMs;
+    if (!timestamp(recovery.removedAt) || start < cleared || start > cleared + 15000 + roundingMs
+      || (item.successful && end > cleared + 15000 + roundingMs)
+      || (item.elapsedMs !== null && record.endedAt !== null && end > Date.parse(record.endedAt) + roundingMs)
+      || (recovery.observed && (start > confirmed || end > confirmed + roundingMs))) corrupt();
+  }
+  let streak = 0, qualifyingIndex = -1;
+  for (let index = 0; index < recoveryProbes.length; index++) {
+    streak = recoveryProbes[index].successful ? streak + 1 : 0;
+    if (streak === 3) { qualifyingIndex = index; break; }
+  }
+  if (qualifyingIndex !== -1 && (!recovery.observed || qualifyingIndex !== recoveryProbes.length - 1)) corrupt();
   if (recovery.observed === true) {
-    const tail = record.observations.filter(item => item.phase === 'recovery').slice(-3);
+    const tail = recoveryProbes.slice(-3);
     if (!timestamp(recovery.removedAt) || !timestamp(recovery.confirmedAt) || recovery.durationMs === null
-      || Date.parse(recovery.confirmedAt) < Date.parse(recovery.removedAt) || tail.length !== 3 || tail.some(item => !item.successful)) corrupt();
+      || confirmed < cleared || confirmed - cleared > 15000 + roundingMs
+      || Math.abs(confirmed - cleared - recovery.durationMs) > roundingMs
+      || tail.length !== 3 || tail.some(item => !item.successful)
+      || Math.abs(confirmed - (Date.parse(tail[2].startedAt) + tail[2].elapsedMs)) > roundingMs) corrupt();
   } else if (recovery.confirmedAt !== null || recovery.durationMs !== null) corrupt();
   for (const value of [recovery.removedAt, recovery.confirmedAt]) {
     if (value !== null && (Date.parse(value) < Date.parse(record.startedAt)

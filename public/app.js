@@ -1,9 +1,11 @@
 import { metric, compareRuns, phaseView } from './results.js';
 import { scenarioProfiles, settingsFromRecord } from './scenarios.js';
 import { renderCharts } from './charts.js';
+import { experimentBudgetMs, experimentLimitMs } from './protocol.js';
 
 const el = id => document.getElementById(id);
 let token, selected = null, activeId = null, timer = null, refreshing = false, selectionVersion = 0, refreshAgain = false, starting = false;
+let servicesReady = false, comparisonVersion = 0;
 function message(text = '') { el('message').textContent = text; el('message').hidden = !text; }
 async function api(path, options = {}) {
   const response = await fetch('/api/' + path, { ...options, headers: { 'X-FaultNet-Token': token,
@@ -22,6 +24,25 @@ function faultName(fault) {
   return fault.type === 'delay' ? `Response delay · ${fault.delayMs} ms`
     : fault.type === 'bandwidth' ? `Bandwidth restriction · ${fault.rateKiBps} KiB/s`
     : fault.type === 'interruption' ? 'Connection interruption' : 'No injected fault';
+}
+function draftSettings() {
+  const type = el('mode').value === 'baseline' ? 'none' : el('fault').value;
+  return { mode: el('mode').value, probeCount: el('count').valueAsNumber, intervalMs: el('interval').valueAsNumber,
+    timeoutMs: el('timeout').valueAsNumber, fault: { type, ...(type === 'delay' ? { delayMs: el('delay').valueAsNumber }
+      : type === 'bandwidth' ? { rateKiBps: el('rate').valueAsNumber } : {}) } };
+}
+function updateControls() {
+  const budget = experimentBudgetMs(draftSettings());
+  const valid = Number.isFinite(budget) && budget <= experimentLimitMs && el('settings').checkValidity();
+  el('budget-note').textContent = !Number.isFinite(budget) ? 'Enter valid whole-number settings to calculate the probing upper bound.'
+    : 'Conservative probing upper bound: ' + (budget / 1000).toFixed(1) + ' s / 120 s.'
+      + (budget > experimentLimitMs ? ' Reduce probe count, request timeout or wait interval before starting.' : ' This is a limit check, not a predicted duration.');
+  el('budget-note').setAttribute('data-invalid', String(!valid));
+  el('start').disabled = starting || Boolean(activeId) || !servicesReady || !valid;
+  el('stop').disabled = !activeId;
+  el('fields').disabled = Boolean(activeId) || starting;
+  el('reuse').disabled = Boolean(activeId) || starting || !selected;
+  return valid;
 }
 function render(record) {
   selected = record;
@@ -55,7 +76,7 @@ function render(record) {
   ]);
   rows('probes', view.probes.map((item, index) => [String(index + 1), item.phase, item.startedAt,
     item.successful ? 'successful' : item.outcome, metric(item.elapsedMs), String(item.bytesReceived), item.httpStatus ?? '—']));
-  el('reuse').disabled = Boolean(activeId) || starting;
+  updateControls();
   rows('phases', ['baseline', 'faulty', 'recovery'].map(phase => {
     const s = record.summary[phase];
     return [phase, `${s.attemptCount} / ${s.cancelledCount}`, `${s.successCount} / ${s.eligibleCount}`, metric(s.availability, true), metric(s.medianElapsedMs), metric(s.p95ElapsedMs), metric(s.meanThroughputKiBps)];
@@ -74,7 +95,9 @@ function option(record) {
   node.textContent = `${record.createdAt} · ${record.state} · ${record.settings.fault.type} · ${record.id.slice(0, 8)}`; return node;
 }
 async function history() {
-  const data = await (await api('experiments')).json();
+  let data;
+  try { data = await (await api('experiments')).json(); }
+  catch (error) { el('record-errors').textContent = error.message; return; }
   for (const id of ['history', 'compare']) {
     const previous = el(id).value;
     el(id).replaceChildren(new Option(id === 'history' ? 'Choose a saved experiment' : 'Choose another experiment', ''), ...data.experiments.map(option));
@@ -83,12 +106,18 @@ async function history() {
   el('record-errors').textContent = data.errors.map(error => `${error.id || 'Invalid record'}: ${error.message}`).join(' ');
 }
 async function comparison() {
+  const version = ++comparisonVersion;
   el('comparison-wrap').hidden = true;
   el('comparison-note').textContent = 'Select a run and another experiment to compare their measurements.';
   if (!selected || !el('compare').value) return;
   const current = selected, comparedId = el('compare').value;
-  const other = (await (await api('experiments/' + comparedId)).json()).experiment;
-  if (selected !== current || el('compare').value !== comparedId) return;
+  let other;
+  try { other = (await (await api('experiments/' + comparedId)).json()).experiment; }
+  catch (error) {
+    if (version === comparisonVersion && selected === current && el('compare').value === comparedId) el('comparison-note').textContent = error.message;
+    return;
+  }
+  if (version !== comparisonVersion || selected !== current || el('compare').value !== comparedId) return;
   if (!compareRuns(current, other)) { el('comparison-note').textContent = 'These runs have incompatible protocol settings. Compare runs with the same mode, count, interval, timeout, payload contract, and recovery rules.'; return; }
   el('comparison-note').textContent = `Selected: ${faultName(current.settings.fault)} (${current.state}). Compared: ${faultName(other.settings.fault)} (${other.state}).`;
   rows('comparison', ['baseline', 'faulty', 'recovery'].map(phase => {
@@ -107,6 +136,7 @@ function faultFields() {
     : el('fault').value === 'bandwidth' ? 'A 64 KiB response takes about 64 ÷ rate seconds. If that exceeds the request timeout, failed probes are expected.'
     : el('fault').value === 'interruption' ? 'Each faulty request is deliberately interrupted; recovery probes begin after the fault is cleared.'
     : 'The configured delay is added before the demo response. Delays longer than the request timeout cause failed probes.';
+  updateControls();
 }
 function applySettings(settings) {
   el('mode').value = settings.mode;
@@ -128,17 +158,20 @@ async function refresh() {
     el('status').textContent = `Demo: ${status.demoReady ? 'ready' : 'unavailable'} · Storage: ${status.storageReady ? 'ready' : 'unavailable'} · Phase: ${status.phase || 'idle'} · Fault: ${status.fault.type}`;
     el('status').setAttribute('data-ready', String(status.demoReady && status.storageReady));
     el('phase-label').textContent = status.phase || 'Idle';
-    el('start').disabled = starting || Boolean(activeId) || !status.demoReady || !status.storageReady;
-    el('stop').disabled = !activeId; el('fields').disabled = Boolean(activeId);
-    el('reuse').disabled = Boolean(activeId) || starting || !selected;
+    servicesReady = status.demoReady && status.storageReady;
+    updateControls();
     if (activeId || selected) {
-      const record = (await (await api('experiments/' + (activeId || selected.id))).json()).experiment;
-      if (version === selectionVersion) render(record);
-      else refreshAgain = true;
-      await comparison();
+      try {
+        const record = (await (await api('experiments/' + (activeId || selected.id))).json()).experiment;
+        if (version === selectionVersion) { render(record); el('selection-error').textContent = ''; await comparison(); }
+        else refreshAgain = true;
+      } catch (error) {
+        if (version === selectionVersion) el('selection-error').textContent = error.message;
+        else refreshAgain = true;
+      }
     }
     await history();
-  } catch (error) { message(error.message); el('start').disabled = true; }
+  } catch (error) { servicesReady = false; message(error.message); updateControls(); }
   finally {
     refreshing = false;
     if (refreshAgain && !starting) refresh();
@@ -155,9 +188,11 @@ el('scenario').addEventListener('change', () => {
 });
 el('fields').addEventListener('input', event => {
   if (event.target.id !== 'scenario') { el('scenario').value = ''; el('scenario-note').textContent = 'Custom settings. Select a preset to reset the controls.'; }
+  updateControls();
 });
 el('fields').addEventListener('change', event => {
   if (event.target.id !== 'scenario') { el('scenario').value = ''; el('scenario-note').textContent = 'Custom settings. Select a preset to reset the controls.'; }
+  updateControls();
 });
 el('reuse').addEventListener('click', () => {
   if (!selected || activeId || starting) return;
@@ -169,11 +204,10 @@ el('settings').addEventListener('submit', event => {
   event.preventDefault();
   action(async () => {
     if (starting) return;
+    if (!updateControls()) return;
     starting = true; selectionVersion++;
-    el('start').disabled = true;
-    const type = el('mode').value === 'baseline' ? 'none' : el('fault').value;
-    const settings = { mode: el('mode').value, probeCount: el('count').valueAsNumber, intervalMs: el('interval').valueAsNumber,
-      timeoutMs: el('timeout').valueAsNumber, fault: { type, ...(type === 'delay' ? { delayMs: el('delay').valueAsNumber } : type === 'bandwidth' ? { rateKiBps: el('rate').valueAsNumber } : {}) } };
+    const settings = draftSettings();
+    updateControls();
     try {
       const record = (await (await api('experiments', { method: 'POST', body: JSON.stringify(settings) })).json()).experiment;
       activeId = record.id; render(record);
@@ -185,9 +219,11 @@ el('refresh').addEventListener('click', () => action(refresh));
 el('history').addEventListener('change', () => action(async () => {
   const version = ++selectionVersion, id = el('history').value;
   if (id) {
-    const record = (await (await api('experiments/' + id)).json()).experiment;
-    if (version !== selectionVersion) return;
-    render(record); await comparison();
+    try {
+      const record = (await (await api('experiments/' + id)).json()).experiment;
+      if (version !== selectionVersion) return;
+      el('selection-error').textContent = ''; render(record); await comparison();
+    } catch (error) { if (version === selectionVersion) el('selection-error').textContent = error.message; }
   }
 }));
 el('compare').addEventListener('change', () => action(comparison));

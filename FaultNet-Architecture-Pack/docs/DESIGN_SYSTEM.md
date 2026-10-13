@@ -23,6 +23,8 @@ Tables retain phase labels, counts, units, and — for unavailable measurements.
 
 Settings display input ranges/units. Baseline-only disables fault inputs. Active experiments disable new starts/settings while keeping Stop available. Poll status/results each second only while active; idle refresh follows user actions or Refresh. Stale selection responses are ignored and export filenames retain the requested record identity.
 
+Display the conservative probing upper bound against 120 seconds and explain which settings to reduce. Validate after preset/reuse/input changes. Comparison and saved-record errors stay in their panels; healthy service readiness can still enable valid new experiments.
+
 ## States and accessibility
 - Empty: No experiment selected; show the start workflow.
 - Running/stopping: Label state/phase; availability, attempts/cancellations, and fault status stay visible.

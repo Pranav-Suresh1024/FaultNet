@@ -1,9 +1,10 @@
 import { problem } from '../errors.js';
+import { experimentBudgetMs, experimentLimitMs } from '../../public/protocol.js';
+export { experimentLimitMs } from '../../public/protocol.js';
 
 const invalid = () => { throw problem('invalid_input', 400, 'Settings must match the documented fields, types, ranges, and experiment budget.'); };
 export const demoContract = 'faultnet-demo-v1';
 export const payloadBytes = 65536;
-export const experimentLimitMs = 120000;
 
 export function objectKeys(value, allowed) {
   return value !== null && typeof value === 'object' && !Array.isArray(value)
@@ -32,8 +33,6 @@ export function normalizeSettings(input) {
     settings.fault.rateKiBps = rateKiBps;
   }
   if ((settings.mode === 'baseline') !== (fault.type === 'none')) invalid();
-  const budget = settings.probeCount * (settings.timeoutMs + settings.intervalMs)
-    * (settings.mode === 'comparison' ? 2 : 1) + (settings.mode === 'comparison' ? 15000 : 0);
-  if (budget > experimentLimitMs) invalid();
+  if (experimentBudgetMs(settings) > experimentLimitMs) invalid();
   return { ...settings, recoverySuccessCount: 3, recoveryWindowMs: 15000, demoContract };
 }
