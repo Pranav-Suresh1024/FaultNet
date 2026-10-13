@@ -1,12 +1,23 @@
 # FaultNet implementation contracts
 
-**Status: Proposed for review, not approved or implemented.** Prepared 12 October 2026 under the user's request to propose and record technical choices. Implementation remains paused. Approval of this document resolves the application contract part of roadmap R01; course/lab availability questions remain separate gates for their affected tasks.
+**Status: Application contracts approved; implementation resumed 12 October 2026.** The user asked to start implementation after the technical proposal was presented. That request approves proceeding with these application choices and supersedes the roadmap preparation pause. Lab scenarios below remain proposals; rubric/tool questions gate their affected tasks. Current implementation and validation are in [HANDOFF.md](../HANDOFF.md).
 
-Read with [roadmap.md](../roadmap.md) and the [architecture pack](../FaultNet-Architecture-Pack/AGENTS.md). This document makes the existing proposals concrete; it does not broaden the approved MVP. Once approved, all agents use the same contracts and update affected documents before changing them.
+Read with [roadmap.md](../roadmap.md) and the [architecture pack](../FaultNet-Architecture-Pack/AGENTS.md). All agents use these application contracts and update affected documents before changing them. The live extension below supersedes the earlier demo-only product boundary; fixed experiment and record contracts remain unchanged.
+
+## Live proxy extension — 13 October 2026
+
+The user requested a close functional/visual live proxy cockpit and removal of reference names from current files. This is implementation authorization on the existing application branch; independent FaultNet source is used. The [design](superpowers/specs/2026-10-13-live-proxy-design.md) records implementation decisions under that request, and the [plan](superpowers/plans/2026-10-13-live-proxy.md) records acceptance checks. Historical Git commits are retained.
+
+- Four loopback listeners: control 3000, demo 3001, fixed experiment proxy 3002, live development proxy 8080. `/` serves the cockpit; `/workbench` retains the dashboard. No schema migration, package or lab merge.
+- Live configuration supports unified/split HTTP/HTTPS development origins, backend prefixes, both-direction delay/bandwidth, jitter, four connection modes, status probability rules, header controls and JSON mocks. Exact bounds/precedence/cancellation are in the design; these rules do not change experiment measurements.
+- GET/POST `/api/live/config` returns `{config}` (GET also returns `proxyUrl`). GET `/api/live/activity` returns `{entries,activeCount}`. POST `/api/live/reset` and `/api/live/activity/clear` expect `{}`. POST `/api/live/probe` expects `{path}` and returns `{status,bytes,elapsedMs,outcome}` with a five-second ceiling. Existing capability/Origin/Host/8192-byte/rate protections apply.
+- Live targets are origin URLs without URL credentials, paths, queries or fragments. Validate resolved addresses, forbid protected local listener ports/metadata/unspecified/multicast addresses, and pin the checked DNS result for the outgoing connection. No automatic redirects, CONNECT, WebSocket proxying, public listeners or production traffic.
+- Configuration and latest 50 finished requests are process memory only. Apply affects new requests; Reset retains applied targets/routes, clears faults/rules, discards drafts and cancels live work. Restart restores the local demo and clears live history. Persistent experiment files are unchanged.
+- Monitor records method, pathname, status, elapsed milliseconds, bytes, outcome and fault labels. Queries, bodies, credentials, cookies, tokens and target URLs are excluded. Pathnames themselves can contain sensitive application identifiers; use synthetic/development traffic and review before sharing a screenshot.
 
 ## Recommended approach
 
-Use Node.js built-in HTTP, filesystem, crypto, timing, and test facilities, with a plain browser dashboard. A single Node process owns three separate loopback listeners, the experiment lifecycle, and safe local persistence. This gives a reproducible local lab without package dependencies.
+Use Node.js built-in HTTP, filesystem, crypto, timing, and test facilities, with plain browser pages. A single Node process owns four separate loopback listeners, the experiment lifecycle, and safe local persistence. This gives a reproducible local lab without package dependencies.
 
 Separate operating-system processes would isolate failures more strongly but add startup/cleanup coordination. A web framework and frontend framework would add dependencies without providing a required MVP feature. Neither alternative is recommended for this first version.
 
@@ -14,8 +25,8 @@ Separate operating-system processes would isolate failures more strongly but add
 
 - Reference runtime: Node.js **22.23.1**, observed on the current Windows laptop; record it in a committed `.node-version`. Other laptops install/use the same reference runtime. Node 24 compatibility may be checked later; it is not assumed.
 - JavaScript ES modules (`type: module`), semantic HTML, plain CSS, browser JavaScript. No third-party runtime or test packages initially.
-- Planned package scripts: `npm start` -> `node src/main.js`; `npm test` -> `node --test`. These commands do not exist yet and are not verified application commands. Commit a package lockfile when the manifest is created; do not require package downloads for zero external dependencies.
-- Control/dashboard: `http://127.0.0.1:3000`; demo: `127.0.0.1:3001`; proxy: `127.0.0.1:3002`. All listeners bind explicitly to `127.0.0.1`. The dashboard uses the canonical numeric host; `localhost` is not an alternative Host value.
+- Configured scripts: `npm start` -> `node src/main.js`; `npm test` -> `node --test`. Both have been executed locally. package-lock.json is committed with zero external dependencies; package downloads are unnecessary.
+- Control/cockpit: `http://127.0.0.1:3000`; workbench: `/workbench`; demo: `127.0.0.1:3001`; experiment proxy: `127.0.0.1:3002`; live proxy: `127.0.0.1:8080`. All listeners bind explicitly to `127.0.0.1`. Controls use the canonical numeric host; `localhost` is not an alternative control Host value.
 - Start demo and proxy before exposing ready control services. If any port is occupied or initialization fails, report the error and close already-started listeners. Do not terminate other programs or silently choose another public port.
 - Automated tests use ephemeral local ports and temporary storage via internal test parameters, not user-selectable target URLs or paths.
 - On normal shutdown, stop the experiment, cancel timers/probes, clear faults, close sockets/listeners, and await the final save. After a hard process crash, startup converts persisted active states to `interrupted` and records missing observations explicitly; faults always start disabled.
@@ -116,6 +127,7 @@ Error shape: `{error: {code, message}}`. Use stable categories: 400 `invalid_inp
 - Save the initial record before accepting a start, then at phase boundaries and on terminal cleanup. A hard crash may lose the latest unsaved in-phase observations; label the persisted record interrupted on restart. Per-probe crash durability is outside this MVP and must be disclosed.
 - A runtime save failure fails/stops the experiment and clears faults; keep the in-memory failed record accessible until process exit. No automatic deletion or expiry.
 - Reject corrupt/unsupported records explicitly; do not repair them silently. Validate their structure, bounds, observations, derived summaries, and phase ordering before display/export. Results are local evidence; `.gitignore` exclusion is not a backup.
+- Recovery probes require a clearance timestamp and cannot begin before it. Confirmation must match the first three-success streak, ending the recovery observations, and its duration/last completion must match within 2 ms timestamp rounding. Successful probes/confirmation must fit the recovery window; known completion times must fit actual terminal endedAt. Unconfirmed failed/cancelled probes may finish after the scheduled window because timer dispatch can be delayed, but never beyond actual endedAt plus rounding.
 
 ## Exports
 
@@ -127,7 +139,7 @@ Error shape: `{error: {code, message}}`. Use stable categories: 400 `invalid_inp
 
 ## Module ownership and interfaces
 
-Use the roadmap's proposed paths. Keep integration/configuration/specification edits with lane A. These JavaScript interfaces are proposals for inter-agent coordination, not existing exports:
+Use the committed module paths. Logical lanes remain proposed future assignments; the current checkout implements sequentially. Factory-created runner, proxy, and store instances expose these interfaces:
 
 | Owner | Module interface | Contract |
 | --- | --- | --- |
@@ -145,17 +157,20 @@ Startup wires shared dependencies once; test fixtures can inject local test reso
 
 ## Dashboard proposal
 
-- One page: settings and start/stop controls; readiness/current phase; comparison table; saved-run list; JSON/CSV export. Poll active status/results every 1000 ms; pause polling when idle and refresh after user actions.
+- User-approved visual update on 13 October 2026 supersedes the 12 October appearance tokens: create a Figma/design-taste-frontend concept, then implement only frontend presentation. [Initial concept](https://www.figma.com/design/ssgBMbLH8CUmZGmzGNE9nE?node-id=4-264) and [current spec](superpowers/specs/2026-10-13-workbench-visual-design.md) define green-black navigation, light canvas, a dark median-chart stage and distinct metric cards. Latest user refinement removes decorative copy/icons, static workflow strip and redundant pills; sidebar retains only Workbench and Live proxy cockpit links. Functional experiment/history/comparison/export controls, units/errors/caveats and live assets remain; use native HTML/CSS without dependencies.
+- Poll active status/results every 1000 ms; pause polling when idle and refresh after user actions. Auto cards show baseline until a faulty attempt exists; the user can select baseline/faulty/recovery explicitly. Recovery duration remains run-level and null unless confirmed. The median chart uses all three stored phase medians; absent values say no successful probes rather than plotting zero.
+- Workbench expansion approved 13 October 2026: six editable presets (healthy, mild/severe delay, bandwidth, timeout stress, HTTP outage), selected-run settings reuse, phase-specific probe durations, successful timing distribution, outcome counts, full descriptive statistics and baseline changes. Exact preset values/formulas are in [the approved design](superpowers/specs/2026-10-13-workbench-design.md). No schema or export fields change; derived values remain browser presentation.
 - Controls show valid ranges and units. Baseline mode disables fault inputs with an explanation. Stop stays available during running/stopping, and confirmed fault clearance appears only after cleanup.
+- Browser and server use public/protocol.js for the same conservative 120000 ms budget formula. The form displays an upper bound and explains excessive settings; correction/preset/reuse recalculates readiness. Comparison/history/selected-record errors stay in their own panels and do not override healthy service readiness; stale success/error responses are ignored.
 - Empty, loading, running, stopping, stopped, failed, interrupted, denied, unsaved, incomplete, and populated states have explicit text. Prevent duplicate starts and ignore stale responses when selection changes.
-- Light theme: background `#f8fafc`, surface `#ffffff`, text `#0f172a`, primary `#1d4ed8`, error `#b91c1c`; system UI font, 16 px body, 8 px spacing unit, 8 px control radius. Maximum content width 1200 px; stack panels below 768 px. These are proposed values, not a verified accessibility claim.
+- Approved workbench visual tokens: canvas `#f1f3ed`, white surface, ink/sidebar/chart stage `#172923`, accent `#176b56`, muted `#59695f`, lime `#d7eda8`, chart text `#f5f8f2`, chart secondary `#b9c8bc`, dark-stage faulty bar `#fbad96`; system UI font stack, 16 px root. Content maximum 1600 px plus 216 px sidebar; 12 px panels and 6 px controls, 44 px minimum input/button height. Settings precede evidence below 1100 px; navigation reflows below 760 px. Charts/tables retain keyboard scroll regions. Lime focus outlines on dark surfaces and accent on light surfaces. These values are not an accessibility certification.
 - Semantic controls/labels/tables, visible keyboard focus, text with color indicators, restrained polite status announcements, no automatic motion. Contrast, zoom/reflow, keyboard paths, and browser behavior must be checked on the rendered UI.
 - Reference browsers: installed Chromium-based Edge/Chrome on Windows; record actual versions during verification. Mobile support is not a release promise.
 
 ## Test and evidence protocol
 
 - Use Node's test runner and strict assertions for formula/validation/storage/security tests and real local HTTP integration tests. Use temporary results roots and ephemeral test ports; always close resources.
-- Write a meaningful failing test for each nontrivial behavior before implementation. CI runs the committed reference runtime and actual test script after configuration exists. No package/browser download is required for this documentation task.
+- Write a meaningful failing test for nontrivial behavior before implementation. Use the committed reference runtime and actual test script. No package/browser download is required. Remote CI execution must be verified separately rather than inferred from a workflow file.
 - Delay check: five successful baseline and five 500 ms delayed requests, with identical settings and 3000 ms timeout; median elapsed-time difference should be 400-800 ms on an otherwise idle machine. Record measured values/environment; a failure is investigated, not silently removed or given a wider tolerance.
 - Bandwidth check: three successful 65,536-byte probes at 32 KiB/s, whole-request goodput each 24-36 KiB/s, timeout 5000 ms. Verify actual received byte counts; report inability to meet this bound on a busy environment rather than claiming a pass.
 - Interruption check: every faulty probe records an incomplete/failed transport outcome; after clear, three full demo responses succeed. Cancellation tests include pending delay, active throttle, interruption, and recovery-window exhaustion.
@@ -172,6 +187,6 @@ Startup wires shared dependencies once; test fixtures can inject local test reso
 
 ## Laptop coordination status
 
-- The user confirms the teammate is not working currently and plans to grant the other laptop's access in the morning. No collaborator invitation or remote-laptop verification has been performed by this agent.
-- This checkout is the active writer for the currently requested contract documentation. Continue sequential work by default; proposed A/B/C lanes become actual assignments only when the user requests concurrent work.
-- Before handing over, commit/push context and verify the remote SHA; the receiving agent reads this proposal's approval status, roadmap task ownership, and HANDOFF.md before making changes.
+- The user now reports the teammate is setting up Packet Tracer and has created a separate branch with .pkt files; origin/task/packet-tracer-labs is observed. Remote-laptop application operation and collaborator access have not been verified by this agent.
+- For the approved UI update, this checkout owns public/, UI tests, and shared design/context on task/faultnet-mvp. The user explicitly requested staying on this branch; teammate lab work remains on its separate branch. Do not merge or overwrite lab work. Resolve any shared-context conflict during reviewed integration.
+- Before handing over, commit/push context and verify the remote SHA; the receiving agent reads current approval status, roadmap ownership, and HANDOFF.md before making changes.

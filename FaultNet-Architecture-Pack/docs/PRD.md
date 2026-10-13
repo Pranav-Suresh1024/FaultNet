@@ -1,18 +1,19 @@
 # Product Requirements Document
 
-## Concrete proposals for review
-[Implementation contracts](../../docs/implementation-contracts.md#measurement-protocol) now proposes measurement settings, definitions, safety bounds, and separate lab scenarios for roadmap R01. These choices remain pending approval; the approved scope and open course/tool questions below are preserved.
+## Approved application contracts
+The user resumed implementation on 12 October 2026 after reviewing the [implementation contracts](../../docs/implementation-contracts.md#measurement-protocol). Application settings, definitions, safety bounds, API/schema, and UI choices are approved. Separate lab scenarios remain proposals; course/tool questions remain open. Current evidence is in [HANDOFF.md](../../HANDOFF.md).
 
 ## Project context
 - Product: FaultNet.
 - Owner: Project owner/user.
-- Status: Approved documentation baseline. Approved choices, proposals, and unresolved details remain distinguished; documentation approval does not authorize application implementation.
+- Status: Application implemented on task/faultnet-mvp under the user's resume request; validation/review and separate lab/release gates are recorded in the handoff and roadmap.
 - Problem: The project investigates how unreliable networks affect web application availability, performance, and recovery.
 - Target users: A student lab operator. Instructors review exported results and supporting evidence.
 - Desired outcome: Reproducible comparisons between normal, faulty, and recovery conditions, with network observations distinguished from application measurements.
-- Reference: https://github.com/Rohith-JN/chaos-proxy — conceptual inspiration only; its code and stack are not adopted.
 
 ## MVP scope
+The user requested a live proxy expansion on 13 October. [Updated contracts](../../docs/implementation-contracts.md#live-proxy-extension--13-october-2026) supersede the original product's demo-only target boundary. The fixed experiment workflow below remains available; the independently implemented live cockpit adds configurable development targets and real traffic controls.
+
 - Must ship:
   - Local web dashboard and a small demo web server.
   - Baseline experiments.
@@ -21,11 +22,11 @@
   - Local JSON records and JSON/CSV export.
   - Separately documented Packet Tracer and Wireshark experiments.
 - Explicitly excluded:
-  - Public deployment, multi-user accounts, tenant management, arbitrary external targets, and production traffic.
+  - Public deployment, multi-user accounts, tenant management, unconfigured forward proxying, and production traffic.
   - Genuine IP packet-loss injection in the first MVP.
   - Automatic integration between Packet Tracer and the real application.
   - Automatic capture or analysis of Wireshark files.
-  - Copying the reference implementation.
+  - Adopting external implementation source.
 - Constraints:
   - Windows-first web application.
   - All application coding performed by agents.
@@ -63,7 +64,7 @@
    - Failure/recovery: Unsupported tools or unavailable permissions are recorded as limitations.
 
 ## Feature specifications
-The following acceptance criteria are recorded in the approved document pack. Numeric protocols and implementation details remain unresolved where identified.
+The following acceptance criteria use the approved concrete application contracts. F-06 still requires separate verified lab evidence.
 
 | ID | User need | Behavior | Acceptance criteria | Priority |
 | --- | --- | --- | --- | --- |
@@ -74,24 +75,25 @@ The following acceptance criteria are recorded in the approved document pack. Nu
 | F-05 | Retain evidence | Save local JSON records until manually deleted | A saved record can be reopened; failed writes are reported; no automatic expiration occurs | Must |
 | F-06 | Support course analysis | Document separate Packet Tracer/Wireshark experiments | Evidence identifies its source, topology/environment, procedure, and observations; simulated measurements are never presented as real application measurements | Must |
 | F-07 | Recover from UI and permission errors | Show explicit states and enforce local control boundaries | Loading, empty, error, stopped, and populated states are visible; prohibited requests cannot change configuration or access results | Must |
+| F-08 | Customize and inspect experiments | Editable scenario presets, saved-run reuse, phase selection, probe/distribution/outcome visuals and fuller statistics | Controls do not silently start runs or mutate evidence; successful timings and all-attempt outcomes remain distinct; missing values stay unavailable | Approved 13 Oct |
+| F-09 | Test live development applications | Unified/split routing, delay/jitter, bidirectional limits, connection modes, status/header/mock rules | Protected Apply/Reset changes real forwarding; reset cancels active work; validate targets/inputs and retain the fixed workbench | Requested 13 Oct |
+| F-10 | Inspect live traffic | Latest 50 memory entries, window statistics/duration bars, filters, clear and sample GET | Show actual outcome/time/bytes/fault labels, exclude queries/bodies/secrets, distinguish process memory from saved experiments | Requested 13 Oct |
 
 ## Success measures
 - Measure application request outcomes, elapsed time, delivered throughput, and observed recovery.
 - Measure RTT and retransmissions only through an appropriate network observation method.
 - Do not infer IP packet loss from failed HTTP requests.
-- Proposed availability definition: Successful non-cancelled attempts divided by all non-cancelled attempts; no attempts yields an unavailable value, not zero.
-- Proposed successful attempt: Expected HTTP response with a complete body. Exact demo response contract remains unresolved.
-- Proposed recovery definition: The first configured number of consecutive successful probes after fault removal, within a configured observation window.
-- Probe counts, intervals, timeouts, payload sizes, recovery count/window, timing tolerances, and percentile calculation are unresolved.
-- No performance improvement, accuracy target, or test result is claimed.
-- Accessibility criteria are proposed in [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md).
+- Availability: Successful non-cancelled attempts divided by all non-cancelled attempts; no eligible attempts yields null.
+- Success: Status 200 and complete 65,536-byte synthetic F body.
+- Recovery: Three consecutive complete successes after clearance within 15 seconds; no confirmation yields null duration.
+- Counts, intervals, timeouts, limits, median/p95 formulas, and calibration tolerances follow the approved [measurement protocol](../../docs/implementation-contracts.md#measurement-protocol).
+- Local test/calibration observations are recorded in HANDOFF.md; no performance improvement or general accuracy claim is made.
+- Accessibility requirements follow [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md); compliance requires rendered verification.
 
 ## Open decisions
-- Measurement protocol and numeric safety limits — owner: Project owner; needed before experiment implementation.
 - Exact Packet Tracer scenarios and RIP/OSPF coverage — owner: Project owner; needed before lab procedures are finalized.
 - Wireshark availability and capture privileges — owner: Project owner; needed before capture exercises.
 - Deadline interpretation and course rubric — owner: Project owner; needed before release planning.
-- API/schema proposals and visual details — owner: Project owner; needed before affected implementation.
 
 ## Definition of ready
-Approved scope and document acceptance criteria are recorded. Blocking unknowns are resolved before the affected implementation. Documentation approval does not authorize application implementation.
+The application scope/contracts are approved and implementation is resumed. Resolve outstanding lab/rubric/tool questions before their affected tasks. Approval does not authorize public deployment or fabricated lab evidence.

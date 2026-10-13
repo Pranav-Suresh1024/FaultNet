@@ -2,29 +2,31 @@
 
 **Goal:** Deliver a reproducible local network-resilience lab with baseline/fault/recovery measurements, saved results, exports, and separate network-lab evidence.
 
-**Status:** Planning only. The user requested implementation, then explicitly paused it to prepare this roadmap. No application task has started. Resume coding only after the user resumes implementation and the affected decisions in R01 are approved.
+**Status:** Implementation resumed on 12 October 2026 after the concrete application contracts were presented. The local application checkpoint is implemented on `task/faultnet-mvp` with tests/review; it is not yet integrated into main. Lab/report/release and other-laptop validation remain pending.
 
-**Architecture:** Plain browser dashboard, Node.js control service, fixed demo server, fault proxy, and local JSON records. The dashboard/control path stays usable while demo traffic is impaired. Packet Tracer and Wireshark provide separate evidence.
+**Architecture:** Plain browser cockpit/workbench, Node.js control, fixed demo/experiment proxy, separate live development proxy, and local JSON experiment records. Control stays usable while application traffic is impaired. Packet Tracer and Wireshark provide separate evidence.
 
 **Source specifications:** [PRD](FaultNet-Architecture-Pack/docs/PRD.md), [Architecture](FaultNet-Architecture-Pack/docs/ARCHITECTURE.md), [Database](FaultNet-Architecture-Pack/docs/DATABASE.md), [Security](FaultNet-Architecture-Pack/docs/SECURITY.md), [Design System](FaultNet-Architecture-Pack/docs/DESIGN_SYSTEM.md), [Code Style](FaultNet-Architecture-Pack/docs/CODE_STYLE.md), and [Testing](FaultNet-Architecture-Pack/docs/TESTING.md).
 
-This is a task roadmap, not a finalized API or numeric protocol. File paths and laptop lanes below are proposals. R01 freezes the contracts before dependent agents implement them; do not turn an unresolved choice into an assumed requirement.
+The [application contracts](docs/implementation-contracts.md) define the concrete API/protocol. Actual module/test paths are in the task branch; laptop lanes remain proposals until assigned. Resolve lab-specific choices before affected lab work.
 
-Concrete recommendations are now recorded in [implementation contracts](docs/implementation-contracts.md), pending owner review. Teammate access is planned for the morning and the teammate is not working currently; this checkout owns the requested documentation work. Application implementation remains paused.
+The user approved the reference-inspired UI redesign on the existing task/faultnet-mvp branch. This checkout owns public/, UI tests, and shared design/context; teammate is working on Packet Tracer in a separate task/packet-tracer-labs branch. Application implementation is resumed. [Implementation evidence](docs/implementation-progress.md) records checks and remaining limits. Keep lab work separate and reconcile shared context during integration.
 
 ## Global constraints
 
 - Agents write all application and test code. The user supplies decisions and access; GUI observations may require the user's machine.
 - Windows-first, Node.js, plain HTML/CSS/JavaScript, and local JSON. No frontend framework, TypeScript, or database service has been approved.
-- Fault injection affects the fixed demo target only; controls bind to loopback. Enforce browser-origin protections as well as loopback binding.
-- No public deployment, production traffic, arbitrary external targets, genuine IP packet-loss injection, or automatic Packet Tracer/Wireshark integration.
+- Experiment injection affects only the fixed demo; the 13 October live extension supports protected, validated development origins. All listeners bind to loopback and enforce browser-origin boundaries.
+- No public deployment, production traffic, unconfigured forward proxying, genuine IP packet-loss injection, or automatic Packet Tracer/Wireshark integration.
 - Measurements distinguish HTTP outcomes from RTT, retransmissions, and packet loss. Missing observations are not zero or fabricated success.
 - Records/logs/exports exclude request bodies, credentials, and cookies. Review captures before any sharing; generated evidence is not automatically backed up by Git.
-- Runtime version, ports, packages, limits, API/schema details, visual tokens, and lab scenarios remain decisions for R01. Prefer Node's built-in capabilities where they fully solve the task.
+- Application runtime, ports, packages, limits, API/schema, and visual tokens follow the approved contracts. Lab scenarios remain R01 decisions. Use Node's built-in capabilities.
 
-## Coordination across three laptops
+## Coordination across two active laptops
+The user requested the live proxy extension on 13 October. Its [design](docs/superpowers/specs/2026-10-13-live-proxy-design.md) and [plan](docs/superpowers/plans/2026-10-13-live-proxy.md) cover R23: configuration/forwarding, protected API/lifecycle, then cockpit/review/handoff. This application's laptop owns all affected source/tests/context on task/faultnet-mvp; the teammate's Packet Tracer branch remains separate. Fixed schema/results are preserved.
 
-Use A, B, and C as logical lanes until actual laptops are assigned. The lanes can also be executed sequentially on one laptop; no simultaneous work is assumed or authorized by this document.
+
+Use A, B, and C as logical responsibility lanes, not laptop counts. The user confirmed two active laptops on 13 October 2026; the third is inactive. Lanes can also be executed sequentially on one laptop; no simultaneous work is assumed or authorized by this document.
 
 | Lane | Proposed responsibility | Exclusive/shared-file boundary |
 | --- | --- | --- |
@@ -38,11 +40,11 @@ For explicitly requested parallel work:
 1. A commits the task claim to this board and pushes it before another laptop starts. Record laptop, branch, owned paths, contract/base commit, and reviewer. Concurrent claims require A to reconcile them before work starts.
 2. Each task uses a branch such as `task/r06-delay`, based on the latest required dependencies. Do not share a working directory or push competing work to `main`.
 3. An agent edits only its owned files and scoped tests. Shared-file changes are proposed in its PR handoff for A to integrate; no silent interface changes.
-4. Task branches use their PR descriptions for progress and test evidence. A updates the shared roadmap/HANDOFF.md when integrating, preventing three agents from editing the same progress file.
+4. Task branches use their PR descriptions for progress and test evidence. A updates the shared roadmap/HANDOFF.md when integrating, preventing multiple agents from editing the same progress file.
 5. The assigned reviewer checks behavior, failure paths, security, and contract compatibility. Integrate only after the task's acceptance checks pass and merge authorization is established.
 6. Re-run affected integration checks against the combined tree. Individual branch checks do not prove the combined application works.
 
-The owner's two laptops and the friend's laptop each authenticate independently. The friend's GitHub account needs collaborator access to push to a private repository. Each Codex account reads committed context; local account memory is not a shared dependency.
+Each active laptop authenticates independently. A teammate's different GitHub account needs collaborator write access to push to a private repository. Each Codex account reads committed context; local account memory is not a shared dependency.
 
 ## Task board
 
@@ -51,26 +53,30 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 | ID | Small deliverable | Depends on | Lane | Status | Assigned laptop / branch / evidence |
 | --- | --- | --- | --- | --- | --- |
 | R00 | Repository and portable context | None | A | Done | Setup verified in commit `1e75729`; other laptops' access unverified |
-| R01 | Approve runtime, measurement, API/schema, security, UI, and lab contracts | User resumes implementation | A + user | In review | Concrete contract proposal prepared; no approval or coding yet; lab/rubric questions remain |
-| R02 | Fixed demo response and startup/shutdown | R01 | A | Planned | Unassigned |
-| R03 | Local control security and input validation | R01 | A | Planned | Unassigned |
-| R04 | JSON record persistence and safe reads | R01 | B | Planned | Unassigned |
-| R05 | Probe outcomes and measurement calculations | R01, R02 | B | Planned | Unassigned |
-| R06 | Pass-through proxy and delay fault | R01, R02 | B | Planned | Unassigned |
-| R07 | Bounded bandwidth restriction | R06 | B | Planned | Unassigned |
-| R08 | Connection interruption and fault reset | R06 | B | Planned | Unassigned |
-| R09 | Baseline/fault/recovery lifecycle and cancellation | R03-R08 | A | Planned | Unassigned |
-| R10 | Control/result API integration | R09 | A | Planned | Unassigned |
-| R11 | Accessible dashboard controls and states | R01, R10 | C | Planned | Unassigned |
-| R12 | Phase comparison and saved-run browser | R04, R05, R11 | C | Planned | Unassigned |
-| R13 | JSON/CSV export and dashboard download | R04, R05, R10, R12 | B then C | Planned | Sequential backend/UI ownership |
-| R14 | End-to-end, failure-path, and security regression checks | R07-R13 | A | Planned | Unassigned |
-| R15 | Packet Tracer procedure and topology | R01 lab decisions | C | Planned | Unassigned |
-| R16 | Recorded Packet Tracer evidence | R15 | C | Planned | Tool/environment access unverified |
-| R17 | Wireshark capture procedure | R01 lab decisions, R06 | C | Planned | Capture availability/permissions unverified |
-| R18 | Recorded Wireshark evidence | R14, R17 | C | Planned | No capture results yet |
-| R19 | Fresh-checkout verification across all three laptops | R14 | A + all laptops | Planned | Unassigned |
+| R01 | Approve runtime, measurement, API/schema, security, UI, and lab contracts | User resumes implementation | A + user | In review | Application contracts approved/resumed; lab/rubric decisions remain open |
+| R02 | Fixed demo response and startup/shutdown | R01 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R03 | Local control security and input validation | R01 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R04 | JSON record persistence and safe reads | R01 | B | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R05 | Probe outcomes and measurement calculations | R01, R02 | B | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R06 | Pass-through proxy and delay fault | R01, R02 | B | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R07 | Bounded bandwidth restriction | R06 | B | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R08 | Connection interruption and fault reset | R06 | B | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R09 | Baseline/fault/recovery lifecycle and cancellation | R03-R08 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R10 | Control/result API integration | R09 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R11 | Accessible dashboard controls and states | R01, R10 | C | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R12 | Phase comparison and saved-run browser | R04, R05, R11 | C | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R13 | JSON/CSV export and dashboard download | R04, R05, R10, R12 | B then C | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R14 | End-to-end, failure-path, and security regression checks | R07-R13 | A | In review | Current checkout / task/faultnet-mvp / see implementation ledger; not merged |
+| R15 | Packet Tracer procedure and topology | R01 lab decisions | C | In review | Teammate / task/packet-tracer-labs / 9f72386; three saved projects independently opened/config reviewed, not merged |
+| R16 | Recorded Packet Tracer evidence | R15 | C | In review | Static outage and RIP/OSPF alternate routes independently checked; see docs/packet-tracer-review.md for scope/transients |
+| R17 | Wireshark capture procedure | R01 lab decisions, R06 | C | In review | docs/wireshark-guide.md; Wireshark 4.6.9/loopback and actual capture permissions verified on current laptop |
+| R18 | Recorded Wireshark evidence | R14, R17 | C | In review | Current laptop / task/faultnet-mvp; four scenarios in one bounded capture, sanitized observations in docs/verification-2026-10-13.md |
+| R19 | Fresh-checkout verification across both active laptops | R14 | A + both laptops | Planned | Lab branch upload confirmed; other laptop's application checkout/runtime still unverified |
 | R20 | Final report, demo instructions, and release checkpoint | R14, R16, R18, R19 | A then C | Planned | Rubric/deadline confirmation pending |
+| R21 | Editable experiment workbench | User's 13 Oct approval, R14 | Current laptop | In review | task/faultnet-mvp; six presets, reuse/phase controls, real charts/statistics, 32 tests |
+| R22 | Reassessed audit fixes | R21 checkpoint | Current laptop | In review | Five findings plus two review cases fixed; 40 tests; see handoff/implementation ledger; not merged |
+| R23 | Live proxy cockpit and traffic controls | User's 13 Oct expansion request, R22 | Current laptop | In review | Independent live forwarding/cockpit; 60 tests; rendered Edge checks blocked; not merged |
+| R24 | Figma-first workbench visual redesign and cleanup | User's 13 Oct frontend-only/refinement requests, R21/R22 | Current laptop | In review | Two-link sidebar, filler removed; native HTML/CSS, preserved controls/logic; 61 tests, bounded in-app rendering/reflow; not merged |
 
 ## Task details and completion checks
 
@@ -78,7 +84,7 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 
 **Owns:** Updates to the seven specification documents and shared contracts. No application code.
 
-**Review artifact:** [docs/implementation-contracts.md](docs/implementation-contracts.md). The user authorized proposing/recording choices; this does not approve the choices or resume coding. Approve the application contract before its dependent tasks; resolve lab-specific questions before their affected tasks rather than treating teammate access as a blocker for local documentation.
+**Contract artifact:** [docs/implementation-contracts.md](docs/implementation-contracts.md). The user resumed application implementation after the proposal. Application decisions are approved; lab/rubric/tool questions remain open. Teammate access is not a blocker for this sequential local application work.
 
 - [ ] Record the user's implementation-resume instruction, course rubric, and confirmed deadline; record unavailable information explicitly.
 - [ ] Approve runtime/module format, required packages (if any), ports, storage directory, and proposed file ownership. Define reproducible start/test commands as planned commands until implemented and verified.
@@ -226,7 +232,7 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 
 **Done when:** Claims are traceable to observed packets and limitations; HTTP failures are not presented as packet-loss rates. If capture is unavailable, keep R18 blocked and report the limitation. **Coverage:** F-06 capture.
 
-### R19: Three-laptop portability
+### R19: Two-laptop portability
 
 **Owns:** A's setup documentation and cross-laptop check records; no machine credentials are committed.
 
@@ -234,7 +240,7 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 - [ ] Verify safe handling of occupied ports, different local paths, missing tooling, and local-only results; record runtime/browser versions and check outcomes per laptop.
 - [ ] Demonstrate one handoff: one agent pushes its code/context, another pulls the matching SHA and identifies the correct next task without prior chat history.
 
-**Done when:** All three environments have recorded evidence, or remaining failures are clearly open blockers. One successful laptop does not imply all three pass.
+**Done when:** Both active environments have recorded evidence, or remaining failures are clearly open blockers. One successful laptop does not imply both pass. The inactive third laptop is excluded.
 
 ### R20: Report and release checkpoint
 

@@ -1,70 +1,37 @@
 # Code Style
 
-## Concrete proposals for review
-[Implementation contracts](../../docs/implementation-contracts.md#runtime-and-startup) proposes a reference Node runtime, ES modules, no third-party packages, and future start/test scripts. Its [module interfaces](../../docs/implementation-contracts.md#module-ownership-and-interfaces) coordinate agent work. No manifest, scripts, exports, or installed dependencies exist yet; approval is pending.
+## Approved implementation
+Application contracts were approved with the 12 October implementation-resume request. Follow the [module contracts](../../docs/implementation-contracts.md#module-ownership-and-interfaces), [architecture](ARCHITECTURE.md), and root [agent instructions](../../AGENTS.md).
 
 ## Languages and conventions
-- Approved: JavaScript on Node.js; plain HTML/CSS/JavaScript frontend.
-- Node.js version and browser support: Unresolved.
-- TypeScript: Not approved.
-- Proposed naming: camelCase functions/variables, descriptive file names, and names matching approved API/schema terminology.
-- Module format, formatter, and linter: Unresolved; no configuration exists.
-- Proposed type discipline: Validate runtime inputs and document important contracts without assuming TypeScript tooling.
+JavaScript ES modules on reference Node.js 22.23.1, semantic HTML, plain CSS/browser JavaScript. Use camelCase, descriptive file names, and exact contract terminology. No framework, TypeScript, formatter/linter, build pipeline, or third-party package is needed for the current application.
 
-## Organization
-- Proposed responsibilities follow [ARCHITECTURE.md](ARCHITECTURE.md).
-- Dashboard code presents data and operator controls.
-- Server-side modules own validation, authorization, experiments, faults, and storage.
-- Browser code must not directly access result files or control targets.
-- Proxy faults must not impair the dashboard/control channel.
-- Shared utilities should be introduced only where an actual repeated need exists.
-- There are no existing application patterns to preserve.
-
-## Coding rules
-Proposed rules:
-- Agents perform all application coding.
-- Keep functions focused and changes scoped to approved features.
-- Validate external inputs at trust boundaries.
-- Handle loading, empty, error, and success states explicitly.
-- Avoid silent failures and unexplained numeric values.
-- Keep measurement units explicit.
-- Bound asynchronous operations and support cancellation.
-- Clear applicable faults during stop/shutdown recovery.
-- Never infer packet-level metrics from application failures.
-- Do not copy the reference project's implementation.
+## Organization and coding rules
+- Agents write all application and test code. The user supplies decisions and access.
+- Keep browser presentation separate from server validation, authorization, lifecycle, faults, and storage.
+- Workbench presets live in public/scenarios.js, measured derivation in public/results.js, SVG rendering in public/charts.js and event orchestration in public/app.js; do not add stored metrics solely for presentation.
+- Live configuration/validation and streaming forwarding live in src/live/config.js and server.js. public/live-model.js owns pure presets/statistics; live.js owns DOM/events. Keep this traffic state separate from experiment storage/protocol. Preserve Node TLS validation and cancellation/backpressure; no external proxy source or dependency is adopted.
+- Use platform facilities and introduce shared helpers only for an actual repeated need.
+- Validate inputs at trust boundaries; do not silently round, clamp, default invalid values, or retry probes.
+- Bound asynchronous operations, support cancellation, and clear faults on stop/failure/shutdown.
+- Keep counts, units, states, missing values, and evidence provenance explicit.
+- Keep loading, empty, failed, stopped, incomplete, unsaved, and populated states understandable.
+- Preserve local work; no force pushes or automatic conflict-side selection.
+- Update callers, tests, exports, config, shared context, and all affected specifications when changing behavior.
 
 ## Errors and logging
-- Proposed error shape: A stable error category and safe human-readable message.
-- Exact API shape and status codes: Unresolved.
-- Distinguish validation, authorization, demo availability, interruption, and storage failures.
-- Do not log bodies, credentials, cookies, or unrestricted sensitive request details.
-- Do not label an incomplete or unsaved result as successful.
-- Follow [SECURITY.md](SECURITY.md).
+Use safe categorized API errors with the approved status codes. Distinguish invalid input, denied requests, unavailable demo, busy experiments, transport outcomes, corrupt records, and storage failure. No stack traces, sensitive paths, bodies, cookies, or capability tokens in public errors/logs. An incomplete or unsaved result cannot be labelled successfully saved.
 
 ## Dependencies
-- No packages or manifests currently exist.
-- New packages require approval of their purpose and resulting stack change.
-- Exact package choices and versions: Unresolved.
-- Proposed lockfile policy: Commit the appropriate lockfile and use reproducible installation once configured.
-- No dependencies are installed during this documentation task.
+package.json and package-lock.json contain zero external packages. .node-version records the reference runtime. No installation is needed to launch/test when the runtime is available. Adding packages or changing the approved stack requires explaining and recording that decision.
 
 ## Review checklist
-- Implementation matches PRD feature IDs and approved acceptance criteria.
-- API, schema, security, and UI states agree.
-- No sensitive data or unrelated changes.
-- Required cancellation and failure paths are handled.
-- Actual configured checks are run and accurately reported.
-- Tests cover meaningful behavior.
-- Changes to decisions update the companion documents.
-- Application implementation requires a separate request.
+Check behavior against PRD feature IDs and contracts; test meaningful success/failure/cancellation paths; inspect safe selected files before staging; run configured checks; document skipped/unavailable validation honestly. Independent review is part of the application checkpoint. Lab evidence and final release have their own gates.
 
 ## Verified commands
-The inspected Windows project archive is empty.
-- Development/start: Not configured.
-- Format: Not configured.
-- Lint: Not configured.
-- Type check: Not configured.
-- Build: Not configured.
+- Start: npm start (node src/main.js).
+- Test: npm test (node --test).
+- Whitespace: git diff --check.
+- No separate build, format, lint, typecheck, or lab-automation command is configured.
 
-These entries describe configuration, not successful test execution.
-Do not invent commands based on the reference repository.
+Actual outcomes/environment are recorded in [HANDOFF.md](../../HANDOFF.md), not inferred from the presence of a script.

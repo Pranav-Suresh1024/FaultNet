@@ -1,87 +1,40 @@
 # Database
 
-## Concrete proposals for review
-[Record and persistence contract](../../docs/implementation-contracts.md#record-and-persistence-contract) proposes schema v1, UUID identifiers, record fields, safe writes, corruption handling, and explicit crash-durability limits; the [exports proposal](../../docs/implementation-contracts.md#exports) specifies JSON/CSV contents. These proposals remain unapproved and unimplemented.
+## Approved record contract
+The application [record/persistence contract](../../docs/implementation-contracts.md#record-and-persistence-contract) and [export contract](../../docs/implementation-contracts.md#exports) were approved with the 12 October implementation-resume request and implemented on the task branch.
 
 ## Storage model
-- Approved storage: Local JSON files; no database service selected.
-- Ownership: Single local lab operator; no tenants or account-owned records.
-- Classification: Lab experiment metadata.
-- Approved exclusions: Request bodies, credentials, and cookies.
-- Wireshark captures remain separate from application records.
-- Architecture source: [ARCHITECTURE.md](ARCHITECTURE.md).
+One local results/{UUID-v4}.json per experiment, schemaVersion 1. No database service, tenants, expiry, deletion endpoint, or migrations. Retention lasts until a separately authorized filesystem deletion. Capture data remains separate.
 
-## Entities
-| Entity | Purpose | Owner | Retention |
-| --- | --- | --- | --- |
-| Experiment record | Settings, timestamps, outcomes, timings, and recovery observations | Local operator | Until manually deleted |
-| Probe observation | Evidence for one experiment attempt | Same experiment/operator | With its experiment record |
-| External evidence reference | Identify separate simulation/capture evidence without importing it | Local operator | Detailed policy unresolved |
-
-The entity decomposition is proposed; approved data categories remain unchanged.
+The 13 October live cockpit has a separate memory-only configuration and latest-50 traffic window. Neither is written under results/ or browser storage. Reload preserves applied memory state; restarting Node resets live settings/monitor. Live Clear monitor does not delete experiment files. Traffic rows exclude query strings, bodies, cookies, credentials, tokens and target URLs; pathname/method/status/time/bytes/outcome/fault labels are retained. No persistent live export is implemented.
 
 ## Schema
-Proposed schema, not an existing implementation:
+Required root fields: schemaVersion, id, createdAt, startedAt, endedAt, state, settings, observations, summary, recovery, persistence, error, evidenceReferences. See the contract for exact types and fixed normalized settings.
 
-Experiment record:
-- schemaVersion: Required version identifier; initial value unresolved.
-- id: Required unique identifier; format unresolved.
-- createdAt: Required timestamp; ISO 8601 UTC proposed.
-- startedAt/endedAt: Optional until the corresponding event occurs.
-- state: Proposed running, stopping, completed, stopped, failed, or interrupted.
-- settings: Required probe configuration and per-phase fault settings.
-- observations: Probe observations available for the run.
-- summary: Derived outcome counts and timing/throughput summaries.
-- recovery: Fault-removal time, observation window, observed/not-observed state, and nullable duration.
-- evidenceReferences: Optional references; never raw captures.
+- States: running, stopping, completed, stopped, failed, interrupted.
+- UTC timestamps describe chronology; elapsed durations use a monotonic clock.
+- Observations record phase, startedAt, elapsedMs, outcome, httpStatus, bytesReceived, successful.
+- Summaries derive from the same observations. Cancelled probes are excluded from availability; missing metrics are null.
+- Workbench min/max, histogram bins, probe visuals and baseline changes are derived in the browser from these same observations/summaries, without new stored fields or a schema migration. Reuse copies editable settings only.
+- Recovery records clearance, confirmation, criterion/window, observed state, and nullable duration. Baseline recovery is not applicable.
+- Persistence explicitly identifies saved or failed evidence; errors contain safe categories/messages.
+- Reviewed evidence references identify packet_tracer or wireshark material under labs/. No evidence-edit API exists.
+- Never store response/request bodies, credentials, cookies, session capability, or raw captures.
 
-Probe observation:
-- phase: Proposed baseline, faulty, or recovery.
-- startedAt: Timestamp.
-- elapsedMs: Nonnegative duration when measurable.
-- outcome: Proposed response_complete, timeout, connection_error, interrupted, or cancelled.
-- httpStatus: Nullable if no response was received.
-- bytesReceived: Nonnegative count.
-- successful: Derived from the approved response contract; cancelled attempts reported separately.
+## Validation and access
+Validate identifiers before building fixed-root paths. Read only regular nonsymlink JSON files up to 1 MiB. Reject unsupported schemas, unexpected fields, invalid settings, unordered/out-of-run observations, inconsistent summaries, and invalid recovery metadata. Lists report per-record errors alongside valid records. API access follows [SECURITY.md](SECURITY.md).
 
-Null means unavailable/not observed where documented; zero must not stand for an unknown value.
-Exact fields, types, enums, defaults, filenames, and schema version require approval.
+Recovery validation enforces post-clearance observations, the first qualifying three-success streak, matching confirmation/duration, and completions within actual terminal endedAt, with 2 ms UTC/monotonic rounding allowance. Failed unconfirmed timeout dispatch may overrun its scheduled window only when consistent with the actual experiment ending. No record is silently repaired.
 
-## Relationships
-- One experiment contains zero or more probe observations.
-- Summaries derive from the same experiment's observations.
-- External evidence references do not establish a live connection to Packet Tracer or Wireshark.
-- Approved deletion is manual.
-- Proposed storage unit: One complete JSON file per experiment; no cascade operations or database foreign keys.
+## Persistence and crash behavior
+Write a unique temporary file in the same directory, flush, close, then rename. Failed replacement preserves the previous valid file. Initial save precedes start acceptance; phase and terminal saves follow. Runtime save failure fails the experiment, clears faults, and preserves current evidence in memory for download until exit. Shutdown reports unsaved evidence.
 
-## Access rules
-- Local operator: Create experiments, read records, and export.
-- Manual deletion: Explicit local filesystem action; no automatic expiration.
-- Untrusted web origins or prohibited control requests: No permitted record or configuration access.
-- Tenant isolation: Not applicable.
-- Proposed enforcement: Fixed storage root, validated record identifiers, and no caller-supplied paths.
-- Security source: [SECURITY.md](SECURITY.md).
+Restart labels saved active records interrupted. Latest in-phase observations may be absent after a hard crash. This is phase-boundary durability, not a power-loss guarantee or per-probe journal.
 
-## Queries and indexes
-- Proposed queries: List experiments chronologically and select a record by identifier.
-- Proposed comparison: Compare compatible baseline/fault/recovery phases.
-- Database indexes: Not applicable to the approved JSON storage model.
-- Pagination, retention limits, and anticipated record volume: Unresolved.
+## Queries, exports, and transfer
+List newest first, read by validated identifier, compare compatible protocols, export validated JSON or fixed-column CSV. CSV protects formula-sensitive text and preserves empty-run metadata. No pagination is included in this small local lab; revisit for a large archive.
 
-## Migrations and seed data
-- Migration commands: Not configured.
-- Proposed compatibility: Version records and explicitly reject unsupported or corrupt formats.
-- Seed data: Synthetic only; no fixtures currently exist.
-- Proposed persistence: Write safely so interrupted writes do not produce apparently valid partial records.
-- Backup/restore procedure: Unresolved.
-- Production migrations: Outside this task and MVP.
+Synthetic fixtures are built by agents inside temporary test directories. Records/captures are ignored by Git and do not move with source pushes. Deliberately review/export/transfer evidence separately if needed. No automatic evidence backup is configured.
 
-## Data validation
-Proposed checks:
-- Required identifiers, settings, timestamps, and approved field types.
-- Nonnegative timings and byte counts.
-- Fault values within approved numeric limits.
-- Consistent phase ordering and summaries derived from observations.
-- Missing recovery is represented explicitly.
-- Invalid/corrupt records produce an error, not invented defaults.
-- Storage failures are surfaced to the operator.
+## Validation evidence
+Storage, corruption, restart interruption, chronology, failure retention, and export parity checks are in tests/storage.test.js, tests/runner.test.js, tests/api.test.js, and tests/lifecycle.test.js. Exact outcomes are recorded in [HANDOFF.md](../../HANDOFF.md).
