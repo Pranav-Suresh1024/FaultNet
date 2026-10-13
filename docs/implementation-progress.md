@@ -1,5 +1,17 @@
 # Implementation ledger
 
+## Workbench visual redesign — 13 October 2026
+
+User authorized a Figma/design-taste-frontend concept followed by frontend-only implementation on the existing application branch. [Editable desktop/mobile concept](https://www.figma.com/design/ssgBMbLH8CUmZGmzGNE9nE?node-id=4-264), [spec](superpowers/specs/2026-10-13-workbench-visual-design.md) and [plan](superpowers/plans/2026-10-13-workbench-visual.md) record the scope. The website-oriented taste skill is adapted to the dashboard's operational purpose, without marketing imagery or site-only motion requirements.
+
+Implemented only public/index.html and public/styles.css: green-black navigation, light canvas/topbar, static instructional comparison sequence, stronger metric hierarchy, dark median-chart stage, light results/advanced analysis and settings column. Existing IDs/control definitions/options are retained. Backend, manifests, workbench JavaScript, measurements/exports/storage and live cockpit assets match the pre-change checkout. No dependency, external asset, archive/rollback or lab integration.
+
+Verification: npm test passed 61/61 with no skips; targeted browser-handler/layout tests passed 7/7 after the option-contract assertion was added. A separate source integrity check compared all 60 existing IDs, 18 control tags and six select blocks to HEAD, checked balanced HTML, and checked eight text contrast pairs (minimum 4.59:1); all passed. Current process serves /workbench with HTTP 200. Independent read-only frontend review found no Critical/Important issues and independently passed the layout regression and whitespace check.
+
+Desktop/mobile Figma screenshots were inspected, but they are concept evidence. Edge's documented browser API blocks /workbench with ERR_BLOCKED_BY_CLIENT. Actual rendered screenshots, 1440/768/390px reflow, keyboard/zoom and fresh visual accessibility checks are unavailable; no bypass or inferred rendering pass. Codex preview was queued, not confirmed visible. Prior behavioral tests exercise actual handlers through a test fixture, not a browser layout engine. Other-laptop/Packet Tracer/Wireshark checks were not repeated for this frontend-only checkpoint.
+
+Shared design tokens/contracts/handoff/roadmap are updated; 51 local Markdown links across eight changed documents resolve, and git diff --check passes. Local design screenshots/source, integrity script and taste draw remain under ignored .codex/workbench-design/. Verify commit/remote SHA/CI after pushing and report outside HANDOFF.md. Next: render this workbench on an accessible browser, test keyboard/reflow and rehearse the demonstration; final release/lab integration remains separate.
+
 ## Live cockpit extension — 13 October 2026
 
 [Design](superpowers/specs/2026-10-13-live-proxy-design.md), [plan](superpowers/plans/2026-10-13-live-proxy.md), and current [handoff](../HANDOFF.md#live-proxy-extension--13-october-2026). User requested implementation on the existing application branch; independent FaultNet source and current-file reference-name removal. Experiments/schema/lab branch remain separate.

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FaultNet · Experiment dashboard</title>
+  <title>FaultNet · Experiment workbench</title>
   <link rel="stylesheet" href="/styles.css">
   <script type="module" src="/app.js"></script>
 </head>
@@ -11,24 +11,30 @@
   <a class="skip-link" href="#overview">Skip to dashboard</a>
   <div class="app-shell">
     <aside class="sidebar" aria-label="Workspace navigation">
-      <a class="brand" href="#overview"><span class="brand-mark" aria-hidden="true">F</span><span>FaultNet<span class="brand-subtitle">NETWORK RESILIENCE LAB</span></span></a>
-      <p class="nav-label">WORKSPACE</p>
+      <a class="brand" href="#overview"><span class="brand-mark" aria-hidden="true">F</span><span>FaultNet<span class="brand-subtitle">Network resilience lab</span></span></a>
       <nav>
-        <a class="nav-link" href="/"><span aria-hidden="true">⇆</span>Live proxy cockpit</a>
-        <a class="nav-link current" href="#overview"><span aria-hidden="true">◫</span>Dashboard</a>
+        <a class="nav-link current" href="#overview" aria-current="location"><span aria-hidden="true">◫</span>Workbench</a>
         <a class="nav-link" href="#experiment-panel"><span aria-hidden="true">＋</span>New experiment</a>
         <a class="nav-link" href="#history-panel"><span aria-hidden="true">◷</span>Saved experiments</a>
         <a class="nav-link" href="#comparison-panel"><span aria-hidden="true">⇄</span>Compare runs</a>
+        <a class="nav-link" href="/"><span aria-hidden="true">⇆</span>Live proxy cockpit</a>
       </nav>
+      <p class="sidebar-statement">Controlled experiments.<br>Measurable recovery.</p>
       <div class="sidebar-note"><span class="local-dot" aria-hidden="true"></span><strong>Local workspace</strong><p>Controlled faults affect demo traffic on this laptop.</p><span class="sidebar-tag">64 KiB synthetic payload</span></div>
       <p class="sidebar-footer">Measure. Compare. Understand.</p>
     </aside>
     <div class="workspace">
       <header class="topbar"><span class="topbar-title">Experiment workspace</span><div class="topbar-meta"><span class="topbar-local">Local only</span><span id="phase-label">Connecting</span></div></header>
       <main id="overview" tabindex="-1">
-        <div class="page-heading"><div><p class="eyebrow">OVERVIEW</p><h1>Experiment dashboard</h1><p class="page-description">See how your application responds to a controlled connection fault.</p></div><span id="run-badge" class="state-badge" data-state="empty">No run selected</span></div>
+        <div class="page-heading"><div><h1>Experiment workbench</h1><p class="page-description">Introduce a fault. Measure the effect. Verify recovery.</p></div><span id="run-badge" class="state-badge" data-state="empty">No run selected</span></div>
         <p id="status" class="service-status" role="status">Connecting to the local services…</p>
         <p id="message" role="alert" hidden></p>
+        <ol class="workflow" aria-label="Comparison experiment sequence">
+          <li><strong>Baseline</strong><span>Measure normal behavior</span></li>
+          <li><strong>Fault</strong><span>Apply the selected fault</span></li>
+          <li><strong>Recovery</strong><span>Confirm three successes</span></li>
+        </ol>
+        <p class="workflow-note">Comparison workflow shown above. Baseline-only runs skip fault and recovery.</p>
         <div class="view-controls"><label>Summarize phase<select id="summary-phase"><option value="auto">Auto · baseline, then faulty</option><option value="baseline">Baseline</option><option value="faulty">Faulty</option><option value="recovery">Recovery</option></select></label><p class="note">Cards and detailed analysis follow this phase. Recovery time describes the whole run.</p></div>
         <section class="metric-grid" aria-label="Selected experiment summary">
           <article class="metric-card"><span class="metric-label">Availability</span><strong id="metric-availability">—</strong><span id="availability-note" class="metric-note">Select or start an experiment</span></article>
@@ -38,16 +44,18 @@
         </section>
         <div class="dashboard-grid">
           <div class="results-column">
-            <section class="panel" aria-labelledby="results-title">
-              <div class="panel-heading"><div><p class="eyebrow">PHASE ANALYSIS</p><h2 id="results-title">Response time comparison</h2></div><span class="subtle-tag">Median · ms</span></div>
+            <section class="panel results-panel" aria-labelledby="results-title">
+              <div class="chart-stage">
+              <div class="panel-heading"><h2 id="results-title">Response time comparison</h2><span class="subtle-tag">Median · ms</span></div>
               <p id="run-info" class="run-info">No experiment selected. Start a run to see its measurements here.</p>
               <div id="latency-chart" class="latency-chart" tabindex="0" role="region" aria-label="Median response time chart, horizontally scrollable"><div class="empty-chart"><span class="empty-chart-icon" aria-hidden="true">▥</span><strong>Your experiment starts here</strong><p>Compare baseline, fault, and recovery measurements from a real run.</p></div></div>
               <p id="recovery" class="recovery-status"></p>
+              </div>
               <div class="table-scroll" tabindex="0" role="region" aria-label="Phase results table, horizontally scrollable"><table><caption>Measured results by phase</caption><thead><tr><th scope="col">Phase</th><th scope="col">Attempts / cancelled</th><th scope="col">Success / eligible</th><th scope="col">Availability</th><th scope="col">Median (ms)</th><th scope="col">p95 (ms)</th><th scope="col">Mean KiB/s</th></tr></thead><tbody id="phases"></tbody></table></div>
               <div class="panel-bottom"><p class="note">Elapsed time covers the complete HTTP response. — means no applicable measurement.</p><div class="actions"><button id="json" class="secondary" disabled>Download JSON</button><button id="csv" class="secondary" disabled>Download CSV</button></div></div>
             </section>
             <section class="panel analysis-panel" aria-labelledby="analysis-title">
-              <div class="panel-heading"><div><p class="eyebrow">INSPECT THE EVIDENCE</p><h2 id="analysis-title">Detailed phase analysis</h2></div><span class="subtle-tag">Measured samples</span></div>
+              <div class="panel-heading"><h2 id="analysis-title">Detailed phase analysis</h2><span class="subtle-tag">Measured samples</span></div>
               <p class="note">Timing statistics use successful complete responses. Percentiles describe these samples; small runs do not establish confidence.</p>
               <div class="table-scroll" tabindex="0" role="region" aria-label="Selected phase statistics, horizontally scrollable"><table><caption>Selected phase statistics and changes from baseline</caption><thead><tr><th scope="col">Measurement</th><th scope="col">Value</th></tr></thead><tbody id="statistics"></tbody></table></div>
               <details open><summary>Probe-by-probe durations</summary><p id="probe-note" class="note">Select a run to inspect attempts.</p><div id="probe-chart" class="latency-chart" tabindex="0" role="region" aria-label="Probe durations chart, horizontally scrollable"><p class="empty-chart">No run selected.</p></div></details>
@@ -57,7 +65,7 @@
             </section>
           </div>
           <section id="experiment-panel" class="panel experiment-panel" aria-labelledby="settings-title">
-            <div class="panel-heading"><div><p class="eyebrow">CONFIGURATION</p><h2 id="settings-title">New experiment</h2></div><span class="subtle-tag">Demo only</span></div>
+            <div class="panel-heading"><h2 id="settings-title">New experiment</h2><span class="subtle-tag">Demo only</span></div>
             <p class="note">Run a baseline or compare one fault with normal and recovery conditions.</p>
             <form id="settings">
               <fieldset id="fields"><legend class="sr-only">Experiment settings</legend>
@@ -83,14 +91,14 @@
         </div>
         <div class="history-grid">
           <section id="history-panel" class="panel" aria-labelledby="history-title">
-            <div class="panel-heading"><div><p class="eyebrow">YOUR EVIDENCE</p><h2 id="history-title">Saved experiments</h2></div><button id="refresh" class="secondary compact">Refresh</button></div>
+            <div class="panel-heading"><h2 id="history-title">Saved experiments</h2><button id="refresh" class="secondary compact">Refresh</button></div>
             <p class="note">Reopen measurements and download their original records.</p>
             <label>Open an experiment<select id="history"><option value="">Choose a saved experiment</option></select></label>
             <p id="record-errors" role="status"></p>
             <p id="selection-error" role="status"></p>
           </section>
           <section id="comparison-panel" class="panel" aria-labelledby="comparison-title">
-            <div class="panel-heading"><div><p class="eyebrow">SIDE BY SIDE</p><h2 id="comparison-title">Compare experiments</h2></div><span class="subtle-tag">Same protocol</span></div>
+            <div class="panel-heading"><h2 id="comparison-title">Compare experiments</h2><span class="subtle-tag">Same protocol</span></div>
             <label>Compare with another experiment<select id="compare"><option value="">Choose another experiment</option></select></label>
             <p id="comparison-note" class="note" role="status">Select a run and another experiment to compare their measurements.</p>
             <div class="table-scroll" id="comparison-wrap" tabindex="0" role="region" aria-label="Cross-run comparison table, horizontally scrollable" hidden><table><caption>Compatible runs: selected / compared</caption><thead><tr><th scope="col">Phase</th><th scope="col">Availability</th><th scope="col">Median (ms)</th><th scope="col">Mean KiB/s</th></tr></thead><tbody id="comparison"></tbody></table></div>

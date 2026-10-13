@@ -76,6 +76,7 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 | R21 | Editable experiment workbench | User's 13 Oct approval, R14 | Current laptop | In review | task/faultnet-mvp; six presets, reuse/phase controls, real charts/statistics, 32 tests |
 | R22 | Reassessed audit fixes | R21 checkpoint | Current laptop | In review | Five findings plus two review cases fixed; 40 tests; see handoff/implementation ledger; not merged |
 | R23 | Live proxy cockpit and traffic controls | User's 13 Oct expansion request, R22 | Current laptop | In review | Independent live forwarding/cockpit; 60 tests; rendered Edge checks blocked; not merged |
+| R24 | Figma-first workbench visual redesign | User's 13 Oct frontend-only request, R21/R22 | Current laptop | In review | Native HTML/CSS, existing controls/logic preserved; 61 tests; rendered Edge checks blocked; not merged |
 
 ## Task details and completion checks
 
