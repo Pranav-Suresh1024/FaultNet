@@ -39,6 +39,7 @@ The [Windows CI workflow](.github/workflows/checks.yml) runs the same tests on b
 ## Shared context
 
 - [Demonstration script](docs/demo-script.md): beginner click-by-click presentation, spoken lines, Wireshark/Packet Tracer steps, questions and fallback evidence.
+- [Two-person demonstration](docs/two-person-demo.md): 12–15 minute coordinated pitch covering workbench, live cockpit, Wireshark and static/RIP/OSPF labs, with actions, spoken lines and questions.
 
 - [AGENTS.md](AGENTS.md): rules every coding agent must follow.
 - [HANDOFF.md](HANDOFF.md): current progress, approvals, blockers, validation, and next action.
