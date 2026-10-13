@@ -1,5 +1,13 @@
 # Implementation ledger
 
+## Workbench cleanup — 13 October 2026
+
+Latest user refinement removes sidebar wrapping/filler and extra navigation. Only plain FaultNet branding plus Workbench/Live proxy cockpit links remain; sidebar stays 216 px. Removed icons, slogans, static workflow rail, duplicate topbar labels, decorative pills and promotional empty-state copy; removed their unused CSS. All 60 IDs, 18 input/select/button/fieldset definitions and six select blocks match the preceding checkout. Backend/JS/live assets/manifests and actual experiment/history/comparison/export behavior are unchanged.
+
+Checks: npm test 61/61 PASS, targeted checks 7/7 PASS, balanced HTML/control integrity PASS; independent source review found no Critical/Important issues and passed layout/whitespace checks. Using the user's existing Codex browser tab, reloaded and inspected empty and saved delay-run states; both nav links fit one line at 1440/962/768/390 px, with no document horizontal overflow. At 390 px, chart scroll viewport/content is 299/540 px; focused ArrowRight changed scroll. Viewport restored. Concept-only limitation from the preceding checkpoint is superseded for this bounded actual rendering check; Edge's prior block was not bypassed or changed.
+
+Actual screenshots/test output are ignored .codex/workbench-design/clean-workbench-desktop.png, clean-workbench-mobile.png and cleanup-tests.txt. No fresh run, deletion, live configuration, lab/capture or other-laptop change. Exhaustive button rehearsal, screen-reader/200% zoom remain unverified. Initial Figma remains a historical reference; current spec/design contracts reflect the cleanup. Final commit/remote SHA/CI are reported outside the handoff after publishing this branch.
+
 ## Workbench visual redesign — 13 October 2026
 
 User authorized a Figma/design-taste-frontend concept followed by frontend-only implementation on the existing application branch. [Editable desktop/mobile concept](https://www.figma.com/design/ssgBMbLH8CUmZGmzGNE9nE?node-id=4-264), [spec](superpowers/specs/2026-10-13-workbench-visual-design.md) and [plan](superpowers/plans/2026-10-13-workbench-visual.md) record the scope. The website-oriented taste skill is adapted to the dashboard's operational purpose, without marketing imagery or site-only motion requirements.

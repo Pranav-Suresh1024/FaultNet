@@ -20,6 +20,7 @@ test('visual workbench preserves its control contract, unique IDs and working se
   }
   for (const match of html.matchAll(/href="#([^"]+)"/g)) assert.ok(ids.includes(match[1]), match[1]);
   assert.match(html, /class="chart-stage"/);
-  assert.match(html, /aria-label="Comparison experiment sequence"/);
-  assert.match(html, /Baseline-only runs skip fault and recovery/);
+  const navigation = html.match(/<nav>([\s\S]*?)<\/nav>/)?.[1];
+  assert.deepEqual([...navigation.matchAll(/<a[^>]*href="([^"]+)"[^>]*>([^<]+)<\/a>/g)].map(match => [match[1], match[2]]),
+    [['#overview','Workbench'],['/','Live proxy cockpit']]);
 });

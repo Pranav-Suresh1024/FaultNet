@@ -20,4 +20,6 @@ Dark-stage text/chart contrast, selected-phase labels versus static workflow rai
 
 ## Remaining verification
 
-Render the implemented workbench in an accessible browser and exercise controls/focus/scrolling at 1440/768/390px and 200% zoom. This is a release follow-up, not completed screenshot evidence. No backend/network changes or new experiment records were required for this appearance checkpoint.
+The subsequent user cleanup removed sidebar icons/copy/extra links, static sequence and redundant labels. Actual empty/saved-run workbench rendering is now checked in the user's existing Codex in-app tab at 1440/962/768/390px; links fit one line, document has no horizontal overflow and focused narrow chart scroll works. Temporary viewport restored. Full tests 61/61 and independent source review passed. Existing controls/logic remain; original Figma is the initial concept, current spec includes cleanup.
+
+Full screen-reader/200% zoom and exhaustive button rehearsal remain release follow-ups. No backend/network changes or new experiment records were required for this appearance checkpoint.
