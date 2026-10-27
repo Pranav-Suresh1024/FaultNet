@@ -1,0 +1,448 @@
+{
+  "sourceCommit": "313822e",
+  "environment": {
+    "os": "Windows_NT",
+    "release": "10.0.26300",
+    "cpu": "12th Gen Intel(R) Core(TM) i7-12650H",
+    "memoryGiB": 23.675750732421875
+  },
+  "runtime": "v22.23.1",
+  "protocol": {
+    "rounds": 10,
+    "probesPerPhase": 5,
+    "intervalMs": 250,
+    "rotation": "cyclic scenario order across rounds",
+    "payloadBytes": 65536
+  },
+  "restored": {
+    "status": 200,
+    "bytes": 65536,
+    "elapsedMs": 6.4,
+    "outcome": "completed"
+  },
+  "scenarios": {
+    "delay-0": {
+      "runs": 10,
+      "attempts": 50,
+      "successes": 50,
+      "availabilityPct": 100.0,
+      "medianMs": 17.806600000010803,
+      "meanMs": 16.313280000003434,
+      "p95Ms": 20.645000000018626,
+      "minMs": 2.906500000040978,
+      "maxMs": 21.194200000027195,
+      "baselineMedianMs": 3.3339999999734573,
+      "addedMedianMs": 14.611449999996694,
+      "addedBootstrap95Ms": [
+        13.574099999968894,
+        15.096400000038557
+      ],
+      "goodputKiBps": 4822.552277303256,
+      "recoveryConfirmed": 10,
+      "recoveryMedianMs": 532.351949999982,
+      "recoveryResidualMs": 0.2938500000163913,
+      "failureMedianMs": null,
+      "fault": {
+        "type": "delay",
+        "delayMs": 0
+      },
+      "representativeRun": "68d39120-3c1b-455d-b7ca-b3e45358e70e"
+    },
+    "delay-150": {
+      "runs": 10,
+      "attempts": 50,
+      "successes": 50,
+      "availabilityPct": 100.0,
+      "medianMs": 160.71964999995544,
+      "meanMs": 161.0783219999951,
+      "p95Ms": 167.87020000000484,
+      "minMs": 156.2888999999268,
+      "maxMs": 171.34509999999864,
+      "baselineMedianMs": 3.2118500000215136,
+      "addedMedianMs": 156.5512999999337,
+      "addedBootstrap95Ms": [
+        155.9324000000779,
+        157.89319999993313
+      ],
+      "goodputKiBps": 397.4698173069989,
+      "recoveryConfirmed": 10,
+      "recoveryMedianMs": 532.3763999999937,
+      "recoveryResidualMs": -0.0028999999922234565,
+      "failureMedianMs": null,
+      "fault": {
+        "type": "delay",
+        "delayMs": 150
+      },
+      "representativeRun": "fce310dd-9b7c-443f-a36c-832d310cb3d0",
+      "calibrationErrorPct": 4.367533333289127
+    },
+    "delay-500": {
+      "runs": 10,
+      "attempts": 50,
+      "successes": 50,
+      "availabilityPct": 100.0,
+      "medianMs": 507.5306499999715,
+      "meanMs": 509.7622660000024,
+      "p95Ms": 517.9098000000231,
+      "minMs": 503.56149999999616,
+      "maxMs": 521.9346000000369,
+      "baselineMedianMs": 4.539900000028865,
+      "addedMedianMs": 503.4123500000278,
+      "addedBootstrap95Ms": [
+        502.08599999995204,
+        506.5357999999542
+      ],
+      "goodputKiBps": 125.55961184862537,
+      "recoveryConfirmed": 10,
+      "recoveryMedianMs": 531.1504999999888,
+      "recoveryResidualMs": -0.684800000017276,
+      "failureMedianMs": null,
+      "fault": {
+        "type": "delay",
+        "delayMs": 500
+      },
+      "representativeRun": "b1e6dd1d-5c13-409e-b8c8-aa68eb1ad6ee",
+      "calibrationErrorPct": 0.68247000000556
+    },
+    "delay-1500": {
+      "runs": 10,
+      "attempts": 50,
+      "successes": 50,
+      "availabilityPct": 100.0,
+      "medianMs": 1510.3456000000006,
+      "meanMs": 1511.3698520000041,
+      "p95Ms": 1522.0123000000021,
+      "minMs": 1503.6766000000061,
+      "maxMs": 1523.0769999999902,
+      "baselineMedianMs": 3.4490999999979977,
+      "addedMedianMs": 1506.5174000000115,
+      "addedBootstrap95Ms": [
+        1503.7952000000223,
+        1508.0746999999974
+      ],
+      "goodputKiBps": 42.346163041350245,
+      "recoveryConfirmed": 10,
+      "recoveryMedianMs": 531.0978000000177,
+      "recoveryResidualMs": -0.8900000000139698,
+      "failureMedianMs": null,
+      "fault": {
+        "type": "delay",
+        "delayMs": 1500
+      },
+      "representativeRun": "a1de4657-377b-4d05-bc36-431d4d60fa8f",
+      "calibrationErrorPct": 0.4344933333341032
+    },
+    "bandwidth-16": {
+      "runs": 10,
+      "attempts": 50,
+      "successes": 50,
+      "availabilityPct": 100.0,
+      "medianMs": 4010.2936999999947,
+      "meanMs": 4010.162659999997,
+      "p95Ms": 4017.722299999965,
+      "minMs": 4001.664699999994,
+      "maxMs": 4019.3889999999956,
+      "baselineMedianMs": 3.532099999996717,
+      "addedMedianMs": 4006.7495500000077,
+      "addedBootstrap95Ms": [
+        4004.4400000000314,
+        4008.4188999999315
+      ],
+      "goodputKiBps": 15.959474523869233,
+      "recoveryConfirmed": 10,
+      "recoveryMedianMs": 530.7652500000113,
+      "recoveryResidualMs": 0.4021999999822583,
+      "failureMedianMs": null,
+      "fault": {
+        "type": "bandwidth",
+        "rateKiBps": 16
+      },
+      "representativeRun": "cd788f87-fe9e-4f37-bb1a-f0fa03c6f90d",
+      "rateAttainmentPct": 99.7467157741827
+    },
+    "bandwidth-32": {
+      "runs": 10,
+      "attempts": 50,
+      "successes": 50,
+      "availabilityPct": 100.0,
+      "medianMs": 2012.64390000001,
+      "meanMs": 2012.0482960000072,
+      "p95Ms": 2017.8806999999797,
+      "minMs": 2002.0632000000332,
+      "maxMs": 2018.9957000000286,
+      "baselineMedianMs": 3.534749999991618,
+      "addedMedianMs": 2009.0894000000262,
+      "addedBootstrap95Ms": [
+        2005.6833500000066,
+        2010.9375000000582
+      ],
+      "goodputKiBps": 31.808517927741235,
+      "recoveryConfirmed": 10,
+      "recoveryMedianMs": 532.5486999999994,
+      "recoveryResidualMs": 0.06689999997615814,
+      "failureMedianMs": null,
+      "fault": {
+        "type": "bandwidth",
+        "rateKiBps": 32
+      },
+      "representativeRun": "3665bd89-e48a-4067-a8c9-9359b23b426b",
+      "rateAttainmentPct": 99.40161852419136
+    },
+    "bandwidth-128": {
+      "runs": 10,
+      "attempts": 50,
+      "successes": 50,
+      "availabilityPct": 100.0,
+      "medianMs": 819.6193499999936,
+      "meanMs": 814.1115539999998,
+      "p95Ms": 929.9420999999857,
+      "minMs": 649.1463999999978,
+      "maxMs": 942.6926000000094,
+      "baselineMedianMs": 3.730749999987893,
+      "addedMedianMs": 824.2202499999839,
+      "addedBootstrap95Ms": [
+        807.2240999999922,
+        844.0818999999901
+      ],
+      "goodputKiBps": 79.11666250938434,
+      "recoveryConfirmed": 10,
+      "recoveryMedianMs": 529.6088500000187,
+      "recoveryResidualMs": -0.5030000000188011,
+      "failureMedianMs": null,
+      "fault": {
+        "type": "bandwidth",
+        "rateKiBps": 128
+      },
+      "representativeRun": "77fdfec3-15f7-4c3b-b181-a6ae3e68735d",
+      "rateAttainmentPct": 61.80989258545652
+    },
+    "interruption": {
+      "runs": 10,
+      "attempts": 50,
+      "successes": 0,
+      "availabilityPct": 0.0,
+      "medianMs": null,
+      "meanMs": null,
+      "p95Ms": null,
+      "minMs": null,
+      "maxMs": null,
+      "baselineMedianMs": 3.1578999999910593,
+      "addedMedianMs": null,
+      "addedBootstrap95Ms": null,
+      "goodputKiBps": null,
+      "recoveryConfirmed": 10,
+      "recoveryMedianMs": 536.423000000068,
+      "recoveryResidualMs": 0.14020000002346933,
+      "failureMedianMs": 1.2800500000012107,
+      "fault": {
+        "type": "interruption"
+      },
+      "representativeRun": "79724bfa-786e-4643-b774-8a5c570c74b9"
+    },
+    "timeout-500": {
+      "runs": 10,
+      "attempts": 50,
+      "successes": 0,
+      "availabilityPct": 0.0,
+      "medianMs": null,
+      "meanMs": null,
+      "p95Ms": null,
+      "minMs": null,
+      "maxMs": null,
+      "baselineMedianMs": 3.1332499999552965,
+      "addedMedianMs": null,
+      "addedBootstrap95Ms": null,
+      "goodputKiBps": null,
+      "recoveryConfirmed": 10,
+      "recoveryMedianMs": 532.4190000000526,
+      "recoveryResidualMs": 0.24400000006426126,
+      "failureMedianMs": 503.8827999999994,
+      "fault": {
+        "type": "delay",
+        "delayMs": 1000
+      },
+      "representativeRun": "6c8df367-e391-404e-8125-4ed5c772ece7"
+    },
+    "timeout-2000": {
+      "runs": 10,
+      "attempts": 50,
+      "successes": 50,
+      "availabilityPct": 100.0,
+      "medianMs": 1010.22325000001,
+      "meanMs": 1010.7486560000023,
+      "p95Ms": 1018.5300000000279,
+      "minMs": 1003.8495000000112,
+      "maxMs": 1021.1131000000169,
+      "baselineMedianMs": 3.9654000000155065,
+      "addedMedianMs": 1005.5322999999917,
+      "addedBootstrap95Ms": [
+        1004.0381000000052,
+        1008.3220999999903
+      ],
+      "goodputKiBps": 63.32050790086961,
+      "recoveryConfirmed": 10,
+      "recoveryMedianMs": 536.948550000001,
+      "recoveryResidualMs": -0.7709000000031665,
+      "failureMedianMs": null,
+      "fault": {
+        "type": "delay",
+        "delayMs": 1000
+      },
+      "representativeRun": "27a7ce47-b678-45db-802f-ddb81836f250",
+      "calibrationErrorPct": 0.5532299999991664
+    }
+  },
+  "live": {
+    "normal": {
+      "attempts": 10,
+      "completed": 10,
+      "http200": 10,
+      "http503": 0,
+      "medianMs": 2.8,
+      "minMs": 2.3,
+      "maxMs": 6.1,
+      "sdMs": 1.127435635019184,
+      "medianBytes": 65536.0,
+      "config": {}
+    },
+    "delay-500": {
+      "attempts": 10,
+      "completed": 10,
+      "http200": 10,
+      "http503": 0,
+      "medianMs": 512.1,
+      "minMs": 504.1,
+      "maxMs": 519.6,
+      "sdMs": 6.537379699339291,
+      "medianBytes": 65536.0,
+      "config": {
+        "responseDelayMs": 500
+      }
+    },
+    "jitter-100": {
+      "attempts": 10,
+      "completed": 10,
+      "http200": 10,
+      "http503": 0,
+      "medianMs": 544.25,
+      "minMs": 443,
+      "maxMs": 618.8,
+      "sdMs": 57.66165681513726,
+      "medianBytes": 65536.0,
+      "config": {
+        "responseDelayMs": 500,
+        "jitterMs": 100
+      }
+    },
+    "download-32": {
+      "attempts": 10,
+      "completed": 10,
+      "http200": 10,
+      "http503": 0,
+      "medianMs": 2018.0,
+      "minMs": 2005,
+      "maxMs": 2026.5,
+      "sdMs": 7.416655430703085,
+      "medianBytes": 65536.0,
+      "config": {
+        "downloadKiBps": 32
+      }
+    },
+    "http-503": {
+      "attempts": 10,
+      "completed": 10,
+      "http200": 0,
+      "http503": 10,
+      "medianMs": 2.2,
+      "minMs": 1.3,
+      "maxMs": 3.2,
+      "sdMs": 0.7874713398664812,
+      "medianBytes": 46.0,
+      "config": {
+        "statusRules": [
+          {
+            "path": "/payload",
+            "status": 503,
+            "probability": 100
+          }
+        ]
+      }
+    },
+    "disconnect": {
+      "attempts": 10,
+      "completed": 0,
+      "http200": 0,
+      "http503": 0,
+      "medianMs": 32.25,
+      "minMs": 31,
+      "maxMs": 46.6,
+      "sdMs": 6.975425116475379,
+      "medianBytes": 16384.0,
+      "config": {
+        "failureMode": "close_body"
+      }
+    },
+    "stalled-body": {
+      "attempts": 10,
+      "completed": 0,
+      "http200": 0,
+      "http503": 0,
+      "medianMs": 5012.25,
+      "minMs": 5001,
+      "maxMs": 5016.7,
+      "sdMs": 5.716068967782386,
+      "medianBytes": 0.0,
+      "config": {
+        "failureMode": "hang_body"
+      }
+    },
+    "mock": {
+      "attempts": 10,
+      "completed": 10,
+      "http200": 10,
+      "http503": 0,
+      "medianMs": 2.6,
+      "minMs": 1.2,
+      "maxMs": 3,
+      "sdMs": 0.7287737036358481,
+      "medianBytes": 32.0,
+      "config": {
+        "mockRules": [
+          {
+            "path": "/payload",
+            "active": true,
+            "body": "{\"service\":\"faultnet\",\"ok\":true}"
+          }
+        ]
+      }
+    }
+  },
+  "overhead": {
+    "pairs": 50,
+    "directMedianMs": 2.3711000000000695,
+    "proxyMedianMs": 5.075600000000122,
+    "blockAddedMedianMs": 2.3218999999998005,
+    "blockAddedBootstrap95Ms": [
+      1.3880000000003747,
+      3.033599999999751
+    ]
+  },
+  "recordQuality": {
+    "accepted": 100,
+    "rejected": 1,
+    "rejections": [
+      {
+        "id": "37685c85-894a-4c9c-a3d2-0b5d6c921fce",
+        "scenario": "bandwidth-32",
+        "reason": "record_corrupt",
+        "utcVsElapsedDifferenceMs": 2.3752999999560416
+      }
+    ]
+  },
+  "totals": {
+    "workbenchRuns": 100,
+    "workbenchAttempts": 1300,
+    "overheadRequests": 100,
+    "liveRequests": 80
+  }
+}

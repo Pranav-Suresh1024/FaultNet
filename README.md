@@ -38,6 +38,8 @@ The [Windows CI workflow](.github/workflows/checks.yml) runs the same tests on b
 
 ## Shared context
 
+- [Final editable report](docs/reports/FaultNet-final-report.docx), [submission PDF](docs/reports/FaultNet-final-report.pdf) and [report handoff](docs/reports/FINAL-REPORT-HANDOFF.md): template-aligned report with repeated measurements, reviewed screenshots, packet correlation, routing comparison and evidence/reproduction notes.
+
 - [Demonstration script](docs/demo-script.md): rubric-aligned actions/spoken lines, measured analysis, controlled timeout what-if, Wireshark/routing interpretation, report checklist and individual-assessment rehearsal.
 - [Two-person demonstration](docs/two-person-demo.md): coordinated pitch covering workbench, live cockpit, Wireshark and static/RIP/OSPF labs; allow 15–18 minutes for the full rubric sequence and evaluation.
 

@@ -1,0 +1,172 @@
+{
+  "packetCount": 55392,
+  "controlPackets": 0,
+  "matchingRule": "Exactly one GET /payload to 3002 within -1 to +100 ms of millisecond UTC probe start; unique stream; response request_in linkage.",
+  "matches": [
+    {
+      "scenario": "delay-500",
+      "run": "b1e6dd1d-5c13-409e-b8c8-aa68eb1ad6ee",
+      "matched": 5,
+      "packetMedianMs": 504.97860000000003,
+      "firstDataMedianMs": 504.93645668029785,
+      "probeMedianMs": 507.6157000000021,
+      "streams": [
+        {
+          "stream": 21,
+          "getFrame": 277,
+          "firstDataFrame": 290,
+          "responseFrame": 292,
+          "firstDataMs": 507.352352142334,
+          "httpMs": 507.38360000000006,
+          "probeMs": 510.49099999999453
+        },
+        {
+          "stream": 23,
+          "getFrame": 303,
+          "firstDataFrame": 316,
+          "responseFrame": 318,
+          "firstDataMs": 504.93645668029785,
+          "httpMs": 504.97860000000003,
+          "probeMs": 507.27320000000327
+        },
+        {
+          "stream": 25,
+          "getFrame": 329,
+          "firstDataFrame": 342,
+          "responseFrame": 344,
+          "firstDataMs": 503.68189811706543,
+          "httpMs": 503.7114,
+          "probeMs": 506.15239999999903
+        },
+        {
+          "stream": 27,
+          "getFrame": 355,
+          "firstDataFrame": 368,
+          "responseFrame": 370,
+          "firstDataMs": 504.76574897766113,
+          "httpMs": 504.79609999999997,
+          "probeMs": 507.6157000000021
+        },
+        {
+          "stream": 29,
+          "getFrame": 381,
+          "firstDataFrame": 394,
+          "responseFrame": 398,
+          "firstDataMs": 505.8906078338623,
+          "httpMs": 506.9141,
+          "probeMs": 512.6873999999953
+        }
+      ]
+    },
+    {
+      "scenario": "delay-1500",
+      "run": "a1de4657-377b-4d05-bc36-431d4d60fa8f",
+      "matched": 5,
+      "packetMedianMs": 1507.7906,
+      "firstDataMedianMs": 1507.7576637268066,
+      "probeMedianMs": 1510.2900999999983,
+      "streams": [
+        {
+          "stream": 48,
+          "getFrame": 618,
+          "firstDataFrame": 631,
+          "responseFrame": 633,
+          "firstDataMs": 1510.2264881134033,
+          "httpMs": 1510.2702,
+          "probeMs": 1513.0539000000063
+        },
+        {
+          "stream": 50,
+          "getFrame": 644,
+          "firstDataFrame": 657,
+          "responseFrame": 659,
+          "firstDataMs": 1514.7876739501953,
+          "httpMs": 1514.8935999999999,
+          "probeMs": 1520.1828000000023
+        },
+        {
+          "stream": 52,
+          "getFrame": 670,
+          "firstDataFrame": 683,
+          "responseFrame": 685,
+          "firstDataMs": 1503.2682418823242,
+          "httpMs": 1503.2999,
+          "probeMs": 1506.0097000000023
+        },
+        {
+          "stream": 54,
+          "getFrame": 696,
+          "firstDataFrame": 709,
+          "responseFrame": 711,
+          "firstDataMs": 1507.7576637268066,
+          "httpMs": 1507.7906,
+          "probeMs": 1510.2900999999983
+        },
+        {
+          "stream": 56,
+          "getFrame": 722,
+          "firstDataFrame": 735,
+          "responseFrame": 737,
+          "firstDataMs": 1506.5865516662598,
+          "httpMs": 1506.615,
+          "probeMs": 1508.5673000000024
+        }
+      ]
+    },
+    {
+      "scenario": "bandwidth-32",
+      "run": "3665bd89-e48a-4067-a8c9-9359b23b426b",
+      "matched": 5,
+      "packetMedianMs": 2010.2764999999997,
+      "firstDataMedianMs": 45.78804969787598,
+      "probeMedianMs": 2011.8233000000037,
+      "streams": [
+        {
+          "stream": 102,
+          "getFrame": 1934,
+          "firstDataFrame": 1949,
+          "responseFrame": 2075,
+          "firstDataMs": 39.113759994506836,
+          "httpMs": 2014.9054999999998,
+          "probeMs": 2017.794299999994
+        },
+        {
+          "stream": 104,
+          "getFrame": 2084,
+          "firstDataFrame": 2099,
+          "responseFrame": 2225,
+          "firstDataMs": 45.44782638549805,
+          "httpMs": 2006.8890000000001,
+          "probeMs": 2009.5331999999908
+        },
+        {
+          "stream": 106,
+          "getFrame": 2234,
+          "firstDataFrame": 2249,
+          "responseFrame": 2375,
+          "firstDataMs": 46.768903732299805,
+          "httpMs": 2014.8049,
+          "probeMs": 2016.55799999999
+        },
+        {
+          "stream": 108,
+          "getFrame": 2384,
+          "firstDataFrame": 2399,
+          "responseFrame": 2525,
+          "firstDataMs": 45.78804969787598,
+          "httpMs": 2010.2764999999997,
+          "probeMs": 2011.8233000000037
+        },
+        {
+          "stream": 110,
+          "getFrame": 2534,
+          "firstDataFrame": 2549,
+          "responseFrame": 2675,
+          "firstDataMs": 46.48017883300781,
+          "httpMs": 2010.274,
+          "probeMs": 2011.654899999994
+        }
+      ]
+    }
+  ]
+}

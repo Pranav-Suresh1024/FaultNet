@@ -72,7 +72,7 @@ Status meanings: **Done** = integrated and verified; **Ready** = dependencies an
 | R17 | Wireshark capture procedure | R01 lab decisions, R06 | C | In review | docs/wireshark-guide.md; Wireshark 4.6.9/loopback and actual capture permissions verified on current laptop |
 | R18 | Recorded Wireshark evidence | R14, R17 | C | In review | Current laptop / task/faultnet-mvp; four scenarios in one bounded capture, sanitized observations in docs/verification-2026-10-13.md |
 | R19 | Fresh-checkout verification across both active laptops | R14 | A + both laptops | Planned | Lab branch upload confirmed; other laptop's application checkout/runtime still unverified |
-| R20 | Final report, demo instructions, and release checkpoint | R14, R16, R18, R19 | A then C | In progress | Rubric mapped in demo scripts; final report, full rehearsal and release acceptance outstanding |
+| R20 | Final report, demo instructions, and release checkpoint | R14, R16, R18, R19 | A then C | In progress | Final report complete on codex/final-report: 28 pages, real repeated metrics, figures and handoff; full rehearsal, other-laptop checks and release acceptance remain separate |
 | R21 | Editable experiment workbench | User's 13 Oct approval, R14 | Current laptop | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
 | R22 | Reassessed audit fixes | R21 checkpoint | Current laptop | Done | main / PR #1; automated/bounded runtime checks and independent reviews in implementation ledger |
 | R23 | Live proxy cockpit and traffic controls | User's 13 Oct expansion request, R22 | Current laptop | In review | main / PR #1; live forwarding/cockpit integrated; full rendered live-control rehearsal remains |
