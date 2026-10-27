@@ -4,8 +4,10 @@ Updated: 27 October 2026, Asia/Kolkata.
 
 ## Deliverables and ownership
 
+- Latest revision: replaced all documentation/RFC/repository bibliography entries with six published papers, each with a verified publication DOI and a freely available complete PDF. Literature review and its comparison table, reproducibility discussion, packet interpretation and novelty citations now match those studies. DOI metadata came from Crossref; full PDFs were retrieved without authentication and checked for title, page count, full text and references. Author manuscripts are labelled where used. GitHub remains in section 9.1 only. See [reference metadata](scholarly-references.json) and [verification evidence](evidence/reference-verification.json).
+
 - Branch: `codex/final-report`; application baseline `313822e` on main. This laptop owns this documentation/report task. Final pushed commit and remote parity are reported in the transfer message, outside this file.
-- [Final editable Word report](FaultNet-final-report.docx) and [matching PDF](FaultNet-final-report.pdf): 28 pages, 16 editable tables, eleven figures and an automatic contents page.
+- [Final editable Word report](FaultNet-final-report.docx) and [matching PDF](FaultNet-final-report.pdf): 29 pages, 16 editable tables, eleven figures and an automatic contents page.
 - The course template's twelve main sections, supplied cover/logo, filled student details, supervisor and unsigned declaration are retained. The complete-report request restores the template's contributions/results/reference material. Both dashboards, practical applications, fault mechanisms, code modules, architecture, experiments, critical evaluation and GitHub link are covered.
 - No narrative dates, AI-agent mentions, draft placeholders or “yet to be implemented/out of scope” language in the report. Technical timestamps within the reviewed interface image remain evidence. The user's partial report is preserved byte-for-byte, including their pre-existing local revision; this revision is included as the source checkpoint.
 - `src/`, `public/`, application contracts, packages and teammate lab files are unchanged. Existing records/exports already expose the required metrics. No added dashboard feature or backend change was necessary.
@@ -36,8 +38,8 @@ One rejected bandwidth-32 run (`37685c85-894a-4c9c-a3d2-0b5d6c921fce`) had 537 m
 - `scripts/analyze-report.py`: validates accepted counts/state and formula self-checks; creates aggregate tables and plots. Successful timing, failed duration and cancellation denominators remain distinct.
 - `scripts/correlate-report.py`: TShark decode passed; checks unique stream matches, response request-frame linkage, GET/first-data/reassembled-response order and agreement with probe timing. `capinfos` confirms 55,392 packets. Capture has no interface statistics block; capture-drop count is unknown.
 - `scripts/export-report.ps1`: Word repagination, automatic contents refresh and PDF export passed.
-- `scripts/verify-report.py`: twelve main sections, 31 headings, 16 native tables, twelve embedded images including the logo, 28 nonblank PDF pages, expected numeric values, no draft/date/AI-agent prose, valid contents/cross-reference fields, no tracked changes/comments, unchanged user source. Approximately 5,613 extracted words.
-- Every final PDF page was rendered at 100 dpi and visually inspected. Fixed split tables, a short spillover page and inconsistent third-level heading fonts during revision. Contents links, page numbers, captions, figures, units and body legibility reviewed.
+- `scripts/verify-report.py`: twelve main sections, 31 headings, 16 native tables, twelve embedded images including the logo, 29 nonblank PDF pages, expected numeric values, no draft/date/AI-agent prose, valid contents/cross-reference fields, no tracked changes/comments, unchanged user source. It also checks all six numbered scholarly citations, DOI/full-text links and GitHub placement. Approximately 6,100 extracted words.
+- Every final PDF page was rendered at 100 dpi and visually inspected, including the revised literature review and bibliography. Contents links, page numbers, captions, figures, units and body legibility reviewed. All fifteen unaffected tables and all image bytes match the pre-reference-revision report. The saved report was updated in its existing Word tab; a local backup preserves the preceding version. No new application/lab tests or measurements were run for this reference-only revision.
 - Selected evidence and repository diff reviewed before staging. Push/remote confirmation is completed in the final transfer message, not assumed by this file.
 
 ## Boundaries and local evidence
@@ -45,6 +47,8 @@ One rejected bandwidth-32 run (`37685c85-894a-4c9c-a3d2-0b5d6c921fce`) had 537 m
 Fresh browser screenshots could not be taken: Computer Use stopped because it could not confidently verify the browser URL. That restriction was not bypassed. The report labels the earlier reviewed workbench/topology screenshots as representative. Live proxy metrics and fresh packet timings were collected independently through the protected API and CLI. No fresh browser visual/accessibility pass or fresh Packet Tracer GUI rerun is claimed. Simulator evidence remains the bounded review of lab commit `9f72386`, with transient losses and Fast Forward Time limitations retained.
 
 Local-only files: `.codex/final-report/evaluation.json`, `rejected-run.json`, `evaluation.pcapng`, `packets.tsv`, `tests.txt`, `verification.json`, rendered page PNGs, preserved `user-source.docx` and analysis packages. Their paths are examples relative to this checkout; other laptops do not receive them through Git. Session capability tokens are not saved in the shared evidence. The controlled app is left running with experiment fault cleared and original normal live configuration restored; stop it with Ctrl+C when finished.
+
+Reference-revision backups, downloaded full papers, Crossref responses and rendered QA pages are local under `.codex/report-references/`. Only the reviewed citation metadata and verification summary are shared. The open Word owner/lock file is deliberately excluded from the commit.
 
 ## Next laptop
 

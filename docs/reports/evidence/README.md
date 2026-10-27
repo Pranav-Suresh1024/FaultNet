@@ -7,6 +7,7 @@ These are reviewed aggregate results and figures, not raw experiment records. Th
 - `summary.json`: actual aggregate results, runtime/environment, settings, record-quality rejection and final reset check.
 - `scenario-comparison.csv`: ten workbench conditions with counts, successful timings, goodput and restoration.
 - `packet-summary.json`: 15 request-to-probe matches from three representative runs, including stream/frame references and timing intervals. No request bodies or raw packets.
+- `reference-verification.json`: Crossref publication DOI/type/title metadata and HTTP-200 full-PDF checks for the six scholarly references. Their bibliography and review text are maintained in [scholarly-references.json](../scholarly-references.json). Publisher metadata and freely available full author versions are distinguished; downloaded papers stay local.
 - `figures/`: nine analytical plots/diagrams generated from the evidence. Routing values come from the separately reviewed simulator batches.
 - `screenshots/workbench.png`: previously reviewed actual interface image. Its example run is illustrative and differs from the repeated evaluation; its technical timestamp is retained as evidence.
 - `screenshots/packet-tracer-topology.png`: actual topology from the reviewed OSPF lab copy. Its drawing is not proof of a completed convergence test.
@@ -44,5 +45,7 @@ The application has no added dependencies. Analysis uses Python with `matplotlib
 4. Run `python scripts/analyze-report.py` and `python scripts/correlate-report.py`. The latter uses the standard Windows TShark installation path. It requires a complete covered five-request run for each selected condition and asserts timestamp/stream linkage. Other platforms need their TShark path adjusted.
 5. Run `python scripts/build-final-report.py`, then `powershell -File scripts/export-report.ps1`. The builder can regenerate the current report from the committed aggregates/screenshots and preserved partial report without raw trials. Word refreshes the automatic contents and page fields before PDF export.
 6. Run `python scripts/verify-report.py`, render the PDF pages and inspect them all. The verifier checks this final evidence snapshot; its fixed expected counts must be reviewed if a new study replaces the dataset. Different machines can produce different numbers; regenerate analysis rather than copying these values into a new study.
+
+For a new reference-access audit, run `python scripts/check-report-references.py`. It checks each DOI against Crossref, validates its journal/proceedings type and title, retrieves the free PDF without authentication, and checks its title, full-text length, reference section and page count. Two journal articles, three conference papers and one workshop paper replace the earlier documentation citations. The project GitHub link is in report section 9.1, outside References. Bibliographic publication years are retained as citation metadata; no experiment calendar dates are added.
 
 No raw capture, generated experiment record, token, account data, or task-local analysis installation is shared in this folder.

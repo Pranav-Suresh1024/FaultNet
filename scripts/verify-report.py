@@ -12,8 +12,28 @@ pdf=PdfReader(folder/'FaultNet-final-report.pdf')
 text='\n'.join(page.extract_text() for page in pdf.pages)
 body='\n'.join(x.text for x in doc.paragraphs)
 headings=[x.text for x in doc.paragraphs if x.style.name.startswith('Heading')]
+literature=json.loads((folder/'scholarly-references.json').read_text(encoding='utf-8'))
+referenceEvidence=json.loads((folder/'evidence/reference-verification.json').read_text(encoding='utf-8'))
+refIndex=next(i for i,p in enumerate(doc.paragraphs) if p.style.name.startswith('Heading') and p.text=='References')
+references='\n'.join(p.text for p in doc.paragraphs[refIndex+1:])
+mainBody='\n'.join(p.text for p in doc.paragraphs[:refIndex])
+assert len(literature['papers'])==len(referenceEvidence)==6
+assert set(re.findall(r'\[(\d+)\]',references))==set(map(str,range(1,7)))
+assert set(re.findall(r'\[(\d+)\]',mainBody))==set(map(str,range(1,7)))
+assert 'github.com' not in references and 'Repository evidence:' not in references
+assert not any(x in body for x in ['RFC 9110','RFC 2453','RFC 2328','Toxiproxy official','Node.js. Performance measurement','Wireshark. User Guide'])
+for ref,proof in zip(literature['papers'],referenceEvidence):
+    assert proof['doi'].casefold()==ref['doi'].casefold() and proof['httpStatus']==200
+    assert proof['pdfPages']==ref['verifiedPdfPages'] and proof['pdfWords']>1500
+    assert ref['doi'] in references and ref['title'] in references
+links={rel.target_ref for rel in doc.part.rels.values() if rel.reltype.endswith('/hyperlink')}
+assert all('https://doi.org/'+ref['doi'] in links and ref['fullTextUrl'] in links for ref in literature['papers'])
+assert len(links)==13, 'Only six DOI/full-text pairs and the project repository link are expected'
 assert [int(re.match(r'^(\d+)\. ',h).group(1)) for h in headings if re.match(r'^\d+\. ',h)]==list(range(1,13))
+assert len(headings)==31
+assert next(p for p in doc.paragraphs if p.text.startswith('The matched streams distinguish')).style.name=='Normal'
 assert len(doc.tables)==16 and len(doc.inline_shapes)==12
+assert len(pdf.pages)==29
 assert all(len(page.extract_text().strip())>50 for page in pdf.pages)
 assert not re.search(r'AI agents?|yet to be implemented|out of scope|2026|placeholder',body,re.I)
 assert not re.search(r'Error!|Reference source not found|TOC will populate',text,re.I)

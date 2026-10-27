@@ -13,6 +13,7 @@ ROOT=Path(__file__).resolve().parents[1]
 TMP=ROOT/'.codex/final-report'
 EVID=ROOT/'docs/reports/evidence'
 S=json.loads((EVID/'summary.json').read_text())
+L=json.loads((ROOT/'docs/reports/scholarly-references.json').read_text(encoding='utf-8'))
 P=json.loads((EVID/'packet-summary.json').read_text())
 assert S['totals']['workbenchRuns']==100 and len(S['live'])==8
 doc=Document(TMP/'user-source.docx' if (TMP/'user-source.docx').exists() else ROOT/'docs/reports/FaultNet-partial-report.docx')
@@ -78,9 +79,10 @@ def image(path,text,width=6.1):
     pic=p.add_run().add_picture(str(path),width=Inches(width))
     pic._inline.docPr.set('descr',text)
     caption(f'Figure {figure_num}. {text}')
-def link(label,url):
+def link(label,url,display=None):
     p=para(label,align=WD_ALIGN_PARAGRAPH.LEFT);el=OxmlElement('w:hyperlink');el.set(qn('r:id'),doc.part.relate_to(url,RT.HYPERLINK,is_external=True))
-    r=OxmlElement('w:r');t=OxmlElement('w:t');t.text=url;r.append(t);el.append(r);p._p.append(el)
+    r=OxmlElement('w:r');t=OxmlElement('w:t');t.text=display or url;r.append(t);el.append(r);p._p.append(el)
+    return p
 def scenario(name):return S['scenarios'][name]
 
 tocp=para('TABLE OF CONTENTS',True,align=WD_ALIGN_PARAGRAPH.CENTER)
@@ -112,17 +114,8 @@ for text in [
 ]:para(text,style='List Bullet',align=WD_ALIGN_PARAGRAPH.LEFT)
 
 h('4. Literature Review and Existing System',new=True)
-para('HTTP semantics distinguish the meaning of a response status from the success of transmitting a complete message [1]. This matters when comparing a valid HTTP 503 response with a request whose connection closes before completion. A complete transport exchange can carry an application error, while an interrupted exchange may have no usable status or payload. FaultNet records these cases separately.')
-para('Node.js supplies the HTTP client/server facilities and a high-resolution elapsed-time clock used by the implementation [2]. These facilities permit real loopback exchanges without a framework dependency. Elapsed timing and UTC timestamps serve different purposes: the former measures duration, while the latter associates observations with capture evidence.')
-para('Toxiproxy is an established TCP proxy for testing network and system conditions [3]. Its existence shows that proxy-based fault injection is an established technique. FaultNet\'s contribution is its educational HTTP workflow, integrated phase statistics, saved records and separate live cockpit, rather than a claim to have invented latency or bandwidth injection. This report does not benchmark Toxiproxy or claim a speed advantage over it.')
-para('Wireshark reconstructs protocol messages from underlying packet segments. Reassembled data is displayed on the final packet of a reconstructed unit, which can differ from the first arrival of response data [4]. Accurate interpretation therefore separates first-response timing from complete-response timing. Packet Tracer routing labs supply a different form of evidence: RIPv2 uses distance-vector routing with hop-count metrics [5], while OSPF maintains link-state information and derives paths using costs [6]. Their metric values are not directly interchangeable.')
-table(['Approach','Useful evidence','Relationship to FaultNet'],[
-('Ordinary request / ping','Current completion or reachability','Does not independently impose the selected HTTP fault.'),
-('Toxiproxy','Established TCP fault injection','Related prior tool; no comparative execution-speed claim.'),
-('Wireshark','Packets, protocol contents and timings','Independent observer of FaultNet traffic.'),
-('Packet Tracer','Simulated routing and link-failure behavior','Separate network-layer demonstration.'),
-('FaultNet','Configured faults, phase statistics and saved records','Combines controlled HTTP execution with inspectable evidence.')
-],[1.25,2.2,2.9],title='Roles of existing approaches and the project')
+for text in L['literatureParagraphs']:para(text)
+table(['Published study','Relevant method','Relationship to FaultNet'],L['comparisonRows'],[1.25,2.2,2.9],title='Published approaches and relationship to FaultNet')
 
 d1500=scenario('delay-1500');b16=scenario('bandwidth-16');b128=scenario('bandwidth-128')
 h('5. Abstract',new=True)
@@ -178,7 +171,7 @@ table(['Important module','Responsibility'],[
 h('9. Project Implementation',new=True)
 h('9.1 Experimental Setup with Hardware and Software Requirements',2)
 env=S['environment'];para(f'The application evaluation used {env["os"]} build {env["release"]}, an {env["cpu"]} processor and {n(env["memoryGiB"],1)} GiB of visible memory. The measured application runtime was {S["runtime"]}. The application uses Node built-in HTTP, timing, filesystem and test facilities with plain HTML/CSS/JavaScript and no external runtime packages. Analysis tooling is separate from application dependencies.')
-para('The application source baseline is commit 313822e in the project repository. Measurement and report scripts are maintained separately from the application modules. Repeating an evaluation must preserve the recorded settings and runtime; a different laptop or source revision can legitimately produce different timings.')
+para(L['reproducibilityParagraph'])
 para('All measured traffic used the numeric loopback address. HTTP probes disabled connection pooling, verified the fixed payload, and measured the entire exchange with performance.now(). UTC starts identify records for packet matching. Background desktop applications and normal operating-system scheduling remained present; the results describe this local environment rather than an isolated hardware benchmark.')
 link('Project repository: ','https://github.com/Pranav-Suresh1024/FaultNet')
 table(['Protocol choice','Value or procedure'],[
@@ -242,7 +235,7 @@ h('9.4.6 Packet Evidence and Timing Correlation',3,new=True)
 para(f'The filtered loopback capture contains {P["packetCount"]:,} packets; {P["controlPackets"]} packets match the dashboard control port. Complete HTTP reconstruction on port 3002 enables stream-specific timing checks. Probe starts are matched to GET timestamps and stream endpoints, with first response data and completed reconstruction considered separately. The capture began after the overhead warm-up sequence, so it is used only for matching covered experiment requests.')
 table(['Condition','Matched streams','Median HTTP time ms','Median probe time ms'],[(row['scenario'],str(row['matched']),n(row['packetMedianMs']),n(row['probeMedianMs'])) for row in P['matches']],[1.5,1.1,1.9,1.85],title='Packet-to-probe correlation for representative covered runs')
 image(EVID/'figures/packet-evidence.png','Measured request and response timing extracted with TShark from the loopback capture. This is an analytical packet view, not a simulated Wireshark screenshot.')
-para('Wireshark may label the final reassembly packet as the HTTP response even though response bytes began in an earlier segment [4]. Packet-derived intervals and application elapsed time therefore need not be numerically identical. Packet evidence is used as an independent consistency check, not as a reason to relabel application elapsed time as TCP acknowledgement RTT. Capture loss, if present, describes recording loss rather than the injected HTTP failure rate.')
+para(L['packetDiscussion'])
 
 h('9.4.7 Routing Comparison in Packet Tracer',3,new=True)
 image(EVID/'screenshots/packet-tracer-topology.png','Reviewed Packet Tracer topology with three routers, three switches and six PCs. The router triangle offers an alternate R1–R3–R2 path.')
@@ -264,7 +257,7 @@ para(f'Third, the timeout intervention changes faulty completion by {n(long["ava
 para('Live results show why status, body size and completion must be considered together. A mock can complete with a small local JSON body; an injected 503 can complete with an error status; a stalled body can time out after headers. The cockpit therefore addresses manual application behavior that cannot be reduced to the workbench\'s fixed payload success criterion.')
 para('Packet evidence is consistent with real HTTP traffic under the tested conditions. The separately reviewed routed topology demonstrates alternate-path selection under a specific failure. The application and simulator answer related resilience questions at different layers; neither evidence set is used to invent measurements for the other.')
 h('10.2 Innovation Novelty and Evidence',2)
-para('The project\'s contribution is an inspectable local workflow: controlled fault settings, real requests, bounded execution, validated records, phase-specific analysis and a separate applied live configuration. Related tools establish proxy fault injection as prior art [3]. The contribution is integration and educational reproducibility, not a new routing protocol or a globally novel failure mechanism.')
+para(L['noveltyParagraph'])
 para('Useful improvement claims are attached to actual comparisons. The longer deadline improves completion for the chosen delayed workload, and dynamic route selection improves settled reachability over the no-backup control in the reviewed topology. Neither claim implies general superiority over unrelated systems. Calibration and interception results identify costs as well as benefits.')
 
 h('11. Conclusion')
@@ -277,18 +270,10 @@ para('Request elapsed time is not TCP RTT, payload goodput is not wire bandwidth
 para('Further evaluation can vary payload sizes, use additional machines and controlled background load, compare pacing strategies at short chunk intervals, and measure routing convergence on a common time base. More frequent crash-durable saves and separate processes could be assessed alongside their storage and coordination costs. These extensions follow directly from the observed limits and do not alter the conclusions for the measured configuration.')
 
 h('References',new=True)
-refs=[
-('1','IETF. HTTP Semantics. RFC 9110.','https://www.rfc-editor.org/rfc/rfc9110'),
-('2','Node.js. Performance measurement APIs and HTTP documentation.','https://nodejs.org/docs/latest-v22.x/api/perf_hooks.html'),
-('3','Shopify. Toxiproxy official repository and documentation.','https://github.com/Shopify/toxiproxy'),
-('4','Wireshark. User Guide, Packet Reassembly and Follow Protocol Streams.','https://www.wireshark.org/docs/wsug_html_chunked/ChAdvReassemblySection.html'),
-('5','Malkin, G. RIP Version 2. RFC 2453.','https://www.rfc-editor.org/rfc/rfc2453'),
-('6','Moy, J. OSPF Version 2. RFC 2328.','https://www.rfc-editor.org/rfc/rfc2328'),
-('7','FaultNet. Source, implementation contracts and reproducible evaluation scripts.','https://github.com/Pranav-Suresh1024/FaultNet')]
-for num,text,url in refs:
-    p=para(f'[{num}] {text}',align=WD_ALIGN_PARAGRAPH.LEFT);p.paragraph_format.keep_with_next=True
-    link('',url)
-para('Repository evidence: scripts/evaluate-report.mjs, scripts/analyze-report.py, docs/reports/evidence/summary.json, scenario-comparison.csv and packet-summary.json. Routing observations are documented in docs/packet-tracer-review.md. Raw captures and generated experiment records remain local; the shared aggregates and procedures identify how the reported results were derived.',align=WD_ALIGN_PARAGRAPH.LEFT)
+for ref in L['papers']:
+    p=para(f'[{ref["number"]}] {ref["authors"]}, “{ref["title"]},” {ref["publication"]}.',align=WD_ALIGN_PARAGRAPH.LEFT);p.paragraph_format.keep_with_next=True
+    link('DOI: ','https://doi.org/'+ref['doi'],ref['doi']).paragraph_format.keep_with_next=True
+    link('Free full text: ',ref['fullTextUrl'],ref['fullTextVersion'])
 
 # Retain native page fields; Word rebuilds the automatic index before export.
 for p in doc.paragraphs:

@@ -1,0 +1,84 @@
+{
+  "papers": [
+    {
+      "number": 1,
+      "authors": "A. Basiri, N. Behnam, R. de Rooij, L. Hochstein, L. Kosewski, J. Reynolds, and C. Rosenthal",
+      "title": "Chaos Engineering",
+      "publication": "IEEE Software, vol. 33, no. 3, pp. 35–41, 2016",
+      "doi": "10.1109/MS.2016.60",
+      "fullTextUrl": "https://arxiv.org/pdf/1702.05843",
+      "fullTextVersion": "Full author manuscript deposited on arXiv",
+      "verifiedPdfPages": 11
+    },
+    {
+      "number": 2,
+      "authors": "P. Alvaro, J. Rosen, and J. M. Hellerstein",
+      "title": "Lineage-driven Fault Injection",
+      "publication": "Proceedings of the ACM SIGMOD International Conference on Management of Data, pp. 331–346, 2015",
+      "doi": "10.1145/2723372.2723711",
+      "fullTextUrl": "https://people.ucsc.edu/~palvaro/molly.pdf",
+      "fullTextVersion": "Full paper hosted by the author at UC Santa Cruz",
+      "verifiedPdfPages": 16
+    },
+    {
+      "number": 3,
+      "authors": "M. Carbone and L. Rizzo",
+      "title": "Dummynet Revisited",
+      "publication": "ACM SIGCOMM Computer Communication Review, vol. 40, no. 2, pp. 12–20, 2010",
+      "doi": "10.1145/1764873.1764876",
+      "fullTextUrl": "https://docenti.ing.unipi.it/l.rizzo/papers/20091201-dummynet.pdf",
+      "fullTextVersion": "Full author manuscript hosted at the University of Pisa",
+      "verifiedPdfPages": 8
+    },
+    {
+      "number": 4,
+      "authors": "V. Paxson",
+      "title": "End-to-End Internet Packet Dynamics",
+      "publication": "Proceedings of ACM SIGCOMM, pp. 139–152, 1997",
+      "doi": "10.1145/263105.263155",
+      "fullTextUrl": "https://cseweb.ucsd.edu/classes/wi01/cse222/papers/paxson-e2e-packets-sigcomm97.pdf",
+      "fullTextVersion": "Full conference paper hosted at UC San Diego",
+      "verifiedPdfPages": 14
+    },
+    {
+      "number": 5,
+      "authors": "B. Lantz, B. Heller, and N. McKeown",
+      "title": "A Network in a Laptop: Rapid Prototyping for Software-Defined Networks",
+      "publication": "Proceedings of the 9th ACM SIGCOMM Workshop on Hot Topics in Networks, pp. 1–6, 2010",
+      "doi": "10.1145/1868447.1868466",
+      "fullTextUrl": "https://yuba.stanford.edu/~nickm/papers/a19-lantz.pdf",
+      "fullTextVersion": "Full workshop paper hosted by the author at Stanford University",
+      "verifiedPdfPages": 6
+    },
+    {
+      "number": 6,
+      "authors": "N. Handigol, B. Heller, V. Jeyakumar, B. Lantz, and N. McKeown",
+      "title": "Reproducible Network Experiments Using Container-Based Emulation",
+      "publication": "Proceedings of the 8th International Conference on Emerging Networking Experiments and Technologies (CoNEXT), pp. 253–264, 2012",
+      "doi": "10.1145/2413176.2413206",
+      "fullTextUrl": "https://conferences.sigcomm.org/co-next/2012/eproceedings/conext/p253.pdf",
+      "fullTextVersion": "Full published conference paper from the ACM SIGCOMM conference proceedings site",
+      "verifiedPdfPages": 12
+    }
+  ],
+  "literatureParagraphs": [
+    "Published work on resilience testing and network experimentation provides the methodological basis for FaultNet. The following studies address deliberate failures, controlled emulation, packet-level interpretation and reproducibility. Their relevance is a connection between experimental methods; their published performance results are not treated as measurements of FaultNet.",
+    "Basiri et al. describe chaos engineering as experimentation on distributed systems using hypotheses about measurable steady-state behavior [1]. The study emphasizes observing the effect of disruptive events at the system boundary. FaultNet adopts a bounded local comparison: a fixed workload is measured before, during and after a selected fault. Its successful-payload and latency measurements are local HTTP indicators; the project does not claim to reproduce Netflix's production-scale experiments or business-level availability metrics.",
+    "Alvaro, Rosen and Hellerstein introduce lineage-driven fault injection, implemented by MOLLY, which reasons backward from a successful outcome to identify failure combinations worth testing [2]. This provides a research basis for relating an injected failure to an explicit outcome instead of merely displaying fault settings. FaultNet uses operator-selected scenarios and a fixed response contract. It does not perform lineage analysis, automatically search distributed failure schedules or provide MOLLY's configuration-specific completeness guarantees.",
+    "Carbone and Rizzo examine Dummynet's link-emulation capabilities and the operating conditions that affect experimental accuracy [3]. Their work makes fidelity a measurement question, rather than an assumption that a configured rate or delay is achieved exactly. FaultNet applies HTTP forwarding waits and body pacing in user space. Its calibration study therefore compares observed timing and payload goodput with configured settings. Dummynet models network-link behavior more broadly; the two systems act at different layers and are not benchmarked against each other here.",
+    "Paxson studies end-to-end Internet packet dynamics using TCP traces and separates transport behavior from underlying network effects [4]. This supports careful interpretation of packet observations alongside application measurements. FaultNet correlates individual requests with captured streams and distinguishes response data arrival, HTTP reconstruction and completion of the application's read. Its local loopback results are not presented as estimates of Internet-wide delay, loss, reordering or congestion, and an HTTP completion failure is not relabelled as IP packet loss.",
+    "Lantz, Heller and McKeown present Mininet as an interactive network-prototyping environment using lightweight operating-system virtualization [5]. The study demonstrates the value of constructing controllable topologies on one computer while acknowledging performance-fidelity limits. FaultNet uses a real local HTTP data path, whereas its separate Packet Tracer cases examine simulated routing and alternate-path selection. These activities answer different questions. The project does not claim to run Mininet or to equate a simulator topology with a measured production network.",
+    "Handigol et al. evaluate reproducible network experiments using container-based emulation and Mininet-HiFi, emphasizing resource isolation, provisioning and monitoring [6]. Their study connects a repeatable experimental setup with the credibility of reported results. FaultNet records settings, runtime, sample counts and validated outcomes, and supplies analysis scripts for its tables and figures. The present evaluation retains ordinary desktop scheduling and one host, so the report confines its quantitative conclusions to that environment rather than claiming equivalent isolation or performance fidelity."
+  ],
+  "comparisonRows": [
+    ["Basiri et al. [1]", "Hypotheses and observable steady-state behavior", "Local baseline/fault/recovery comparison with explicit HTTP outcomes."],
+    ["Alvaro et al. [2]", "Outcome-guided failure selection using lineage", "Fixed configured scenarios; no automatic lineage or completeness guarantee."],
+    ["Carbone and Rizzo [3]", "Controlled link emulation and accuracy assessment", "Calibrate user-space HTTP delay/pacing; distinguish the injection layer."],
+    ["Paxson [4]", "Trace-based analysis separating network and TCP effects", "Correlate streams with probes; distinguish elapsed time, RTT and loss."],
+    ["Lantz et al. [5]", "Interactive virtual-network prototyping", "Keep real HTTP traffic and simulated routing evidence separate."],
+    ["Handigol et al. [6]", "Reproducible emulation with resource controls", "Preserve settings and analysis while disclosing the shared-host environment."]
+  ],
+  "packetDiscussion": "The matched streams distinguish first response data, the packet completing HTTP reconstruction and completion of the application's read. The measured intervals can therefore differ without contradiction. Stream matching supplies the local evidence for this distinction. Paxson's analysis motivates separating packet observations from transport effects [4]. Application elapsed time and reconstructed-response intervals measure different stages of an exchange; neither is TCP acknowledgement RTT. Capture loss describes recording loss and must be reported separately from injected HTTP failures.",
+  "noveltyParagraph": "Published studies already establish deliberate fault experiments [1], outcome-guided fault selection [2] and controllable network emulation [3]. FaultNet's contribution is the integration of local HTTP fault settings, validated phase observations, saved evidence and a separate live development interface into an inspectable teaching workflow. The project does not claim a new fault-injection principle, routing protocol or performance advantage over these research systems. Its quantitative findings concern the measured FaultNet configuration.",
+  "reproducibilityParagraph": "The application source baseline is commit 313822e in the project repository. Measurement and report scripts are maintained separately from the application modules. The emphasis on recording a repeatable setup is consistent with the reproducibility concerns studied by Handigol et al. [6]. A different laptop or source revision can legitimately produce different timings; comparisons must retain the recorded settings and runtime."
+}
