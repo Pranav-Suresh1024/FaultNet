@@ -6,7 +6,7 @@ Updated: 27 October 2026, Asia/Kolkata.
 
 - Latest revision: replaced all documentation/RFC/repository bibliography entries with six published papers, each with a verified publication DOI and a freely available complete PDF. Literature review and its comparison table, reproducibility discussion, packet interpretation and novelty citations now match those studies. DOI metadata came from Crossref; full PDFs were retrieved without authentication and checked for title, page count, full text and references. Author manuscripts are labelled where used. GitHub remains in section 9.1 only. See [reference metadata](scholarly-references.json) and [verification evidence](evidence/reference-verification.json).
 
-- Branch: `codex/final-report`; application baseline `313822e` on main. This laptop owns this documentation/report task. Final pushed commit and remote parity are reported in the transfer message, outside this file.
+- Branch: `task/final-report`, renamed locally and on GitHub at the user's request; application baseline `313822e` on main. This laptop owns this documentation/report task. Final pushed commit and remote parity are reported in the transfer message, outside this file.
 - [Final editable Word report](FaultNet-final-report.docx) and [matching PDF](FaultNet-final-report.pdf): 29 pages, 16 editable tables, eleven figures and an automatic contents page.
 - The course template's twelve main sections, supplied cover/logo, filled student details, supervisor and unsigned declaration are retained. The complete-report request restores the template's contributions/results/reference material. Both dashboards, practical applications, fault mechanisms, code modules, architecture, experiments, critical evaluation and GitHub link are covered.
 - No narrative dates, AI-agent mentions, draft placeholders or “yet to be implemented/out of scope” language in the report. Technical timestamps within the reviewed interface image remain evidence. The user's partial report is preserved byte-for-byte, including their pre-existing local revision; this revision is included as the source checkpoint.
@@ -52,7 +52,7 @@ Reference-revision backups, downloaded full papers, Crossref responses and rende
 
 ## Next laptop
 
-1. Preserve local edits; fetch origin and switch to `codex/final-report` only when safe. Pull `--ff-only`, verify the transfer SHA, then read root `HANDOFF.md` and this file.
+1. Preserve local edits; fetch origin and switch to `task/final-report` only when safe. Pull `--ff-only`, verify the transfer SHA, then read root `HANDOFF.md` and this file.
 2. Open the final DOCX for permitted editorial changes and the PDF for stable submission/printing. The existing partial remains the source checkpoint. The report needs ordinary student review/signature handling; no signatures were fabricated.
 3. Keep the teammate's `task/packet-tracer-labs` branch separate. No lab merge, main merge, deployment or other-laptop validation is implied by this report checkpoint.
 4. Further application work is a separate task. Priorities supported by this evaluation are the recovery clock-validation boundary and high-rate pacing calibration, with meaningful tests. Do not alter the published evidence without re-running and relabelling a replacement evaluation.
