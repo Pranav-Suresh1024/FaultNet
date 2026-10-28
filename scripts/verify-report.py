@@ -44,6 +44,11 @@ for expected in ['14.61','95% percentile','seed 308','Capture-drop statistics ar
     assert expected in body,expected
 provenance=json.loads((folder/'evidence/provenance.json').read_text())
 assert provenance['evidenceCommit'] in body and provenance['evidenceUrl'] in links
+assert 'Separate confirmation check.' in body and '50 baseline, 50 faulty and 30 recovery' in body
+confirmation=json.loads((folder/'evidence/followup-verification.json').read_text())
+assert confirmation['tests']['passed']==61 and confirmation['tests']['failed']==0
+assert confirmation['workbench']['acceptedRuns']==10 and confirmation['workbench']['rejectedRuns']==0
+assert confirmation['live']['attempts']==80 and confirmation['live']['resetBytes']==65536
 assert all(text.count('9.4.'+str(i))>=2 for i in range(1,8)), 'Each performance subsection must appear in contents and body'
 assert all(len(page.extract_text().strip())>50 for page in pdf.pages)
 assert not re.search(r'AI agents?|yet to be implemented|out of scope|2026|placeholder',body,re.I)

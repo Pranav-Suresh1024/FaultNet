@@ -13,7 +13,8 @@ The current report revision and artifact checksums are in [the handoff](../FINAL
 - `provenance.json`: full application/evidence/lab revisions, Packet Tracer version and unknown capture-drop count.
 - `reference-verification.json`: six Crossref-verified DOI publications with freely retrievable complete PDFs, plus the checked Stanford alternate for paper [6]. Citation/review text is in [scholarly-references.json](../scholarly-references.json).
 - `figures/`: nine analytical figures. Calibration includes zero delay; the live figure shows individual observations and median markers. Recovery plot shows selected conditions; Table 13 includes all ten.
-- `screenshots/workbench.png` and `screenshots/packet-tracer-topology.png`: previously reviewed real images, labelled separately from the repeated measurements. A fresh cockpit screenshot could not be obtained: the browser route returned the local access-boundary rejection and native browser inspection was unavailable. No security restriction was weakened or screenshot fabricated.
+- `screenshots/workbench.png` and `screenshots/packet-tracer-topology.png`: previously reviewed real images, labelled separately from the repeated measurements. The follow-up native browser view also confirmed the local access-boundary rejection after ordinary address-bar navigation. Browser diagnostics reported a paused document response. No security restriction/header was weakened or screenshot fabricated.
+- `followup-verification.json`: separate fresh check of 61 passing tests, ten accepted workbench runs / 130 phase observations, and eight live cases / 80 samples with a successful reset. These values are not added to the original study. Raw follow-up records remain ignored in `.codex/cockpit-followup/`; existing collection tooling was run with that directory and one round.
 
 ## Protocol and definitions
 

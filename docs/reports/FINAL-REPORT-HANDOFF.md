@@ -4,7 +4,7 @@ Updated: 28 October 2026, Asia/Kolkata. Branch: `task/final-report`.
 
 ## Current deliverables
 
-Use [the revised editable report](FaultNet-final-report-revised.docx) and [matching PDF](FaultNet-final-report-revised.pdf). These supersede the earlier final report for submission review. Earlier final/partial reports remain unchanged, including the report already open in Word. The twelve course sections and their order, cover/logo, student details, supervisor and unsigned declaration are preserved. The abstract stays in its template position. Revised length: 26 pages, 16 editable tables, eleven figures plus logo, 32 headings and approximately 6,889 extracted words. Contents includes all seven performance subsections and Appendix A.
+Use [the revised editable report](FaultNet-final-report-revised.docx) and [matching PDF](FaultNet-final-report-revised.pdf). These supersede the earlier final report for submission review. Earlier final/partial reports remain unchanged, including the report already open in Word. The twelve course sections and their order, cover/logo, student details, supervisor and unsigned declaration are preserved. The abstract stays in its template position. Revised length: 26 pages, 16 editable tables, eleven figures plus logo, 32 headings and approximately 7,005 extracted words. Contents includes all seven performance subsections and Appendix A.
 
 No application, package, runtime contract or teammate lab changes. No main merge or deployment is authorized by this report checkpoint.
 
@@ -20,8 +20,8 @@ No application, package, runtime contract or teammate lab changes. No main merge
 SHA-256 of the final revised files:
 
 ```text
-DOCX c6822632b32c49f5ef56db30ffdf87c7da74fb00086021605f37c1afe906be31
-PDF  5071cbddc180ad24509ee7aa32c0dd2befb85146dd89bae91cdd54f4b9535567
+DOCX e023192ec19982f704e7bc89928bb1a6aaf55a460baf7f5de0fd5ac560924b89
+PDF  d685536d33d24e26d61b76aec1d3479e20ae8aafdf1ce7191ab77620f6e93968
 ```
 
 Field refresh or a Word save can change binary hashes; compare downloaded files before opening/resaving. Rebuilds are expected to preserve content/statistics, not necessarily binary hashes.
@@ -37,7 +37,7 @@ Field refresh or a Word save can change binary hashes; compare downloaded files 
 - Table 1 compares layer/faults, automation/evidence/persistence and limitations, including FaultNet. Contributions are more concrete and limited to documented responsibilities. Scholarly references remain; paper [6] has an additional checked Stanford full-paper link. GitHub/evidence links remain outside References.
 - Unnecessary forced page breaks removed; 26 final pages rendered at 100 dpi and all inspected. Tables remain editable with repeated continuation headers; no clipping/overlap or broken navigation found. The new appendix distinguishes document generation, numerical recalculation and replacement experiments.
 - `scripts/verify-report.py` passed all structure, measurement, link, contents, source-preservation and no-draft/date/prose checks. All 15 external links also survived PDF export. Six publication DOIs/full PDFs and the additional Stanford copy were checked again. Changed Python scripts compile successfully. `git diff --check` passed; application files match the pinned baseline.
-- Existing 61/61 application tests remain prior evidence from the measured unchanged application. No application tests, experiments, packet captures or simulator runs were repeated for this editorial revision.
+- Fresh follow-up: 61/61 tests passed, zero failures/skips/cancellations, Node 22.23.1, 18.073 seconds. The existing collector ran with one round and separate local output: ten accepted saved workbench runs / 130 phase observations (50 baseline, 50 faulty, 30 recovery), no rejected records and recovery confirmed in all ten. Interruption and the 500 ms deadline gave 0/5 faulty successes; other cases gave 5/5. Eight live scenarios produced 80 requests; HTTP 503, disconnect and stall outcomes matched their intended mechanisms, and reset returned HTTP 200 / 65,536 bytes. See evidence/followup-verification.json. Original study inputs/aggregates are unchanged; the fresh batch is described separately at the end of Appendix A. No fresh capture or simulator execution.
 
 ## Reproduction modes
 
@@ -49,8 +49,8 @@ See [the evidence guide](evidence/README.md) and report Appendix A for exact com
 
 ## Remaining boundary and next action
 
-A fresh live-cockpit screenshot is the one requested visual addition not completed. The browser route returned the dashboard's local access-boundary rejection; native browser inspection was unavailable. No restriction was bypassed, no UI image was fabricated, and no failed browser route is represented as successful UI verification. Existing workbench/topology screenshots and independently measured live numerical results remain. A future legitimate browser session can add a readable actual cockpit screenshot without changing the quantitative evidence.
+A fresh live-cockpit screenshot is the one requested visual addition not completed. The extension route and ordinary native address-bar navigation both returned the dashboard's local access-boundary rejection. The actual native view was inspected; browser diagnostics additionally reported a paused document response. No restriction was bypassed, no UI image was fabricated, and no failed browser route is represented as successful UI verification. Existing workbench/topology screenshots and independently measured live numerical results remain. A future legitimate browser session can add a readable actual cockpit screenshot without changing the quantitative evidence.
 
-The report documents, but does not fix, the recovery UTC/monotonic validation boundary or the high-rate pacing limitation. Other-laptop runtime checks, a new UI/accessibility pass, fresh Packet Tracer execution and full rehearsal remain separate gates. Local raw originals, rendered QA pages, backups and Word locks remain unshared. This turn started the unmodified local application for screenshot inspection; no experiment or live-configuration mutation was performed.
+The report documents, but does not fix, the recovery UTC/monotonic validation boundary or the high-rate pacing limitation. Other-laptop runtime checks, a new UI/accessibility pass, fresh Packet Tracer execution and full rehearsal remain separate gates. Local raw originals, rendered QA pages, backups and Word locks remain unshared. The live configuration was restored by the collector after its synthetic checks. No application code, request headers or security settings were changed. Raw follow-up records and test log remain ignored under .codex/cockpit-followup/. The first 25 rendered pages are pixel-identical to the earlier reviewed revision; the changed appendix page was visually inspected and structure/link checks passed.
 
 Next laptop: preserve edits, fetch and safely switch to `task/final-report`, pull `--ff-only`, verify the artifact/evidence revisions above and read root HANDOFF. Review/signature handling remains with the students. Do not merge the lab branch or main automatically. Transfer writing ownership only after a confirmed push; final branch-head parity is checked outside this file, while the immutable report/evidence revisions remain recorded here.

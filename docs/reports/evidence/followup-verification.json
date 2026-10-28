@@ -1,0 +1,154 @@
+{
+  "applicationCommit": "313822e58f7d4420550a1836ebe949dc4727b88c",
+  "relationshipToReport": "Separate one-round confirmation; original 100-run numerical study unchanged.",
+  "tests": {
+    "passed": 61,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "durationMs": 18072.8052,
+    "runtime": "v22.23.1"
+  },
+  "workbench": {
+    "acceptedRuns": 10,
+    "rejectedRuns": 0,
+    "baselineObservations": 50,
+    "faultyObservations": 50,
+    "recoveryObservations": 30,
+    "conditions": [
+      {
+        "condition": "delay-0",
+        "successfulFaultyRequests": 5,
+        "faultyAttempts": 5,
+        "recoveryConfirmed": true,
+        "saved": true
+      },
+      {
+        "condition": "delay-150",
+        "successfulFaultyRequests": 5,
+        "faultyAttempts": 5,
+        "recoveryConfirmed": true,
+        "saved": true
+      },
+      {
+        "condition": "delay-500",
+        "successfulFaultyRequests": 5,
+        "faultyAttempts": 5,
+        "recoveryConfirmed": true,
+        "saved": true
+      },
+      {
+        "condition": "delay-1500",
+        "successfulFaultyRequests": 5,
+        "faultyAttempts": 5,
+        "recoveryConfirmed": true,
+        "saved": true
+      },
+      {
+        "condition": "bandwidth-16",
+        "successfulFaultyRequests": 5,
+        "faultyAttempts": 5,
+        "recoveryConfirmed": true,
+        "saved": true
+      },
+      {
+        "condition": "bandwidth-32",
+        "successfulFaultyRequests": 5,
+        "faultyAttempts": 5,
+        "recoveryConfirmed": true,
+        "saved": true
+      },
+      {
+        "condition": "bandwidth-128",
+        "successfulFaultyRequests": 5,
+        "faultyAttempts": 5,
+        "recoveryConfirmed": true,
+        "saved": true
+      },
+      {
+        "condition": "interruption",
+        "successfulFaultyRequests": 0,
+        "faultyAttempts": 5,
+        "recoveryConfirmed": true,
+        "saved": true
+      },
+      {
+        "condition": "timeout-500",
+        "successfulFaultyRequests": 0,
+        "faultyAttempts": 5,
+        "recoveryConfirmed": true,
+        "saved": true
+      },
+      {
+        "condition": "timeout-2000",
+        "successfulFaultyRequests": 5,
+        "faultyAttempts": 5,
+        "recoveryConfirmed": true,
+        "saved": true
+      }
+    ]
+  },
+  "live": {
+    "attempts": 80,
+    "conditions": [
+      {
+        "condition": "normal",
+        "attempts": 10,
+        "completed": 10,
+        "completedWithHttp200": 10
+      },
+      {
+        "condition": "delay-500",
+        "attempts": 10,
+        "completed": 10,
+        "completedWithHttp200": 10
+      },
+      {
+        "condition": "jitter-100",
+        "attempts": 10,
+        "completed": 10,
+        "completedWithHttp200": 10
+      },
+      {
+        "condition": "download-32",
+        "attempts": 10,
+        "completed": 10,
+        "completedWithHttp200": 10
+      },
+      {
+        "condition": "http-503",
+        "attempts": 10,
+        "completed": 10,
+        "completedWithHttp200": 0
+      },
+      {
+        "condition": "disconnect",
+        "attempts": 10,
+        "completed": 0,
+        "completedWithHttp200": 0
+      },
+      {
+        "condition": "stalled-body",
+        "attempts": 10,
+        "completed": 0,
+        "completedWithHttp200": 0
+      },
+      {
+        "condition": "mock",
+        "attempts": 10,
+        "completed": 10,
+        "completedWithHttp200": 10
+      }
+    ],
+    "resetHttpStatus": 200,
+    "resetBytes": 65536
+  },
+  "overheadRequests": 10,
+  "browser": {
+    "cockpitScreenshotObtained": false,
+    "observedError": "prohibited_request",
+    "diagnosticError": "Raw CDP unavailable while Browser Use resolves a paused document response",
+    "securityChecksChanged": false
+  },
+  "rawEvidencePolicy": "Raw records remain local under .codex/cockpit-followup; no credentials or raw captures shared."
+}
