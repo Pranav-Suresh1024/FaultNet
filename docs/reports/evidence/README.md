@@ -12,7 +12,7 @@ The current report revision and artifact checksums are in [the handoff](../FINAL
 - `packet-summary.json`: fifteen matched request/probe timing rows with stream and frame references. Raw capture remains local.
 - `provenance.json`: full application/evidence/lab revisions, Packet Tracer version and unknown capture-drop count.
 - `reference-verification.json`: six Crossref-verified DOI publications with freely retrievable complete PDFs, plus the checked Stanford alternate for paper [6]. Citation/review text is in [scholarly-references.json](../scholarly-references.json).
-- `figures/`: nine analytical figures. Calibration includes zero delay; the live figure shows individual observations and median markers. Recovery plot shows selected conditions; Table 13 includes all ten.
+- `figures/`: nine analytical figures. Calibration shows paired-added-minus-configured residuals and confidence intervals, including zero delay; the live figure shows individual observations and median markers. Recovery plot shows selected conditions; Table 13 includes all ten.
 - `screenshots/workbench.png` and `screenshots/packet-tracer-topology.png`: previously reviewed real images, labelled separately from repeated measurements.
 - `screenshots/live-cockpit.png`: actual screenshot supplied by the user, preserved byte-for-byte. The report uses the full view and a native Word crop enlarging the monitor for print. Source/hash/dimensions are in provenance.json. Its latest 50 requests / 49 altered / 30 error-cancel / 29.9 ms median are a rolling monitor snapshot, not controlled study totals. Normal reset settings do not erase prior monitor history. This completes the screenshot deliverable despite earlier automated browser rejection/paused-response diagnostics; it is not an automated UI/accessibility test.
 - `followup-verification.json`: separate fresh check of 61 passing tests, ten accepted workbench runs / 130 phase observations, and eight live cases / 80 samples with a successful reset. These values are not added to the original study. Raw follow-up records remain ignored in `.codex/cockpit-followup/`; existing collection tooling was run with that directory and one round.
@@ -36,6 +36,8 @@ The overhead study has ten paired blocks, 50 direct and 50 fault-free proxied re
 
 Routing is the bounded prior review in Packet Tracer 9.0.1 at lab commit `9f72386cf4a1ae30ccd50ba7c0a1a403b3178229`; see [the review](../../packet-tracer-review.md). Report route excerpts and ping summaries retain alternate R3 next-hop evidence and transient qualifications. Fast Forward Time prevents a wall-clock RIP/OSPF speed ranking.
 
+The primary run/reproduction guide is the [root README](../../../README.md#report-and-evaluation-reproduction). Full-text access URLs are retained in verification metadata only; the report lists normal citations and DOIs.
+
 ## Rebuild the document from aggregates
 
 Use the report revision in the handoff. Save/close the intended output first. With Python packages `python-docx` and `pypdf`, run:
@@ -46,7 +48,7 @@ powershell -File scripts/export-report.ps1
 python scripts/verify-report.py
 ```
 
-Defaults create `FaultNet-final-report-revised.docx` and matching PDF, preserving earlier reports. The builder reads committed aggregates, figures, citations and the partial-report cover/template. It does not run experiments or recalculate statistics. Microsoft Word is required for this export helper. Refreshing fields may change binary hashes; verify values and render again. The original course order is retained, including abstract placement; contents includes level-three performance subsections and Appendix A.
+Defaults create `FaultNet-final-report-revised.docx` and matching PDF, preserving earlier reports. The builder reads committed aggregates, figures, citations and the current revised-report cover/declaration, falling back to the partial template when no revised report exists. It does not run experiments or recalculate statistics. Microsoft Word is required for this export helper. Refreshing fields may change binary hashes; verify values and render again. The original course order is retained, including abstract placement; contents includes level-three performance subsections. The procedural appendix is removed; run/reproduction instructions are in the root README.
 
 ## Recalculate results from original numerical observations
 

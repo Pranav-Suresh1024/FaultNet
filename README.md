@@ -36,9 +36,55 @@ Tests use temporary storage and ephemeral ports. Runtime results go to ignored `
 
 The [Windows CI workflow](.github/workflows/checks.yml) runs the same tests on branch pushes and pull requests. The application checkpoint passed from a fresh GitHub checkout; check the current branch's result before integration.
 
+## Report and evaluation reproduction
+
+The [editable project report](docs/reports/FaultNet-final-report-revised.docx) and [PDF](docs/reports/FaultNet-final-report-revised.pdf) describe the design, measurements and findings. Application startup and operation are covered above; the procedures below explain how to regenerate the report or repeat its analysis. The [report handoff](docs/reports/FINAL-REPORT-HANDOFF.md) records exact source/evidence revisions and file checksums.
+
+### Generate the document from existing results
+
+Save and close the revised report before rebuilding it. Report tooling uses Python packages `python-docx` and `pypdf`; PDF export uses Microsoft Word on Windows. These are separate from the dependency-free application.
+
+```powershell
+python scripts/build-final-report.py
+powershell -File scripts/export-report.ps1
+python scripts/verify-report.py
+```
+
+The builder reads committed aggregate results, figures and citation metadata, and retains the current report's cover/declaration. It writes the revised DOCX/PDF pair. This procedure does not run experiments or recalculate statistics. After export, inspect all rendered pages, contents, figures and tables; a successful build alone does not establish layout quality. Rebuilding can change binary checksums even when measurements are unchanged.
+
+### Recalculate statistics from the recorded observations
+
+Install `matplotlib` and `numpy` in the Python environment used for analysis, then run:
+
+```powershell
+python scripts/analyze-report.py
+```
+
+The input is [the sanitized numerical dataset](docs/reports/evidence/analysis-inputs.json). No running application or ignored raw evaluation file is required. The script recreates workbench/live/overhead statistics, run-level bootstrap intervals, the comparison CSV and eight figures. It preserves the recorded environment and rejection audit; the reduced dataset cannot independently revalidate original record chronology. The packet-derived figure uses separate capture analysis.
+
+### Collect a replacement evaluation
+
+Use Node.js 22.23.1 and an idle local application. The collector resumes existing output, so use a separate checkout or preserve any existing `.codex/final-report/` data before beginning a replacement study. Do not run another experiment or change live settings while collection is active.
+
+```powershell
+npm start
+```
+
+In a second terminal at the repository root:
+
+```powershell
+node scripts/evaluate-report.mjs
+python scripts/prepare-report-inputs.py
+python scripts/analyze-report.py
+```
+
+The collector checks application files against the pinned baseline, retains rejected runs for review and restores the applied live configuration. Review the projected numerical fields before sharing them. New timings belong to a labelled replacement evaluation; do not silently combine them with the report's original 100-run study. The separate confirmation batch remains identified in [its summary](docs/reports/evidence/followup-verification.json).
+
+For packet evidence, follow the [Wireshark guide](docs/wireshark-guide.md), select the current loopback interface and retain captures locally. `python scripts/correlate-report.py` requires covered original capture/record files and the standard Windows TShark path. Published frame/timing summaries permit inspection but cannot replace independent packet decoding or establish unknown capture-drop statistics. Routing reproduction requires Packet Tracer 9.0.1 and the separately pinned lab revision. Detailed settings, denominators and evidence boundaries are in the [evidence guide](docs/reports/evidence/README.md).
+
 ## Shared context
 
-- [Final editable report](docs/reports/FaultNet-final-report.docx), [submission PDF](docs/reports/FaultNet-final-report.pdf) and [report handoff](docs/reports/FINAL-REPORT-HANDOFF.md): template-aligned report with repeated measurements, reviewed screenshots, packet correlation, routing comparison and evidence/reproduction notes.
+- [Final editable report](docs/reports/FaultNet-final-report-revised.docx), [submission PDF](docs/reports/FaultNet-final-report-revised.pdf) and [report handoff](docs/reports/FINAL-REPORT-HANDOFF.md): template-aligned report with repeated measurements, reviewed screenshots, packet correlation, routing comparison and evidence/reproduction notes.
 
 - [Demonstration script](docs/demo-script.md): rubric-aligned actions/spoken lines, measured analysis, controlled timeout what-if, Wireshark/routing interpretation, report checklist and individual-assessment rehearsal.
 - [Two-person demonstration](docs/two-person-demo.md): coordinated pitch covering workbench, live cockpit, Wireshark and static/RIP/OSPF labs; allow 15–18 minutes for the full rubric sequence and evaluation.

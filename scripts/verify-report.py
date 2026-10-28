@@ -27,32 +27,38 @@ for ref,proof in zip(literature['papers'],referenceEvidence):
     assert proof['pdfPages']==ref['verifiedPdfPages'] and proof['pdfWords']>1500
     assert ref['doi'] in references and ref['title'] in references
 links={rel.target_ref for rel in doc.part.rels.values() if rel.reltype.endswith('/hyperlink')}
-assert all('https://doi.org/'+ref['doi'] in links and ref['fullTextUrl'] in links for ref in literature['papers'])
-assert len(links)==15, 'Six DOI/full-text pairs, Stanford alternate, repository and pinned evidence are expected'
+assert all('https://doi.org/'+ref['doi'] in links and ref['fullTextUrl'] not in links for ref in literature['papers'])
+assert len(links)==8, 'Six publication DOIs, repository and pinned evidence are expected'
+assert 'Free full text:' not in body and 'Additional author copy:' not in body
 pdfLinks={a.get_object()['/A']['/URI'] for page in pdf.pages for a in page.get('/Annots',[]) if a.get_object().get('/A',{}).get('/URI')}
 assert links==pdfLinks, 'All external document links must survive PDF export'
 assert [int(re.match(r'^(\d+)\. ',h).group(1)) for h in headings if re.match(r'^\d+\. ',h)]==list(range(1,13))
-assert len(headings)==32
+assert len(headings)==31
 assert next(p for p in doc.paragraphs if p.text.startswith('The matched streams distinguish')).style.name=='Normal'
 assert len(doc.tables)==16 and len(doc.inline_shapes)==14
-assert len(pdf.pages)==28
+assert len(pdf.pages)==27
 assert 'Live proxy cockpit showing applied settings' in body and '29.9 ms displayed median' in body
 tableText='\n'.join(c.text for t in doc.tables for row in t.rows for c in row.cells)
 assert 'Completed with HTTP 200' in tableText and 'Median attempt duration ms' in tableText
 assert 'Successful median ms' in tableText and 'Mean per-request goodput KiB/s' in tableText
 assert len(doc.tables[12].rows)==11, 'Recovery table must cover all ten conditions'
-for expected in ['14.61','95% percentile','seed 308','Capture-drop statistics are unknown','9.0.1','Appendix A Reproduction Procedure']:
+for expected in ['14.61','95% percentile','seed 308','Capture-drop statistics are unknown','9.0.1','Paired added response time minus the configured delay']:
     assert expected in body,expected
 provenance=json.loads((folder/'evidence/provenance.json').read_text())
 assert provenance['evidenceCommit'] in body and provenance['evidenceUrl'] in links
-assert 'Separate confirmation check.' in body and '50 baseline, 50 faulty and 30 recovery' in body
+assert 'A separate confirmation batch' in body and '50 baseline, 50 faulty and 30 recovery' in body
+assert not any(x in body for x in ['Appendix A','npm start','python scripts/','Regenerate the document'])
+readme=(ROOT/'README.md').read_text(encoding='utf-8')
+assert all(x in readme for x in ['Report and evaluation reproduction','npm start','python scripts/build-final-report.py','python scripts/analyze-report.py','node scripts/evaluate-report.mjs'])
 confirmation=json.loads((folder/'evidence/followup-verification.json').read_text())
 assert confirmation['tests']['passed']==61 and confirmation['tests']['failed']==0
 assert confirmation['workbench']['acceptedRuns']==10 and confirmation['workbench']['rejectedRuns']==0
 assert confirmation['live']['attempts']==80 and confirmation['live']['resetBytes']==65536
 assert all(text.count('9.4.'+str(i))>=2 for i in range(1,8)), 'Each performance subsection must appear in contents and body'
 assert all(len(page.extract_text().strip())>50 for page in pdf.pages)
-assert not re.search(r'AI agents?|yet to be implemented|out of scope|2026|placeholder',body,re.I)
+assert not re.search(r'AI agents?|yet to be implemented|out of scope|placeholder',body,re.I)
+introIndex=next(i for i,p in enumerate(doc.paragraphs) if p.style.name.startswith('Heading') and p.text=='1. Introduction')
+assert '2026' not in '\n'.join(p.text for p in doc.paragraphs[introIndex:]), 'Student front-matter dates are retained; experiment narrative dates remain excluded'
 assert not re.search(r'Error!|Reference source not found|TOC will populate',text,re.I)
 for expected in ['Pranav Suresh','24BCE2086','Soham','24BAI0142','55,392','61 tests','2.38','1,300']:
     # Word can insert a discretionary space in wrapped numbers.

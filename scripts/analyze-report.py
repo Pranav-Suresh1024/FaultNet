@@ -6,6 +6,7 @@ sys.path.insert(0,str(ROOT/'.codex/final-report/python'))
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
 import numpy as np
 
 raw=json.loads((ROOT/'docs/reports/evidence/analysis-inputs.json').read_text())
@@ -66,22 +67,46 @@ with (out/'scenario-comparison.csv').open('w',newline='') as f:
 plt.rcParams.update({'font.family':'DejaVu Sans','font.size':10,'axes.spines.top':False,'axes.spines.right':False,'figure.dpi':160,'savefig.dpi':240,'axes.grid':True,'grid.alpha':.2})
 colors=['#176b56','#355e85','#ac503a','#6d648c']
 def save(name):plt.tight_layout();plt.savefig(fig/(name+'.png'),bbox_inches='tight');plt.close()
-figobj,ax=plt.subplots(figsize=(6.6,3.6));ax.set_xlim(0,10);ax.set_ylim(0,6);ax.axis('off')
-for x,y,label in [(1.5,5,'Browser interfaces\nWorkbench | Cockpit'),(7.5,5,'Control server :3000\nProtected settings and evidence'),
-                  (1.5,2.9,'Experiment runner\nReal HTTP probe'),(4.6,2.9,'Experiment proxy :3002\nDelay / pacing / interruption'),
-                  (8,2.9,'Demo server :3001\n65,536 synthetic bytes'),(4.6,.8,'Live proxy :8080\nIndependent applied settings'),
-                  (8,.8,'Development origin\nDemo used in this evaluation')]:
-    ax.text(x,y,label,ha='center',va='center',fontsize=8.5,bbox=dict(boxstyle='round,pad=.5',fc='#f1f4f1',ec='#9caaa4'))
-for start,end in [((3.05,5),(5.6,5)),((7.5,4.35),(4.6,3.6)),((2.6,2.9),(3.1,2.9)),((6.1,2.9),(6.8,2.9)),((6.1,.8),(6.8,.8))]:
-    ax.annotate('',xy=end,xytext=start,arrowprops=dict(arrowstyle='->',color='#176b56',lw=1.4))
-ax.text(1.5,.8,'Manual development client\nuses port 8080',ha='center',va='center',fontsize=8.5)
-ax.annotate('',xy=(3.1,.8),xytext=(2.75,.8),arrowprops=dict(arrowstyle='->',color='#176b56',lw=1.4))
+figobj,ax=plt.subplots(figsize=(6.8,4.2));ax.set_xlim(0,10.6);ax.set_ylim(0,7.2);ax.axis('off')
+nodes={
+    'browser':(1.4,6,'Browser interfaces\nWorkbench / Cockpit'),
+    'control':(4,6,'Control server\nPort 3000'),
+    'runner':(6.6,6,'Experiment runner\nPhase coordination'),
+    'records':(9.2,6,'Validated records\nLocal JSON files'),
+    'experiment':(6.6,3.5,'Experiment proxy\nPort 3002'),
+    'demo':(9.2,3.5,'Demo server\nPort 3001'),
+    'client':(1.4,1,'Development client\nUses port 8080'),
+    'live':(4,1,'Live proxy\nPort 8080'),
+    'origin':(6.6,1,'Development origin\nDemo in this study')}
+boxes={}
+for name,(x,y,label) in nodes.items():
+    box=FancyBboxPatch((x-1.05,y-.5),2.1,1,boxstyle='round,pad=0.02,rounding_size=0.07',fc='#f1f4f1',ec='#7c9188',lw=1)
+    ax.add_patch(box);boxes[name]=box;ax.text(x,y,label,ha='center',va='center',fontsize=8)
+assert len(boxes)==9 and all(abs(a[0]-b[0])>2.1 or abs(a[1]-b[1])>1 for i,a in enumerate(nodes.values()) for b in list(nodes.values())[i+1:])
+for source,target,control in [('browser','control',False),('control','runner',True),('runner','records',True),
+                              ('runner','experiment',False),('experiment','demo',False),
+                              ('control','live',True),('client','live',False),('live','origin',False)]:
+    ax.add_patch(FancyArrowPatch(nodes[source][:2],nodes[target][:2],patchA=boxes[source],patchB=boxes[target],
+        arrowstyle='->' if control else '<->',mutation_scale=10,shrinkA=3,shrinkB=3,
+        color='#67736e' if control else '#176b56',lw=1.2,linestyle='--' if control else '-'))
+ax.text(5.3,6.7,'Run control',ha='center',fontsize=7)
+ax.text(7.9,6.7,'Save / load',ha='center',fontsize=7)
+ax.text(3.7,3.7,'Apply / reset',ha='right',fontsize=8)
+ax.text(6.85,4.65,'HTTP probe',ha='left',fontsize=8)
+ax.text(7.9,4.2,'HTTP',ha='center',fontsize=8)
+ax.text(.35,.05,'Solid: HTTP request and reply     Dashed: internal control or storage access',fontsize=7.5,color='#46544e')
 save('architecture')
 names=['delay-0','delay-150','delay-500','delay-1500'];s=[summary['scenarios'][n] for n in names]
-plt.figure(figsize=(6.6,3.6));x=[v['fault']['delayMs'] for v in s];y=[v['addedMedianMs'] for v in s]
-plt.plot([0,1550],[0,1550],'--',color='gray',label='Ideal added delay')
-plt.errorbar(x,y,yerr=[[v['addedMedianMs']-v['addedBootstrap95Ms'][0] for v in s],[v['addedBootstrap95Ms'][1]-v['addedMedianMs'] for v in s]],fmt='o-',color=colors[0],capsize=4,label='Measured paired run medians')
-plt.xlabel('Configured delay (ms)');plt.ylabel('Added full-response time (ms)');plt.legend(fontsize=8);save('delay-calibration')
+plt.figure(figsize=(6.6,3.6));positions=np.arange(len(s));excess=[v['addedMedianMs']-v['fault']['delayMs'] for v in s]
+intervals=[[bound-v['fault']['delayMs'] for bound in v['addedBootstrap95Ms']] for v in s]
+assert all(lo<=value<=hi for value,(lo,hi) in zip(excess,intervals))
+plt.axvline(0,ls='--',color='gray',lw=1)
+plt.errorbar(excess,positions,xerr=[[value-lo for value,(lo,hi) in zip(excess,intervals)],
+    [hi-value for value,(lo,hi) in zip(excess,intervals)]],fmt='o',color=colors[0],capsize=4)
+for pos,value,(lo,hi) in zip(positions,excess,intervals):plt.text(hi+.4,pos,f'{value:.2f}',va='center',fontsize=9)
+plt.yticks(positions,[str(v['fault']['delayMs'])+' ms' for v in s]);plt.gca().invert_yaxis();plt.xlim(-1,20)
+plt.gca().yaxis.grid(False);plt.xlabel('Paired added time minus configured delay (ms)');plt.ylabel('Configured delay')
+plt.title('Deviation from configured delay; zero is exact calibration',fontsize=10);save('delay-calibration')
 plt.figure(figsize=(6.6,3.6))
 for name,color in zip(['delay-0','delay-150','delay-500','delay-1500'],colors):
     ts=sorted(t for r in raw['runs'] if r['scenario']==name for t,ok in zip(r['faultyMs'],r['faultySuccess']) if ok)
