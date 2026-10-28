@@ -7,8 +7,8 @@ ROOT=Path(__file__).resolve().parents[1]
 folder=ROOT/'docs/reports'
 s=json.loads((folder/'evidence/summary.json').read_text())
 p=json.loads((folder/'evidence/packet-summary.json').read_text())
-doc=Document(folder/'FaultNet-final-report.docx')
-pdf=PdfReader(folder/'FaultNet-final-report.pdf')
+doc=Document(folder/'FaultNet-final-report-revised.docx')
+pdf=PdfReader(folder/'FaultNet-final-report-revised.pdf')
 text='\n'.join(page.extract_text() for page in pdf.pages)
 body='\n'.join(x.text for x in doc.paragraphs)
 headings=[x.text for x in doc.paragraphs if x.style.name.startswith('Heading')]
@@ -28,12 +28,23 @@ for ref,proof in zip(literature['papers'],referenceEvidence):
     assert ref['doi'] in references and ref['title'] in references
 links={rel.target_ref for rel in doc.part.rels.values() if rel.reltype.endswith('/hyperlink')}
 assert all('https://doi.org/'+ref['doi'] in links and ref['fullTextUrl'] in links for ref in literature['papers'])
-assert len(links)==13, 'Only six DOI/full-text pairs and the project repository link are expected'
+assert len(links)==15, 'Six DOI/full-text pairs, Stanford alternate, repository and pinned evidence are expected'
+pdfLinks={a.get_object()['/A']['/URI'] for page in pdf.pages for a in page.get('/Annots',[]) if a.get_object().get('/A',{}).get('/URI')}
+assert links==pdfLinks, 'All external document links must survive PDF export'
 assert [int(re.match(r'^(\d+)\. ',h).group(1)) for h in headings if re.match(r'^\d+\. ',h)]==list(range(1,13))
-assert len(headings)==31
+assert len(headings)==32
 assert next(p for p in doc.paragraphs if p.text.startswith('The matched streams distinguish')).style.name=='Normal'
 assert len(doc.tables)==16 and len(doc.inline_shapes)==12
-assert len(pdf.pages)==29
+assert len(pdf.pages)==26
+tableText='\n'.join(c.text for t in doc.tables for row in t.rows for c in row.cells)
+assert 'Completed with HTTP 200' in tableText and 'Median attempt duration ms' in tableText
+assert 'Successful median ms' in tableText and 'Mean per-request goodput KiB/s' in tableText
+assert len(doc.tables[12].rows)==11, 'Recovery table must cover all ten conditions'
+for expected in ['14.61','95% percentile','seed 308','Capture-drop statistics are unknown','9.0.1','Appendix A Reproduction Procedure']:
+    assert expected in body,expected
+provenance=json.loads((folder/'evidence/provenance.json').read_text())
+assert provenance['evidenceCommit'] in body and provenance['evidenceUrl'] in links
+assert all(text.count('9.4.'+str(i))>=2 for i in range(1,8)), 'Each performance subsection must appear in contents and body'
 assert all(len(page.extract_text().strip())>50 for page in pdf.pages)
 assert not re.search(r'AI agents?|yet to be implemented|out of scope|2026|placeholder',body,re.I)
 assert not re.search(r'Error!|Reference source not found|TOC will populate',text,re.I)
@@ -55,14 +66,15 @@ for match in p['matches']:
     for stream in match['streams']:
         assert stream['getFrame']<stream['firstDataFrame']<=stream['responseFrame']
         assert 0<=stream['firstDataMs']<=stream['httpMs']+.01
-with zipfile.ZipFile(folder/'FaultNet-final-report.docx') as z:
+with zipfile.ZipFile(folder/'FaultNet-final-report-revised.docx') as z:
     xml=z.read('word/document.xml').decode()
     assert 'TOC ' in xml and 'PAGEREF' in xml and 'https://github.com/Pranav-Suresh1024/FaultNet' in text
     assert '<w:ins ' not in xml and '<w:del ' not in xml
     assert not any('/comments' in name for name in z.namelist())
+    assert '1-3' in xml, 'Contents must include performance subsections'
 source=ROOT/'.codex/final-report/user-source.docx'
 if source.exists():assert source.read_bytes()==(folder/'FaultNet-partial-report.docx').read_bytes(), 'User source changed'
 print(json.dumps({'pages':len(pdf.pages),'tables':len(doc.tables),'embeddedFiguresExcludingLogo':len(doc.inline_shapes)-1,
     'headings':len(headings),'wordCount':len(text.split()),'validatedRuns':100,'rejectedRuns':1,'testsPassed':61,
-    'docxSha256':hashlib.sha256((folder/'FaultNet-final-report.docx').read_bytes()).hexdigest(),
-    'pdfSha256':hashlib.sha256((folder/'FaultNet-final-report.pdf').read_bytes()).hexdigest()},indent=2))
+    'docxSha256':hashlib.sha256((folder/'FaultNet-final-report-revised.docx').read_bytes()).hexdigest(),
+    'pdfSha256':hashlib.sha256((folder/'FaultNet-final-report-revised.pdf').read_bytes()).hexdigest()},indent=2))

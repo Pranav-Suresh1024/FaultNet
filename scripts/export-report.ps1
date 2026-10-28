@@ -1,4 +1,4 @@
-param([string]$ReportPath = (Join-Path $PSScriptRoot '../docs/reports/FaultNet-final-report.docx'))
+param([string]$ReportPath = (Join-Path $PSScriptRoot '../docs/reports/FaultNet-final-report-revised.docx'))
 $reportSource = (Resolve-Path -LiteralPath $ReportPath).Path
 $reportPdf = [IO.Path]::ChangeExtension($reportSource, '.pdf')
 $reportWord = New-Object -ComObject Word.Application

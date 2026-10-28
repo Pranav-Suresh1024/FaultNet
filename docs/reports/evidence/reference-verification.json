@@ -81,6 +81,12 @@
     "pdfPages": 12,
     "pdfWords": 9635,
     "sha256": "de705ba6f8427d86f91dfc189e07dfedf98ec448076a1e58006dac718f30a0ea",
-    "version": "Full published conference paper from the ACM SIGCOMM conference proceedings site"
+    "version": "Full published conference paper from the ACM SIGCOMM conference proceedings site",
+    "additionalFullText": {
+      "url": "https://yuba.stanford.edu/~nickm/papers/p253.pdf",
+      "httpStatus": 200,
+      "pdfPages": 12,
+      "sha256": "de705ba6f8427d86f91dfc189e07dfedf98ec448076a1e58006dac718f30a0ea"
+    }
   }
 ]

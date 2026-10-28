@@ -1,0 +1,10 @@
+{
+  "applicationCommit": "313822e58f7d4420550a1836ebe949dc4727b88c",
+  "evidenceCommit": "515ff591e4433c98021599623c0b14664f17329a",
+  "evidenceUrl": "https://github.com/Pranav-Suresh1024/FaultNet/tree/515ff591e4433c98021599623c0b14664f17329a/docs/reports/evidence",
+  "labCommit": "9f72386cf4a1ae30ccd50ba7c0a1a403b3178229",
+  "packetTracerVersion": "9.0.1",
+  "captureDrops": null,
+  "analysisInput": "analysis-inputs.json",
+  "scope": "Sanitized original numerical inputs reproduce statistics, not original record chronology or packet decoding."
+}

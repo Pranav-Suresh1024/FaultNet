@@ -58,7 +58,8 @@
       "doi": "10.1145/2413176.2413206",
       "fullTextUrl": "https://conferences.sigcomm.org/co-next/2012/eproceedings/conext/p253.pdf",
       "fullTextVersion": "Full published conference paper from the ACM SIGCOMM conference proceedings site",
-      "verifiedPdfPages": 12
+      "verifiedPdfPages": 12,
+      "additionalFullTextUrl": "https://yuba.stanford.edu/~nickm/papers/p253.pdf"
     }
   ],
   "literatureParagraphs": [
@@ -69,6 +70,15 @@
     "Paxson studies end-to-end Internet packet dynamics using TCP traces and separates transport behavior from underlying network effects [4]. This supports careful interpretation of packet observations alongside application measurements. FaultNet correlates individual requests with captured streams and distinguishes response data arrival, HTTP reconstruction and completion of the application's read. Its local loopback results are not presented as estimates of Internet-wide delay, loss, reordering or congestion, and an HTTP completion failure is not relabelled as IP packet loss.",
     "Lantz, Heller and McKeown present Mininet as an interactive network-prototyping environment using lightweight operating-system virtualization [5]. The study demonstrates the value of constructing controllable topologies on one computer while acknowledging performance-fidelity limits. FaultNet uses a real local HTTP data path, whereas its separate Packet Tracer cases examine simulated routing and alternate-path selection. These activities answer different questions. The project does not claim to run Mininet or to equate a simulator topology with a measured production network.",
     "Handigol et al. evaluate reproducible network experiments using container-based emulation and Mininet-HiFi, emphasizing resource isolation, provisioning and monitoring [6]. Their study connects a repeatable experimental setup with the credibility of reported results. FaultNet records settings, runtime, sample counts and validated outcomes, and supplies analysis scripts for its tables and figures. The present evaluation retains ordinary desktop scheduling and one host, so the report confines its quantitative conclusions to that environment rather than claiming equivalent isolation or performance fidelity."
+  ],
+  "capabilityRows": [
+    ["Chaos engineering [1]", "System-level disruptive events; method rather than one injector", "Hypothesis-led steady-state experiments; tool-specific automation and storage", "No direct HTTP calibration or performance comparison with FaultNet."],
+    ["MOLLY [2]", "Distributed execution faults and failure combinations", "Lineage-guided schedule selection and counterexample traces", "Requires lineage/model support; FaultNet uses selected scenarios, not automated schedule search."],
+    ["Dummynet [3]", "Kernel/link emulation: delay, rate limits, queues and loss", "Configurable packet pipelines; experiment storage supplied by surrounding tooling", "Different injection layer; host resources and configuration affect fidelity."],
+    ["Packet dynamics [4]", "Observational TCP/network trace analysis; no injector", "Trace-derived packet measurements; recorded traces are the evidence", "Internet-path study, not an interactive fault dashboard or local loopback benchmark."],
+    ["Mininet [5]", "Virtual hosts, links and switches; topology and control experiments", "Interactive CLI and scripted experiments; no FaultNet-style validated phase records", "Shared-host resource constraints limit performance fidelity."],
+    ["Mininet-HiFi [6]", "Container-based network experiments with resource controls", "Scripted reproductions with provisioning and monitoring", "Resource isolation improves fidelity under stated conditions; not benchmarked against FaultNet."],
+    ["FaultNet", "HTTP proxy waits, body pacing and interruption; broader manual live effects", "Automatic baseline/fault/recovery; validated JSON/CSV; live monitor in memory", "Fixed local workload, timer granularity, clock-validation rejection; no IP-loss or lineage search."]
   ],
   "comparisonRows": [
     ["Basiri et al. [1]", "Hypotheses and observable steady-state behavior", "Local baseline/fault/recovery comparison with explicit HTTP outcomes."],
