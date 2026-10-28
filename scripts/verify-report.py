@@ -34,8 +34,9 @@ assert links==pdfLinks, 'All external document links must survive PDF export'
 assert [int(re.match(r'^(\d+)\. ',h).group(1)) for h in headings if re.match(r'^\d+\. ',h)]==list(range(1,13))
 assert len(headings)==32
 assert next(p for p in doc.paragraphs if p.text.startswith('The matched streams distinguish')).style.name=='Normal'
-assert len(doc.tables)==16 and len(doc.inline_shapes)==12
-assert len(pdf.pages)==26
+assert len(doc.tables)==16 and len(doc.inline_shapes)==14
+assert len(pdf.pages)==28
+assert 'Live proxy cockpit showing applied settings' in body and '29.9 ms displayed median' in body
 tableText='\n'.join(c.text for t in doc.tables for row in t.rows for c in row.cells)
 assert 'Completed with HTTP 200' in tableText and 'Median attempt duration ms' in tableText
 assert 'Successful median ms' in tableText and 'Mean per-request goodput KiB/s' in tableText
@@ -77,6 +78,11 @@ with zipfile.ZipFile(folder/'FaultNet-final-report-revised.docx') as z:
     assert '<w:ins ' not in xml and '<w:del ' not in xml
     assert not any('/comments' in name for name in z.namelist())
     assert '1-3' in xml, 'Contents must include performance subsections'
+    screenshot=(folder/'evidence/screenshots/live-cockpit.png').read_bytes()
+    assert hashlib.sha256(screenshot).hexdigest()==provenance['cockpitScreenshot']['sha256']
+    assert any(z.read(name)==screenshot for name in z.namelist() if name.startswith('word/media/'))
+    assert 'l="63400" t="15621"' in xml, 'The readable monitor detail must retain its native Word crop'
+    assert [int(n) for n in re.findall(r'^Figure (\d+)\.',body,re.M)]==list(range(1,14))
 source=ROOT/'.codex/final-report/user-source.docx'
 if source.exists():assert source.read_bytes()==(folder/'FaultNet-partial-report.docx').read_bytes(), 'User source changed'
 print(json.dumps({'pages':len(pdf.pages),'tables':len(doc.tables),'embeddedFiguresExcludingLogo':len(doc.inline_shapes)-1,

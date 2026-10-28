@@ -6,5 +6,13 @@
   "packetTracerVersion": "9.0.1",
   "captureDrops": null,
   "analysisInput": "analysis-inputs.json",
-  "scope": "Sanitized original numerical inputs reproduce statistics, not original record chronology or packet decoding."
+  "scope": "Sanitized original numerical inputs reproduce statistics, not original record chronology or packet decoding.",
+  "cockpitScreenshot": {
+    "path": "screenshots/live-cockpit.png",
+    "source": "Actual screenshot attached by the user",
+    "sha256": "1d3caf5235b185e43ba007c42b1324d8600b63fd41e73cb2d2f6e91639ee9488",
+    "width": 1877,
+    "height": 877,
+    "interpretation": "Rolling monitor window; separate from controlled evaluation totals. Native Word crop enlarges the same unmodified image."
+  }
 }

@@ -80,6 +80,7 @@ def image(path,text,width=6.1):
     pic=p.add_run().add_picture(str(path),width=Inches(width))
     pic._inline.docPr.set('descr',text)
     caption(f'Figure {figure_num}. {text}')
+    return pic
 def link(label,url,display=None):
     p=para(label,align=WD_ALIGN_PARAGRAPH.LEFT);el=OxmlElement('w:hyperlink');el.set(qn('r:id'),doc.part.relate_to(url,RT.HYPERLINK,is_external=True))
     r=OxmlElement('w:r');t=OxmlElement('w:t');t.text=display or url;r.append(t);el.append(r);p._p.append(el)
@@ -227,6 +228,13 @@ table(['Condition','Confirmed runs','Confirmation median ms','Recovery minus bas
 para('With three required successes and 250 ms between recovery attempts, two waits alone contribute approximately 500 ms. Confirmation therefore includes observation policy and scheduling, not just fault removal. The recovery residual compares successful response behavior after clearance with that run\'s baseline and is useful alongside the confirmation flag.')
 
 h('9.4.5 Live Proxy Evaluation',3)
+image(EVID/'screenshots/live-cockpit.png','Live proxy cockpit showing applied settings and its recent-traffic monitor. This interface snapshot is separate from the controlled evaluation tables.')
+para('The cockpit snapshot shows 50 finished requests, 49 marked altered, 30 error/cancel outcomes and a 29.9 ms displayed median. These values summarize the latest monitor window, including earlier faulted requests; zero delay/rate settings do not erase that history. Reset removes active effects, while Clear monitor clears the visible history. The rolling monitor values are distinct from the eight-condition live study and the workbench\'s successful-response statistics. A display of error/cancel outcomes is not an IP packet-loss measurement.')
+monitor=image(EVID/'screenshots/live-cockpit.png','Enlarged monitor detail from the same cockpit screenshot. The latest 50 finished requests remain visible after faults are reset; counts are not the repeated-study totals.')
+# Preserve the original image bytes; Word's crop enlarges the monitor for print.
+monitor.height=Inches(6.1*740/687)
+crop=OxmlElement('a:srcRect');crop.set('l','63400');crop.set('t','15621')
+monitor._inline.xpath('.//pic:blipFill')[0].insert(1,crop)
 image(EVID/'figures/live-comparison.png','Individual live attempt durations under normal, delayed, jittered and rate-restricted configurations; ten observations per condition, with black median markers.')
 table(['Live condition','Completed','Completed with HTTP 200','Median attempt duration ms','Median bytes'],[(name,f'{s["completed"]}/10',f'{s["http200"]}/10',n(s['medianMs']),n(s['medianBytes'],0)) for name,s in S['live'].items()],[1.35,.8,1.4,1.6,1.2],title='Manual live-proxy sample outcomes')
 normal=S['live']['normal'];jitter=S['live']['jitter-100'];fixed=S['live']['delay-500']
