@@ -13,8 +13,8 @@ No application, package, runtime contract or teammate lab changes. No main merge
 - Application: `313822e58f7d4420550a1836ebe949dc4727b88c`.
 - Evaluation scripts and numerical evidence: `515ff591e4433c98021599623c0b14664f17329a`.
 - [Permanent evidence snapshot](https://github.com/Pranav-Suresh1024/FaultNet/tree/515ff591e4433c98021599623c0b14664f17329a/docs/reports/evidence).
-- Revised report/document scripts: `66f4a83398e2b9e45f455f309fd96bc67790af32`.
-- [Permanent revised report snapshot](https://github.com/Pranav-Suresh1024/FaultNet/tree/66f4a83398e2b9e45f455f309fd96bc67790af32/docs/reports). This handoff-only metadata update follows that immutable artifact commit, avoiding a self-referential hash.
+- Revised report/document scripts: `5b5a6ae3c846c36ffe1183abe94b0f66f67f12da`.
+- [Permanent revised report snapshot](https://github.com/Pranav-Suresh1024/FaultNet/tree/5b5a6ae3c846c36ffe1183abe94b0f66f67f12da/docs/reports). This handoff-only metadata update follows that immutable artifact commit, avoiding a self-referential hash.
 - Reviewed lab: `9f72386cf4a1ae30ccd50ba7c0a1a403b3178229`, Packet Tracer 9.0.1; separate `task/packet-tracer-labs` branch, unmerged.
 
 SHA-256 of the final revised files:
